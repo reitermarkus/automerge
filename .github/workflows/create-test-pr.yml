@@ -1,3 +1,5 @@
+name: create-test-pr
+
 on:
   workflow_dispatch:
 
