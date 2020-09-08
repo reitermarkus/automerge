@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  create-test-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main-test
+      - name: Make changes
+        id: changes
+        run: |
+          echo >> README.md
+          number="${RANDOM}"
+          echo "${number}" >> README.md
+          echo "::set-output name=number::${number}"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: Test Pull Request (${{ steps.changes.outputs.number }})
