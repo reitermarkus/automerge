@@ -1,0 +1,42 @@
+name: automerge
+
+on:
+  schedule:
+    - cron: 0 * * * *
+  workflow_run:
+    workflows:
+      - build-test
+    types:
+      - completed
+  pull_request_review:
+    types:
+      - submitted
+  pull_request_target:
+    types:
+      - ready_for_review
+  workflow_dispatch:
+    inputs:
+      pull-request:
+        description: Pull Request Number
+        required: false
+
+jobs:
+  automerge:
+    if: github.event.review.state == 'approved' || !github.event.review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Event
+        run: |
+          echo '${{ github.event_name }}'
+
+          cat <<EOF
+            ${{ toJSON(github.event) }}
+          EOF
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+      - uses: ./
+        with:
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          do-not-merge-labels: never-merge
+          pull-request: ${{ github.event.inputs.pull-request }}

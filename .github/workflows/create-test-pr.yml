@@ -1,0 +1,48 @@
+name: create-test-pr
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-test-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out test branch
+        uses: actions/checkout@v2
+        with:
+          ref: main-test
+          persist-credentials: false
+
+      - name: Make changes
+        id: changes
+        run: |
+          echo >> README.md
+          number="${RANDOM}"
+          echo "${number}" >> README.md
+          echo "::set-output name=number::${number}"
+
+      - name: Create pull request
+        id: create-pull-request
+        uses: peter-evans/create-pull-request@44f76dd5b30daa9cc0444913acc58a040c19539c
+        with:
+          title: Test Pull Request (${{ steps.changes.outputs.number }})
+          commit-message: Test commit by @github-actions.
+          branch: test-pr-${{ steps.changes.outputs.number }}
+
+      - name: Check out pull request branch
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          ref: test-pr-${{ steps.changes.outputs.number }}
+
+      - name: Push more changes to the pull request
+        run: |
+          echo >> README.md
+          echo '${{ steps.changes.outputs.number }}' >> README.md
+
+          git config --global user.email "me@reitermark.us"
+          git config --global user.name "Markus Reiter"
+
+          git add README.md
+          git commit -m 'Test commit by @reitermarkus.'
+          git push
