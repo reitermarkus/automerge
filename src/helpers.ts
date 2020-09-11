@@ -4,7 +4,7 @@ import { Octokit, PullRequest, Review, WorkflowRun } from './types'
 
 export function isApprovedReview(review: Review): boolean {
   return (
-    review.state === 'APPROVED' &&
+    review.state === 'approved' &&
     (review.author_association === 'OWNER' || review.author_association === 'MEMBER')
   )
 }
