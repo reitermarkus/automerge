@@ -3,9 +3,6 @@ name: automerge
 on:
   schedule:
     - cron: 0 * * * *
-  check_run:
-    types:
-      - completed
   workflow_run:
     workflows:
       - build-test

@@ -66,6 +66,14 @@ class AutomergeAction {
             }
         });
     }
+    handleSchedule() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const pullRequests = yield this.octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', sort: 'updated', direction: 'desc', per_page: 100 }));
+            for (const pullRequest of pullRequests.data) {
+                yield this.automergePullRequest(pullRequest.number);
+            }
+        });
+    }
     handleWorkflowRun() {
         return __awaiter(this, void 0, void 0, function* () {
             const { action, workflow_run: workflowRun } = github.context.payload;
@@ -249,6 +257,11 @@ function run() {
             switch (eventName) {
                 case 'pull_request_review': {
                     yield action.handlePullRequestReview();
+                    break;
+                }
+                case 'schedule':
+                case 'workflow_dispatch': {
+                    yield action.handleSchedule();
                     break;
                 }
                 case 'workflow_run': {

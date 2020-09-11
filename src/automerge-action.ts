@@ -38,6 +38,20 @@ export class AutomergeAction {
     }
   }
 
+  async handleSchedule(): Promise<void> {
+    const pullRequests = await this.octokit.pulls.list({
+      ...github.context.repo,
+      state: 'open',
+      sort: 'updated',
+      direction: 'desc',
+      per_page: 100,
+    })
+
+    for (const pullRequest of pullRequests.data) {
+      await this.automergePullRequest(pullRequest.number)
+    }
+  }
+
   async handleWorkflowRun(): Promise<void> {
     const { action, workflow_run: workflowRun } = github.context.payload
 
