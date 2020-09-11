@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.MY_GITHUB_TOKEN }}
-          ref: refs/pull/${{ steps.create-pull-request.outputs.pull-request-number }}/head
+          ref: test-pr-${{ steps.changes.outputs.number }}
 
       - name: Push more changes to the pull request
         run: |
