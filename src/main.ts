@@ -13,7 +13,7 @@ async function run(): Promise<void> {
     const action = new AutomergeAction(octokit, input)
 
     if (input.pullRequest) {
-      await action.automergePullRequest(input.pullRequest)
+      await action.automergePullRequests([input.pullRequest])
       return
     }
 
@@ -21,6 +21,10 @@ async function run(): Promise<void> {
     switch (eventName) {
       case 'pull_request_review': {
         await action.handlePullRequestReview()
+        break
+      }
+      case 'pull_request_target': {
+        await action.handlePullRequestTarget()
         break
       }
       case 'push':

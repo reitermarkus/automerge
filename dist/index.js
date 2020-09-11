@@ -45,13 +45,95 @@ class AutomergeAction {
         this.octokit = octokit;
         this.input = input;
     }
-    automergePullRequest(number) {
+    automergePullRequests(numbers) {
         return __awaiter(this, void 0, void 0, function* () {
-            core.info(`Evaluating pull request ${number} for auto-mergeability…`);
-            const pullRequest = yield this.octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }));
-            core.info(`PULL_REQUEST: ${JSON.stringify(pullRequest, undefined, 2)}`);
-            const reviews = yield this.octokit.pulls.listReviews(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }));
-            core.info(`REVIEWS: ${JSON.stringify(reviews, undefined, 2)}`);
+            const maxTries = 5;
+            const retries = maxTries - 1;
+            const queue = numbers.map(number => ({ number, tries: 0 }));
+            let arg;
+            while ((arg = queue.shift())) {
+                const { number, tries } = arg;
+                if (tries > 0) {
+                    yield new Promise(r => setTimeout(r, Math.pow(2, tries) * 1000));
+                }
+                const triesLeft = retries - tries;
+                const retry = yield this.automergePullRequest(number, triesLeft);
+                if (retry) {
+                    queue.push({ number, tries: tries + 1 });
+                }
+            }
+        });
+    }
+    automergePullRequest(number, triesLeft) {
+        return __awaiter(this, void 0, void 0, function* () {
+            core.info(`Evaluating auto-mergeability for pull request ${number}:`);
+            const pullRequest = (yield this.octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }))).data;
+            const baseBranch = pullRequest.base.ref;
+            if (!(yield helpers_1.isBranchProtected(this.octokit, baseBranch))) {
+                core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`);
+                return false;
+            }
+            if (pullRequest.merged) {
+                core.info(`Pull request ${number} is already merged.`);
+                return false;
+            }
+            if (pullRequest.state === 'closed') {
+                core.info(`Pull request ${number} is closed.`);
+                return false;
+            }
+            const labels = pullRequest.labels.map(({ name }) => name);
+            const doNotMergeLabels = labels.filter(label => this.input.doNotMergeLabels.includes(label) || helpers_1.isDoNotMergeLabel(label));
+            if (doNotMergeLabels.length > 0) {
+                core.info(`Pull request contains “do not merge” labels: ${doNotMergeLabels.join(', ')}`);
+                return false;
+            }
+            // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
+            const mergeableState = pullRequest.mergeable_state;
+            switch (mergeableState) {
+                case 'draft': {
+                    core.info(`Pull request ${number} is not mergeable because it is a draft.`);
+                    return false;
+                }
+                case 'dirty': {
+                    core.info(`Pull request ${number} is not mergeable because it is dirty.`);
+                    return false;
+                }
+                case 'blocked': {
+                    core.info(`Merging is blocked for pull request ${number}.`);
+                    return false;
+                }
+                case 'clean':
+                case 'has_hooks':
+                case 'unknown':
+                case 'unstable': {
+                    try {
+                        if (this.input.dryRun) {
+                            core.info(`Would try merging pull request ${number} in '${mergeableState}' state:`);
+                        }
+                        else {
+                            core.info(`Trying to merge pull request ${number} in '${mergeableState}' state:`);
+                            this.octokit.pulls.merge(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }));
+                            core.info(`Successfully merged pull request ${number}.`);
+                        }
+                        return false;
+                    }
+                    catch (error) {
+                        const message = `Failed to merge pull request ${number} (${triesLeft} tries left): ${error.message}`;
+                        if (triesLeft === 0) {
+                            core.setFailed(message);
+                            return false;
+                        }
+                        else {
+                            core.error(message);
+                            return true;
+                        }
+                    }
+                }
+                default: {
+                    core.warning(`Unknown state for pull request ${number}: '${mergeableState}'`);
+                    return false;
+                }
+            }
         });
     }
     handlePullRequestReview() {
@@ -60,17 +142,26 @@ class AutomergeAction {
             if (!action || !review || !pullRequest) {
                 return;
             }
-            if (action === 'submitted' && helpers_1.isApprovedReview(review)) {
-                yield this.automergePullRequest(pullRequest.number);
+            if (action === 'submitted' && helpers_1.isReviewApproved(review)) {
+                yield this.automergePullRequests([pullRequest.number]);
+            }
+        });
+    }
+    handlePullRequestTarget() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { action, pull_request: pullRequest } = github.context.payload;
+            if (!action || !pullRequest) {
+                return;
+            }
+            if (action === 'ready_for_review') {
+                yield this.automergePullRequests([pullRequest.number]);
             }
         });
     }
     handleSchedule() {
         return __awaiter(this, void 0, void 0, function* () {
-            const pullRequests = yield this.octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', sort: 'updated', direction: 'desc', per_page: 100 }));
-            for (const pullRequest of pullRequests.data) {
-                yield this.automergePullRequest(pullRequest.number);
-            }
+            const pullRequests = (yield this.octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', sort: 'updated', direction: 'desc', per_page: 100 }))).data;
+            yield this.automergePullRequests(pullRequests.map(({ number }) => number));
         });
     }
     handleWorkflowRun() {
@@ -81,7 +172,7 @@ class AutomergeAction {
             }
             const pullRequests = yield helpers_1.pullRequestsForWorkflowRun(this.octokit, workflowRun);
             for (const number of pullRequests) {
-                yield this.automergePullRequest(number);
+                yield this.automergePullRequests([number]);
             }
         });
     }
@@ -125,13 +216,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isApprovedReview = void 0;
+exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isPullRequestMergeable = exports.isBranchProtected = exports.isReviewApproved = exports.UNMERGEABLE_STATES = void 0;
+const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
-function isApprovedReview(review) {
-    return (review.state === 'APPROVED' &&
-        (review.author_association === 'OWNER' || review.author_association === 'MEMBER'));
+exports.UNMERGEABLE_STATES = ['blocked'];
+function isReviewApproved(review) {
+    if (review.state.toUpperCase() !== 'APPROVED') {
+        core.debug(`Review ${review.id} is not approved.`);
+        return false;
+    }
+    if (review.author_association !== 'OWNER' && review.author_association !== 'MEMBER') {
+        core.debug(`Review ${review.id} is approved but author is not a member or owner.`);
+        return false;
+    }
+    return true;
 }
-exports.isApprovedReview = isApprovedReview;
+exports.isReviewApproved = isReviewApproved;
+function isBranchProtected(octokit, branchName) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        const branchArgs = Object.assign(Object.assign({}, github.context.repo), { branch: branchName });
+        const branch = (yield octokit.repos.getBranch(branchArgs)).data;
+        if (branch.protected === true && branch.protection.enabled === true) {
+            const protection = (yield octokit.repos.getBranchProtection(branchArgs)).data;
+            // Only auto-merge if reviews are required and stale reviews are dismissed automatically.
+            const requiredPullRequestReviews = ((_a = protection.required_pull_request_reviews) === null || _a === void 0 ? void 0 : _a.dismiss_stale_reviews) || false;
+            // Only auto-merge if there is at least one required status check.
+            const requiredStatusChecks = (((_b = protection.required_status_checks) === null || _b === void 0 ? void 0 : _b.contexts) || []) !== [];
+            return requiredPullRequestReviews && requiredStatusChecks;
+        }
+        return false;
+    });
+}
+exports.isBranchProtected = isBranchProtected;
+function isPullRequestMergeable(pullRequest) {
+    return !pullRequest.merged;
+}
+exports.isPullRequestMergeable = isPullRequestMergeable;
 // Loosely match a “do not merge” label's name.
 function isDoNotMergeLabel(string) {
     const label = string.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -200,8 +321,8 @@ class Input {
     constructor() {
         this.token = core.getInput('token', { required: true });
         this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',');
-        this.minimumApprovals = getNumber('minimum-approvals', { required: true }) || 1;
         this.pullRequest = getNumber('pull-request');
+        this.dryRun = core.getInput('dry-run') === 'true';
     }
 }
 exports.Input = Input;
@@ -254,7 +375,7 @@ function run() {
             const octokit = github.getOctokit(input.token);
             const action = new automerge_action_1.AutomergeAction(octokit, input);
             if (input.pullRequest) {
-                yield action.automergePullRequest(input.pullRequest);
+                yield action.automergePullRequests([input.pullRequest]);
                 return;
             }
             const eventName = github.context.eventName;
@@ -263,6 +384,11 @@ function run() {
                     yield action.handlePullRequestReview();
                     break;
                 }
+                case 'pull_request_target': {
+                    yield action.handlePullRequestTarget();
+                    break;
+                }
+                case 'push':
                 case 'schedule':
                 case 'workflow_dispatch': {
                     yield action.handleSchedule();

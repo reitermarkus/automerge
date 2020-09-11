@@ -2,7 +2,12 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 import { Input } from './input'
-import { isApprovedReview, pullRequestsForWorkflowRun } from './helpers'
+import {
+  isBranchProtected,
+  isDoNotMergeLabel,
+  isReviewApproved,
+  pullRequestsForWorkflowRun,
+} from './helpers'
 import { Octokit } from './types'
 
 export class AutomergeAction {
@@ -14,22 +19,116 @@ export class AutomergeAction {
     this.input = input
   }
 
-  async automergePullRequest(number: number): Promise<void> {
-    core.info(`Evaluating pull request ${number} for auto-mergeability…`)
+  async automergePullRequests(numbers: number[]): Promise<void> {
+    const maxTries = 5
+    const retries = maxTries - 1
 
-    const pullRequest = await this.octokit.pulls.get({
-      ...github.context.repo,
-      pull_number: number,
-    })
+    const queue = numbers.map(number => ({ number, tries: 0 }))
 
-    core.info(`PULL_REQUEST: ${JSON.stringify(pullRequest, undefined, 2)}`)
+    let arg
+    while ((arg = queue.shift())) {
+      const { number, tries } = arg
 
-    const reviews = await this.octokit.pulls.listReviews({
-      ...github.context.repo,
-      pull_number: number,
-    })
+      if (tries > 0) {
+        await new Promise(r => setTimeout(r, 2 ** tries * 1000))
+      }
 
-    core.info(`REVIEWS: ${JSON.stringify(reviews, undefined, 2)}`)
+      const triesLeft = retries - tries
+      const retry = await this.automergePullRequest(number, triesLeft)
+
+      if (retry) {
+        queue.push({ number, tries: tries + 1 })
+      }
+    }
+  }
+
+  async automergePullRequest(number: number, triesLeft: number): Promise<boolean> {
+    core.info(`Evaluating auto-mergeability for pull request ${number}:`)
+
+    const pullRequest = (
+      await this.octokit.pulls.get({
+        ...github.context.repo,
+        pull_number: number,
+      })
+    ).data
+
+    const baseBranch = pullRequest.base.ref
+    if (!(await isBranchProtected(this.octokit, baseBranch))) {
+      core.info(
+        `Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`
+      )
+      return false
+    }
+
+    if (pullRequest.merged) {
+      core.info(`Pull request ${number} is already merged.`)
+      return false
+    }
+
+    if (pullRequest.state === 'closed') {
+      core.info(`Pull request ${number} is closed.`)
+      return false
+    }
+
+    const labels = pullRequest.labels.map(({ name }) => name)
+    const doNotMergeLabels = labels.filter(
+      label => this.input.doNotMergeLabels.includes(label) || isDoNotMergeLabel(label)
+    )
+    if (doNotMergeLabels.length > 0) {
+      core.info(`Pull request contains “do not merge” labels: ${doNotMergeLabels.join(', ')}`)
+      return false
+    }
+
+    // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
+    const mergeableState = pullRequest.mergeable_state
+    switch (mergeableState) {
+      case 'draft': {
+        core.info(`Pull request ${number} is not mergeable because it is a draft.`)
+        return false
+      }
+      case 'dirty': {
+        core.info(`Pull request ${number} is not mergeable because it is dirty.`)
+        return false
+      }
+      case 'blocked': {
+        core.info(`Merging is blocked for pull request ${number}.`)
+        return false
+      }
+      case 'clean':
+      case 'has_hooks':
+      case 'unknown':
+      case 'unstable': {
+        try {
+          if (this.input.dryRun) {
+            core.info(`Would try merging pull request ${number} in '${mergeableState}' state:`)
+          } else {
+            core.info(`Trying to merge pull request ${number} in '${mergeableState}' state:`)
+
+            this.octokit.pulls.merge({
+              ...github.context.repo,
+              pull_number: number,
+            })
+
+            core.info(`Successfully merged pull request ${number}.`)
+          }
+
+          return false
+        } catch (error) {
+          const message = `Failed to merge pull request ${number} (${triesLeft} tries left): ${error.message}`
+          if (triesLeft === 0) {
+            core.setFailed(message)
+            return false
+          } else {
+            core.error(message)
+            return true
+          }
+        }
+      }
+      default: {
+        core.warning(`Unknown state for pull request ${number}: '${mergeableState}'`)
+        return false
+      }
+    }
   }
 
   async handlePullRequestReview(): Promise<void> {
@@ -39,23 +138,35 @@ export class AutomergeAction {
       return
     }
 
-    if (action === 'submitted' && isApprovedReview(review)) {
-      await this.automergePullRequest(pullRequest.number)
+    if (action === 'submitted' && isReviewApproved(review)) {
+      await this.automergePullRequests([pullRequest.number])
+    }
+  }
+
+  async handlePullRequestTarget(): Promise<void> {
+    const { action, pull_request: pullRequest } = github.context.payload
+
+    if (!action || !pullRequest) {
+      return
+    }
+
+    if (action === 'ready_for_review') {
+      await this.automergePullRequests([pullRequest.number])
     }
   }
 
   async handleSchedule(): Promise<void> {
-    const pullRequests = await this.octokit.pulls.list({
-      ...github.context.repo,
-      state: 'open',
-      sort: 'updated',
-      direction: 'desc',
-      per_page: 100,
-    })
+    const pullRequests = (
+      await this.octokit.pulls.list({
+        ...github.context.repo,
+        state: 'open',
+        sort: 'updated',
+        direction: 'desc',
+        per_page: 100,
+      })
+    ).data
 
-    for (const pullRequest of pullRequests.data) {
-      await this.automergePullRequest(pullRequest.number)
-    }
+    await this.automergePullRequests(pullRequests.map(({ number }) => number))
   }
 
   async handleWorkflowRun(): Promise<void> {
@@ -68,7 +179,7 @@ export class AutomergeAction {
     const pullRequests = await pullRequestsForWorkflowRun(this.octokit, workflowRun)
 
     for (const number of pullRequests) {
-      await this.automergePullRequest(number)
+      await this.automergePullRequests([number])
     }
   }
 }
