@@ -23,6 +23,7 @@ async function run(): Promise<void> {
         await action.handlePullRequestReview()
         break
       }
+      case 'push':
       case 'schedule':
       case 'workflow_dispatch': {
         await action.handleSchedule()

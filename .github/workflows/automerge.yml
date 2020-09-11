@@ -1,6 +1,7 @@
 name: automerge
 
 on:
+  push:
   schedule:
     - cron: 0 * * * *
   workflow_run:
