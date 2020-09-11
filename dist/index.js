@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutomergeAction = void 0;
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
+const helpers_1 = __webpack_require__(8);
 function authorAssociationAllowed(authorAssociation) {
     return authorAssociation === 'OWNER' || authorAssociation === 'MEMBER';
 }
@@ -54,22 +55,93 @@ class AutomergeAction {
     }
     handlePullRequestReview() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { action, review, pull_request } = github.context.payload;
-            if (!action || !review || !pull_request) {
+            const { action, review, pull_request: pullRequest } = github.context.payload;
+            if (!action || !review || !pullRequest) {
                 return;
             }
             if (action === 'submitted' &&
                 review.state === 'approved' &&
                 authorAssociationAllowed(review.author_association)) {
-                yield this.automergePullRequest(pull_request.number);
+                yield this.automergePullRequest(pullRequest.number);
             }
         });
     }
     handleWorkflowRun() {
-        return __awaiter(this, void 0, void 0, function* () { });
+        return __awaiter(this, void 0, void 0, function* () {
+            const { action, workflow_run: workflowRun } = github.context.payload;
+            if (!action || !workflowRun) {
+                return;
+            }
+            const pullRequests = yield helpers_1.pullRequestsForWorkflowRun(this.octokit, workflowRun);
+            for (const number of pullRequests) {
+                yield this.automergePullRequest(number);
+            }
+        });
     }
 }
 exports.AutomergeAction = AutomergeAction;
+
+
+/***/ }),
+
+/***/ 8:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = void 0;
+const github = __importStar(__webpack_require__(438));
+// Loosely match a “do not merge” label's name.
+function isDoNotMergeLabel(string) {
+    const label = string.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const match = label.match(/^dono?tmerge$/);
+    return match != null;
+}
+exports.isDoNotMergeLabel = isDoNotMergeLabel;
+function pullRequestsForWorkflowRun(octokit, workflowRun) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let pullRequests = workflowRun.pull_requests.map(({ number }) => number);
+        if (pullRequests.length === 0) {
+            const headRepo = workflowRun.head_repository;
+            const headBranch = workflowRun.head_branch;
+            const headSha = workflowRun.head_sha;
+            pullRequests = (yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', head: `${headRepo.owner.login}:${headBranch}`, sort: 'updated', direction: 'desc', per_page: 100 }))).data
+                .filter(pr => pr.head.sha === headSha)
+                .map(({ number }) => number);
+        }
+        return pullRequests;
+    });
+}
+exports.pullRequestsForWorkflowRun = pullRequestsForWorkflowRun;
 
 
 /***/ }),

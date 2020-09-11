@@ -2,16 +2,18 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 import { Input } from './input'
+import { pullRequestsForWorkflowRun } from './helpers'
+import { Octokit } from './types'
 
 function authorAssociationAllowed(authorAssociation: string): boolean {
   return authorAssociation === 'OWNER' || authorAssociation === 'MEMBER'
 }
 
 export class AutomergeAction {
-  octokit: ReturnType<typeof github.getOctokit>
+  octokit: Octokit
   input: Input
 
-  constructor(octokit: ReturnType<typeof github.getOctokit>, input: Input) {
+  constructor(octokit: Octokit, input: Input) {
     this.octokit = octokit
     this.input = input
   }
@@ -21,9 +23,9 @@ export class AutomergeAction {
   }
 
   async handlePullRequestReview(): Promise<void> {
-    const { action, review, pull_request } = github.context.payload
+    const { action, review, pull_request: pullRequest } = github.context.payload
 
-    if (!action || !review || !pull_request) {
+    if (!action || !review || !pullRequest) {
       return
     }
 
@@ -32,9 +34,21 @@ export class AutomergeAction {
       review.state === 'approved' &&
       authorAssociationAllowed(review.author_association)
     ) {
-      await this.automergePullRequest(pull_request.number)
+      await this.automergePullRequest(pullRequest.number)
     }
   }
 
-  async handleWorkflowRun(): Promise<void> {}
+  async handleWorkflowRun(): Promise<void> {
+    const { action, workflow_run: workflowRun } = github.context.payload
+
+    if (!action || !workflowRun) {
+      return
+    }
+
+    const pullRequests = await pullRequestsForWorkflowRun(this.octokit, workflowRun)
+
+    for (const number of pullRequests) {
+      await this.automergePullRequest(number)
+    }
+  }
 }
