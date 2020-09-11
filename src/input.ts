@@ -25,7 +25,7 @@ export class Input {
   constructor() {
     this.token = core.getInput('token', { required: true })
     this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',')
-    this.minimumApprovals = getNumber('minimum-approvals', { required: true })!
+    this.minimumApprovals = getNumber('minimum-approvals', { required: true }) || 1
     this.pullRequest = getNumber('pull-request')
   }
 }
