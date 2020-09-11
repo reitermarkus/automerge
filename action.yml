@@ -1,6 +1,7 @@
 name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
+
 inputs:
   token:
     required: true
@@ -8,12 +9,21 @@ inputs:
     default: ${{ github.token }}
   minimum-approvals:
     required: true
-    description: 'input description here'
+    description: >
+      Minimum number of approvals required for a pull request
+      to be merged automatically.
     default: 1
   do-not-merge-labels:
-    required: true
-    description: 'input description here'
-    default: 1
+    required: false
+    description: >
+      When any of these labels is applied to a pull request,
+      do not automatically merge it.
+  pull-request:
+    required: false
+    description: >
+      Pull request which should be tried to be merged
+      automatically.
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
