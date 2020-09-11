@@ -1,3 +1,5 @@
+name: automerge
+
 on:
   schedule:
     - cron: 0 * * * *
