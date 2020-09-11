@@ -22,21 +22,24 @@ jobs:
           echo "::set-output name=number::${number}"
 
       - name: Create pull request
+        id: create-pull-request
         uses: peter-evans/create-pull-request@44f76dd5b30daa9cc0444913acc58a040c19539c
         with:
           title: Test Pull Request (${{ steps.changes.outputs.number }})
           commit-message: Test commit 1.
           branch: test-pr-${{ steps.changes.outputs.number }}
 
-      - name: Make more changes
+      - name: Check out pull request branch
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          ref: refs/pull/${{ steps.create-pull-request.outputs.pull-request-number }}/head
+
+      - name: Push more changes to the pull request
         run: |
           echo >> README.md
           echo '${{ steps.changes.outputs.number }}' >> README.md
 
-      - name: Push one more commit to pull request to trigger CI
-        uses: peter-evans/create-pull-request@44f76dd5b30daa9cc0444913acc58a040c19539c
-        with:
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
-          title: Test Pull Request (${{ steps.changes.outputs.number }})
-          commit-message: Test commit 2.
-          branch: test-pr-${{ steps.changes.outputs.number }}
+          git add README.md
+          git commit -m 'Test commit 2.'
+          git push
