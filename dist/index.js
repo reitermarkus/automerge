@@ -40,9 +40,6 @@ exports.AutomergeAction = void 0;
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 const helpers_1 = __webpack_require__(8);
-function authorAssociationAllowed(authorAssociation) {
-    return authorAssociation === 'OWNER' || authorAssociation === 'MEMBER';
-}
 class AutomergeAction {
     constructor(octokit, input) {
         this.octokit = octokit;
@@ -51,6 +48,10 @@ class AutomergeAction {
     automergePullRequest(number) {
         return __awaiter(this, void 0, void 0, function* () {
             core.info(`Evaluating pull request ${number} for auto-mergeability…`);
+            const pullRequest = yield this.octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }));
+            core.info(`PULL_REQUEST: ${JSON.stringify(pullRequest, undefined, 2)}`);
+            const reviews = yield this.octokit.pulls.listReviews(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }));
+            core.info(`REVIEWS: ${JSON.stringify(reviews, undefined, 2)}`);
         });
     }
     handlePullRequestReview() {
@@ -59,9 +60,7 @@ class AutomergeAction {
             if (!action || !review || !pullRequest) {
                 return;
             }
-            if (action === 'submitted' &&
-                review.state === 'approved' &&
-                authorAssociationAllowed(review.author_association)) {
+            if (action === 'submitted' && helpers_1.isApprovedReview(review)) {
                 yield this.automergePullRequest(pullRequest.number);
             }
         });
@@ -126,8 +125,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = void 0;
+exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isApprovedReview = void 0;
 const github = __importStar(__webpack_require__(438));
+function isApprovedReview(review) {
+    return (review.state === 'APPROVED' &&
+        (review.author_association === 'OWNER' || review.author_association === 'MEMBER'));
+}
+exports.isApprovedReview = isApprovedReview;
 // Loosely match a “do not merge” label's name.
 function isDoNotMergeLabel(string) {
     const label = string.toLowerCase().replace(/[^a-z0-9]/g, '');

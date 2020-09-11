@@ -2,12 +2,8 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 import { Input } from './input'
-import { pullRequestsForWorkflowRun } from './helpers'
+import { isApprovedReview, pullRequestsForWorkflowRun } from './helpers'
 import { Octokit } from './types'
-
-function authorAssociationAllowed(authorAssociation: string): boolean {
-  return authorAssociation === 'OWNER' || authorAssociation === 'MEMBER'
-}
 
 export class AutomergeAction {
   octokit: Octokit
@@ -20,6 +16,20 @@ export class AutomergeAction {
 
   async automergePullRequest(number: number): Promise<void> {
     core.info(`Evaluating pull request ${number} for auto-mergeability…`)
+
+    const pullRequest = await this.octokit.pulls.get({
+      ...github.context.repo,
+      pull_number: number,
+    })
+
+    core.info(`PULL_REQUEST: ${JSON.stringify(pullRequest, undefined, 2)}`)
+
+    const reviews = await this.octokit.pulls.listReviews({
+      ...github.context.repo,
+      pull_number: number,
+    })
+
+    core.info(`REVIEWS: ${JSON.stringify(reviews, undefined, 2)}`)
   }
 
   async handlePullRequestReview(): Promise<void> {
@@ -29,11 +39,7 @@ export class AutomergeAction {
       return
     }
 
-    if (
-      action === 'submitted' &&
-      review.state === 'approved' &&
-      authorAssociationAllowed(review.author_association)
-    ) {
+    if (action === 'submitted' && isApprovedReview(review)) {
       await this.automergePullRequest(pullRequest.number)
     }
   }

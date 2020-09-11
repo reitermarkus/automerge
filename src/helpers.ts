@@ -1,6 +1,13 @@
 import * as github from '@actions/github'
 
-import { Octokit, PullRequest, WorkflowRun } from './types'
+import { Octokit, PullRequest, Review, WorkflowRun } from './types'
+
+export function isApprovedReview(review: Review): boolean {
+  return (
+    review.state === 'APPROVED' &&
+    (review.author_association === 'OWNER' || review.author_association === 'MEMBER')
+  )
+}
 
 // Loosely match a “do not merge” label's name.
 export function isDoNotMergeLabel(string: string): boolean {
