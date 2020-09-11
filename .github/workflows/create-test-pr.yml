@@ -40,6 +40,9 @@ jobs:
           echo >> README.md
           echo '${{ steps.changes.outputs.number }}' >> README.md
 
+          git config --global user.email "me@reitermark.us"
+          git config --global user.name "Markus Reiter"
+
           git add README.md
           git commit -m 'Test commit 2.'
           git push
