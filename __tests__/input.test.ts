@@ -2,8 +2,10 @@ import { Input } from '../src/input'
 
 const testEnvVars = {
   INPUT_TOKEN: 'deadbeefcafebabedeadbeefcafebabedeadbeef',
+  'INPUT_MERGE-METHOD': '',
   'INPUT_DO-NOT-MERGE-LABELS': 'never-merge,blocked',
-  'INPUT_MINIMUM-APPROVALS': '1',
+  'INPUT_PULL-REQUEST': '',
+  'INPUT_DRY-RUN': '',
 }
 
 describe('input', () => {
@@ -17,9 +19,23 @@ describe('input', () => {
     const input = new Input()
 
     expect(input.token).toBe('deadbeefcafebabedeadbeefcafebabedeadbeef')
+    expect(input.mergeMethod).toBe(undefined)
     expect(input.doNotMergeLabels).toStrictEqual(['never-merge', 'blocked'])
-    expect(input.minimumApprovals).toBe(1)
     expect(input.pullRequest).toBe(null)
+    expect(input.dryRun).toBe(false)
+  })
+
+  it('accepts an optional `merge-method` input', () => {
+    process.env['INPUT_MERGE-METHOD'] = 'squash'
+
+    const input = new Input()
+
+    expect(input.mergeMethod).toBe('squash')
+  })
+  it('fails with an unknown `merge-method` input', () => {
+    process.env['INPUT_MERGE-METHOD'] = 'fixup'
+
+    expect(() => new Input()).toThrow()
   })
 
   it('accepts an optional `pull-request` input', () => {
@@ -30,18 +46,17 @@ describe('input', () => {
     expect(input.pullRequest).toBe(1234)
   })
 
-  it('fails if `minimum-approvals` is not an integer', () => {
+  it('fails if `pull-request` input si not a number', () => {
     process.env['INPUT_PULL-REQUEST'] = 'abc'
+
     expect(() => new Input()).toThrow()
   })
 
-  it('fails if `minimum-approvals` is not specified', () => {
-    process.env['INPUT_MINIMUM-APPROVALS'] = undefined
-    expect(() => new Input()).toThrow()
-  })
+  it('accepts an optional `dry-run` input', () => {
+    process.env['INPUT_DRY-RUN'] = 'true'
 
-  it('fails if `minimum-approvals` is not an integer', () => {
-    process.env['INPUT_MINIMUM-APPROVALS'] = 'abc'
-    expect(() => new Input()).toThrow()
+    const input = new Input()
+
+    expect(input.dryRun).toBe(true)
   })
 })

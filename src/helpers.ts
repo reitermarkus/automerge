@@ -1,12 +1,50 @@
+import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 import { Octokit, PullRequest, Review, WorkflowRun } from './types'
 
-export function isApprovedReview(review: Review): boolean {
-  return (
-    review.state === 'approved' &&
-    (review.author_association === 'OWNER' || review.author_association === 'MEMBER')
-  )
+export const UNMERGEABLE_STATES = ['blocked']
+
+export function isReviewApproved(review: Review): boolean {
+  if (review.state.toUpperCase() !== 'APPROVED') {
+    core.debug(`Review ${review.id} is not approved.`)
+    return false
+  }
+
+  if (review.author_association !== 'OWNER' && review.author_association !== 'MEMBER') {
+    core.debug(`Review ${review.id} is approved but author is not a member or owner.`)
+    return false
+  }
+
+  return true
+}
+
+export async function isBranchProtected(octokit: Octokit, branchName: string): Promise<boolean> {
+  const branchArgs = {
+    ...github.context.repo,
+    branch: branchName,
+  }
+
+  const branch = (await octokit.repos.getBranch(branchArgs)).data
+
+  if (branch.protected === true && branch.protection.enabled === true) {
+    const protection = (await octokit.repos.getBranchProtection(branchArgs)).data
+
+    // Only auto-merge if reviews are required and stale reviews are dismissed automatically.
+    const requiredPullRequestReviews =
+      protection.required_pull_request_reviews?.dismiss_stale_reviews || false
+
+    // Only auto-merge if there is at least one required status check.
+    const requiredStatusChecks = (protection.required_status_checks?.contexts || []) !== []
+
+    return requiredPullRequestReviews && requiredStatusChecks
+  }
+
+  return false
+}
+
+export function isPullRequestMergeable(pullRequest: PullRequest): boolean {
+  return !pullRequest.merged
 }
 
 // Loosely match a “do not merge” label's name.

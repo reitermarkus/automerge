@@ -1,101 +1,76 @@
 <p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/reitermarkus/automerge/actions"><img alt="typescript-action status" src="https://github.com/reitermarkus/automerge/workflows/build-test/badge.svg"></a>
 </p>
 
-# Create a JavaScript Action using TypeScript
+# Automerge Action
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+This action allows merging pull requests automatically if they have been approved and status checks have passed.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+The action uses GitHub's branch protection rules to determine if auto-merging is allowed for a specific branch. Auto-merging is enabled for a branch given the following criteria:
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+- The **Require pull request reviews before merging** rule and the additional **Dismiss stale pull request approvals when new commits are pushed** rule
+  are enabled for the branch. This ensures that no changes to the pull request are possible between the approval and the automatic merging.
 
-## Create an action from this template
+- The **Require status checks to pass before merging** rule is enabled and at least one status check is selected.
 
-Click the `Use this Template` and provide the new repo details for your action
 
-## Code in Main
+## Inputs
 
-Install the dependencies  
-```bash
-$ npm install
+| Name | Required  | Description |
+|------|-----------|-------------|
+| `token` | yes | A GitHub Token other than the default `GITHUB_TOKEN` needs to be specified in order to be able to trigger other workflows. |
+| `merge-method` | no | Specify which merge method to use. By default, will select the first one available in this order: `merge`, `squash`, `rebase` |
+| `do-not-merge-labels` | no | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically. |
+| `pull-request` | no | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event. |
+| `dry-run` | no | If set to `true`, will not actually merge pull requests but still perform all other checks. |
+
+
+## Example Workflow
+
+```yml
+name: Automerge
+
+on:
+  # Try merging all open pull requests. (Only recommended for testing.)
+  push:
+
+  # Try merging all open pull requests.
+  schedule:
+    - cron: 0 * * * *
+
+  # Try merging pull requests belonging to a workflow run.
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+  # Try merging a pull request when it is approved.
+  pull_request_review:
+    types:
+      - submitted
+
+  # Try merging a pull request when a draft is marked as “ready for review.”
+  pull_request_target:
+    types:
+      - ready_for_review
+
+  # Try merging the specified pull request or all open pull requests if none is specified.
+  workflow_dispatch:
+    inputs:
+      pull-request:
+        description: Pull Request Number
+        required: false
+
+jobs:
+  automerge:
+    if: (github.event.review.state == 'approved' || !github.event.review)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: reitermarkus/automerge@v1
+        with:
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          merge-method: rebase
+          do-not-merge-labels: never-merge
+          pull-request: ${{ github.event.inputs.pull-request }}
 ```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml contains defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
-
-```yaml
-uses: ./
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
-
-## Usage:
-
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
