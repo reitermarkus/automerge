@@ -26,7 +26,7 @@ jobs:
         uses: peter-evans/create-pull-request@44f76dd5b30daa9cc0444913acc58a040c19539c
         with:
           title: Test Pull Request (${{ steps.changes.outputs.number }})
-          commit-message: Test commit 1.
+          commit-message: Test commit by @github-actions.
           branch: test-pr-${{ steps.changes.outputs.number }}
 
       - name: Check out pull request branch
@@ -44,5 +44,5 @@ jobs:
           git config --global user.name "Markus Reiter"
 
           git add README.md
-          git commit -m 'Test commit 2.'
+          git commit -m 'Test commit by @reitermarkus.'
           git push
