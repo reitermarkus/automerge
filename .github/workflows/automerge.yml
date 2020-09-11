@@ -17,12 +17,12 @@ on:
   workflow_dispatch:
     inputs:
       pull_request:
-        description: Pull Request number
+        description: Pull Request Number
         required: false
 
 jobs:
   automerge:
-    if: startsWith(github.repository, 'Homebrew/') && (github.event.review.state == 'approved' || !github.event.review)
+    if: (github.event.review.state == 'approved' || !github.event.review)
     runs-on: ubuntu-latest
     steps:
       - name: Event
