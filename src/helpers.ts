@@ -1,12 +1,41 @@
+import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 import { Octokit, PullRequest, Review, WorkflowRun } from './types'
 
-export function isApprovedReview(review: Review): boolean {
-  return (
-    review.state === 'approved' &&
-    (review.author_association === 'OWNER' || review.author_association === 'MEMBER')
-  )
+export const UNMERGEABLE_STATES = ['blocked']
+
+export function isReviewApproved(review: Review): boolean {
+  if (review.state.toUpperCase() !== 'APPROVED') {
+    core.debug(`Review ${review.id} is not approved.`)
+    return false
+  }
+
+  if (review.author_association !== 'OWNER' && review.author_association !== 'MEMBER') {
+    core.debug(`Review ${review.id} is approved but author is not a member or owner.`)
+    return false
+  }
+
+  return true
+}
+
+export async function isBranchProtected(octokit: Octokit, branchName: string): Promise<boolean> {
+  const branch = (
+    await octokit.repos.getBranch({
+      ...github.context.repo,
+      branch: branchName,
+    })
+  ).data
+
+  if (branch.protected === true && branch.protection.enabled === true) {
+    return true
+  }
+
+  return false
+}
+
+export function isPullRequestMergeable(pullRequest: PullRequest): boolean {
+  return !pullRequest.merged
 }
 
 // Loosely match a “do not merge” label's name.

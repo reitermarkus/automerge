@@ -18,8 +18,8 @@ describe('input', () => {
 
     expect(input.token).toBe('deadbeefcafebabedeadbeefcafebabedeadbeef')
     expect(input.doNotMergeLabels).toStrictEqual(['never-merge', 'blocked'])
-    expect(input.minimumApprovals).toBe(1)
     expect(input.pullRequest).toBe(null)
+    expect(input.dryRun).toBe(false)
   })
 
   it('accepts an optional `pull-request` input', () => {
@@ -28,6 +28,14 @@ describe('input', () => {
     const input = new Input()
 
     expect(input.pullRequest).toBe(1234)
+  })
+
+  it('accepts an optional `dry-run` input', () => {
+    process.env['INPUT_DRY-RUN'] = 'true'
+
+    const input = new Input()
+
+    expect(input.dryRun).toBe(true)
   })
 
   it('fails if `minimum-approvals` is not an integer', () => {

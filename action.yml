@@ -7,22 +7,19 @@ inputs:
     required: true
     description: GitHub token
     default: ${{ github.token }}
-  minimum-approvals:
-    required: true
-    description: >
-      Minimum number of approvals required for a pull request
-      to be merged automatically.
-    default: 1
   do-not-merge-labels:
     required: false
     description: >
-      When any of these labels is applied to a pull request,
-      do not automatically merge it.
+      When any of these labels is applied to a pull request, do not automatically merge it.
   pull-request:
     required: false
     description: >
-      Pull request which should be tried to be merged
-      automatically.
+      Pull request which should be tried to be merged automatically.
+  dry-run:
+    required: true
+    description: >
+      If set to `true`, will not actually merge pull requests but still perform all other checks.
+    default: false
 
 runs:
   using: 'node12'

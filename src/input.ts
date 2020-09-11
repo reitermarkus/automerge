@@ -19,13 +19,13 @@ function getNumber(input: string, options?: core.InputOptions): number | null {
 export class Input {
   token: string
   doNotMergeLabels: string[]
-  minimumApprovals: number
   pullRequest: number | null
+  dryRun: boolean
 
   constructor() {
     this.token = core.getInput('token', { required: true })
     this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',')
-    this.minimumApprovals = getNumber('minimum-approvals', { required: true }) || 1
     this.pullRequest = getNumber('pull-request')
+    this.dryRun = core.getInput('dry-run') === 'true'
   }
 }
