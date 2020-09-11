@@ -12,10 +12,19 @@ async function run(): Promise<void> {
 
     const action = new AutomergeAction(octokit, input)
 
+    if (input.pullRequest) {
+      await action.automergePullRequest(input.pullRequest)
+      return
+    }
+
     const eventName = github.context.eventName
     switch (eventName) {
       case 'pull_request_review': {
         await action.handlePullRequestReview()
+        break
+      }
+      case 'workflow_run': {
+        await action.handleWorkflowRun()
         break
       }
       default: {

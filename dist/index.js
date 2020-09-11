@@ -65,6 +65,9 @@ class AutomergeAction {
             }
         });
     }
+    handleWorkflowRun() {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
 }
 exports.AutomergeAction = AutomergeAction;
 
@@ -166,10 +169,18 @@ function run() {
             const input = new input_1.Input();
             const octokit = github.getOctokit(input.token);
             const action = new automerge_action_1.AutomergeAction(octokit, input);
+            if (input.pullRequest) {
+                yield action.automergePullRequest(input.pullRequest);
+                return;
+            }
             const eventName = github.context.eventName;
             switch (eventName) {
                 case 'pull_request_review': {
                     yield action.handlePullRequestReview();
+                    break;
+                }
+                case 'workflow_run': {
+                    yield action.handleWorkflowRun();
                     break;
                 }
                 default: {

@@ -35,4 +35,6 @@ export class AutomergeAction {
       await this.automergePullRequest(pull_request.number)
     }
   }
+
+  async handleWorkflowRun(): Promise<void> {}
 }

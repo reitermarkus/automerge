@@ -16,7 +16,7 @@ on:
       - submitted
   workflow_dispatch:
     inputs:
-      pull_request:
+      pull-request:
         description: Pull Request Number
         required: false
 
@@ -36,3 +36,4 @@ jobs:
       - uses: ./
         with:
           token: ${{ secrets.MY_GITHUB_TOKEN }}
+          pull-request: ${{ github.event.inputs.pull-request }}
