@@ -1,0 +1,34 @@
+on:
+  schedule:
+    - cron: 0 * * * *
+  check_run:
+    types:
+      - completed
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+  pull_request_review:
+    types:
+      - submitted
+  workflow_dispatch:
+    inputs:
+      pull_request:
+        description: Pull Request number
+        required: false
+
+jobs:
+  automerge:
+    if: startsWith(github.repository, 'Homebrew/') && (github.event.review.state == 'approved' || !github.event.review)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Event
+        run: |
+          cat <<EOF | jq
+            ${{ toJSON(github.event) }}
+          EOF
+      - uses: actions/checkout@main
+      - uses: ./
+        with:
+          token: ${{ secrets.MY_GITHUB_TOKEN }}

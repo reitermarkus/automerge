@@ -2,10 +2,18 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  milliseconds: # change this
+  token:
+    required: true
+    description: GitHub token
+    default: ${{ github.token }}
+  minimum-approvals:
     required: true
     description: 'input description here'
-    default: 'default value if applicable'
+    default: 1
+  do-not-merge-labels:
+    required: true
+    description: 'input description here'
+    default: 1
 runs:
   using: 'node12'
   main: 'dist/index.js'

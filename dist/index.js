@@ -29,22 +29,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Input = void 0;
 const core = __importStar(__webpack_require__(186));
+function getNumber(input, options) {
+    const stringValue = core.getInput(input, options);
+    if (stringValue === '' && !(options === null || options === void 0 ? void 0 : options.required)) {
+        return null;
+    }
+    const numberValue = parseInt(stringValue, 10);
+    if (isNaN(numberValue)) {
+        throw Error(`Failed parsing input '${input}' to number: '${stringValue}'`);
+    }
+    return numberValue;
+}
 class Input {
     constructor() {
         this.token = core.getInput('token', { required: true });
-        this.doNotMergeLabels = core.getInput('token').split(',');
-        try {
-            const pullRequest = core.getInput('pull-request') || null;
-            if (pullRequest) {
-                this.pullRequest = parseInt(pullRequest);
-            }
-            else {
-                this.pullRequest = null;
-            }
-        }
-        catch (error) {
-            throw Error(`Failed getting input 'pull-request': ${error}`);
-        }
+        this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',');
+        this.minimumApprovals = getNumber('minimum-approvals', { required: true });
+        this.pullRequest = getNumber('pull-request');
     }
 }
 exports.Input = Input;
