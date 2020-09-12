@@ -28,17 +28,25 @@ export async function isBranchProtected(octokit: Octokit, branchName: string): P
   const branch = (await octokit.repos.getBranch(branchArgs)).data
 
   if (branch.protected === true && branch.protection.enabled === true) {
-    const protection = (await octokit.repos.getBranchProtection(branchArgs)).data
+    try {
+      const protection = (await octokit.repos.getBranchProtection(branchArgs)).data
 
-    // Only auto-merge if reviews are required and stale reviews are dismissed automatically.
-    const requiredPullRequestReviews =
-      protection.required_pull_request_reviews?.dismiss_stale_reviews || false
+      // Only auto-merge if reviews are required and stale reviews are dismissed automatically.
+      const requiredPullRequestReviews =
+        protection.required_pull_request_reviews?.dismiss_stale_reviews || false
 
-    // Only auto-merge if there is at least one required status check.
-    const contexts = protection.required_status_checks?.contexts || []
-    const requiredStatusChecks = contexts.length >= 1
+      // Only auto-merge if there is at least one required status check.
+      const contexts = protection.required_status_checks?.contexts || []
+      const requiredStatusChecks = contexts.length >= 1
 
-    return requiredPullRequestReviews && requiredStatusChecks
+      return requiredPullRequestReviews && requiredStatusChecks
+    } catch (error) {
+      if (error.status === 404) {
+        core.setFailed(
+          `Failed getting protection rules for branch '${branchName}': ${error.message}\nMake sure the specified 'token' has the rights to view branch protection rules.`
+        )
+      }
+    }
   }
 
   return false

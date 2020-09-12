@@ -266,13 +266,20 @@ function isBranchProtected(octokit, branchName) {
         const branchArgs = Object.assign(Object.assign({}, github.context.repo), { branch: branchName });
         const branch = (yield octokit.repos.getBranch(branchArgs)).data;
         if (branch.protected === true && branch.protection.enabled === true) {
-            const protection = (yield octokit.repos.getBranchProtection(branchArgs)).data;
-            // Only auto-merge if reviews are required and stale reviews are dismissed automatically.
-            const requiredPullRequestReviews = ((_a = protection.required_pull_request_reviews) === null || _a === void 0 ? void 0 : _a.dismiss_stale_reviews) || false;
-            // Only auto-merge if there is at least one required status check.
-            const contexts = ((_b = protection.required_status_checks) === null || _b === void 0 ? void 0 : _b.contexts) || [];
-            const requiredStatusChecks = contexts.length >= 1;
-            return requiredPullRequestReviews && requiredStatusChecks;
+            try {
+                const protection = (yield octokit.repos.getBranchProtection(branchArgs)).data;
+                // Only auto-merge if reviews are required and stale reviews are dismissed automatically.
+                const requiredPullRequestReviews = ((_a = protection.required_pull_request_reviews) === null || _a === void 0 ? void 0 : _a.dismiss_stale_reviews) || false;
+                // Only auto-merge if there is at least one required status check.
+                const contexts = ((_b = protection.required_status_checks) === null || _b === void 0 ? void 0 : _b.contexts) || [];
+                const requiredStatusChecks = contexts.length >= 1;
+                return requiredPullRequestReviews && requiredStatusChecks;
+            }
+            catch (error) {
+                if (error.status === 404) {
+                    core.setFailed(`Failed getting protection rules for branch '${branchName}': ${error.message}\nMake sure the specified 'token' has the rights to view branch protection rules.`);
+                }
+            }
         }
         return false;
     });
