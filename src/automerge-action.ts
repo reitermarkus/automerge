@@ -2,7 +2,13 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 import { Input } from './input'
-import { isBranchProtected, isDoNotMergeLabel, isReviewApproved, pullRequestsForWorkflowRun } from './helpers'
+import {
+  isBranchProtected,
+  isDoNotMergeLabel,
+  isPullRequestApproved,
+  isReviewApproved,
+  pullRequestsForWorkflowRun,
+} from './helpers'
 import { MergeMethod, Octokit } from './types'
 
 export class AutomergeAction {
@@ -70,6 +76,11 @@ export class AutomergeAction {
     const baseBranch = pullRequest.base.ref
     if (!(await isBranchProtected(this.octokit, baseBranch))) {
       core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`)
+      return false
+    }
+
+    if (!(await isPullRequestApproved(this.octokit, pullRequest))) {
+      core.info(`Pull request ${number} is not approved.`)
       return false
     }
 

@@ -61,7 +61,7 @@ class AutomergeAction {
                 if (retry) {
                     queue.push({ number, tries: tries + 1 });
                 }
-                core.info("\n");
+                core.info('');
             }
         });
     }
@@ -92,6 +92,10 @@ class AutomergeAction {
             const baseBranch = pullRequest.base.ref;
             if (!(yield helpers_1.isBranchProtected(this.octokit, baseBranch))) {
                 core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`);
+                return false;
+            }
+            if (!(yield helpers_1.isPullRequestApproved(this.octokit, pullRequest))) {
+                core.info(`Pull request ${number} is not approved.`);
                 return false;
             }
             if (pullRequest.merged === true) {
@@ -245,16 +249,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isBranchProtected = exports.isReviewApproved = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isBranchProtected = exports.isReviewApproved = exports.isReviewAuthorMember = exports.isPullRequestApproved = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 exports.UNMERGEABLE_STATES = ['blocked'];
+function isPullRequestApproved(octokit, pullRequest) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const reviews = (yield octokit.pulls.listReviews(Object.assign(Object.assign({}, github.context.repo), { pull_number: pullRequest.number, per_page: 100 }))).data;
+        if (reviews.length === 100) {
+            core.setFailed('Handling pull requests with more than 100 reviews is not implemented.');
+            return false;
+        }
+        const relevantReviews = uniqueRelevantReviews(reviews);
+        const relevantReviewsForCommit = relevantReviews.filter(review => review.commit_id === pullRequest.head.sha);
+        return (relevantReviewsForCommit.length > 0 &&
+            isReviewApproved(relevantReviewsForCommit[relevantReviewsForCommit.length - 1]));
+    });
+}
+exports.isPullRequestApproved = isPullRequestApproved;
+function uniqueRelevantReviews(reviews) {
+    const relevantReviews = reviews.filter(review => (review.state === 'APPROVED' || review.state === 'CHANGES_REQUESTED') && isReviewAuthorMember(review));
+    const reviewsByAuthor = {};
+    for (const relevantReview of relevantReviews) {
+        reviewsByAuthor[relevantReview.user.login] = relevantReview;
+    }
+    return Object.values(reviewsByAuthor);
+}
+function isReviewAuthorMember(review) {
+    return review.author_association === 'OWNER' || review.author_association === 'MEMBER';
+}
+exports.isReviewAuthorMember = isReviewAuthorMember;
 function isReviewApproved(review) {
     if (review.state.toUpperCase() !== 'APPROVED') {
         core.debug(`Review ${review.id} is not approved.`);
         return false;
     }
-    if (review.author_association !== 'OWNER' && review.author_association !== 'MEMBER') {
+    if (!isReviewAuthorMember(review)) {
         core.debug(`Review ${review.id} is approved but author is not a member or owner.`);
         return false;
     }

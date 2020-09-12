@@ -5,13 +5,55 @@ import { Octokit, PullRequest, Review, WorkflowRun } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
+export async function isPullRequestApproved(octokit: Octokit, pullRequest: PullRequest): Promise<boolean> {
+  const reviews = (
+    await octokit.pulls.listReviews({
+      ...github.context.repo,
+      pull_number: pullRequest.number,
+      per_page: 100,
+    })
+  ).data
+
+  if (reviews.length === 100) {
+    core.setFailed('Handling pull requests with more than 100 reviews is not implemented.')
+    return false
+  }
+
+  const relevantReviews = uniqueRelevantReviews(reviews)
+  const relevantReviewsForCommit = relevantReviews.filter(review => review.commit_id === pullRequest.head.sha)
+
+  return (
+    relevantReviewsForCommit.length > 0 &&
+    isReviewApproved(relevantReviewsForCommit[relevantReviewsForCommit.length - 1])
+  )
+}
+
+function uniqueRelevantReviews(reviews: Review[]): Review[] {
+  const relevantReviews = reviews.filter(
+    review =>
+      (review.state === 'APPROVED' || review.state === 'CHANGES_REQUESTED') && isReviewAuthorMember(review)
+  )
+
+  const reviewsByAuthor: { [key: string]: Review } = {}
+
+  for (const relevantReview of relevantReviews) {
+    reviewsByAuthor[relevantReview.user.login] = relevantReview
+  }
+
+  return Object.values(reviewsByAuthor)
+}
+
+export function isReviewAuthorMember(review: Review): boolean {
+  return review.author_association === 'OWNER' || review.author_association === 'MEMBER'
+}
+
 export function isReviewApproved(review: Review): boolean {
   if (review.state.toUpperCase() !== 'APPROVED') {
     core.debug(`Review ${review.id} is not approved.`)
     return false
   }
 
-  if (review.author_association !== 'OWNER' && review.author_association !== 'MEMBER') {
+  if (!isReviewAuthorMember(review)) {
     core.debug(`Review ${review.id} is approved but author is not a member or owner.`)
     return false
   }
