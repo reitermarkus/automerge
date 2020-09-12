@@ -249,10 +249,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isBranchProtected = exports.isReviewApproved = exports.isReviewAuthorMember = exports.isPullRequestApproved = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isBranchProtected = exports.isReviewApproved = exports.isReviewAuthorMember = exports.isPullRequestApproved = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 exports.UNMERGEABLE_STATES = ['blocked'];
+function isChangeRequested(review) {
+    return review.state.toUpperCase() === 'CHANGES_REQUESTED';
+}
+function isApproval(review) {
+    return review.state.toUpperCase() === 'APPROVED';
+}
+function relevantReviewsForCommit(reviews, commit) {
+    return reviews
+        .filter(review => review.commit_id === commit &&
+        (isApproval(review) || isChangeRequested(review)) &&
+        isReviewAuthorMember(review))
+        .sort((a, b) => Date.parse(b.submitted_at) - Date.parse(a.submitted_at))
+        .reduce((acc, review) => (acc.some(r => r.user.login === review.user.login) ? acc : [...acc, review]), [])
+        .reverse();
+}
+exports.relevantReviewsForCommit = relevantReviewsForCommit;
+function commitHasMinimumApprovals(reviews, commit, n) {
+    const relevantReviews = relevantReviewsForCommit(reviews, commit);
+    // All last `n` reviews must be approvals.
+    const lastNReviews = relevantReviews.reverse().slice(0, n);
+    return lastNReviews.length >= n && lastNReviews.every(isApproval);
+}
+exports.commitHasMinimumApprovals = commitHasMinimumApprovals;
 function isPullRequestApproved(octokit, pullRequest) {
     return __awaiter(this, void 0, void 0, function* () {
         const reviews = (yield octokit.pulls.listReviews(Object.assign(Object.assign({}, github.context.repo), { pull_number: pullRequest.number, per_page: 100 }))).data;
@@ -260,27 +283,18 @@ function isPullRequestApproved(octokit, pullRequest) {
             core.setFailed('Handling pull requests with more than 100 reviews is not implemented.');
             return false;
         }
-        const relevantReviews = uniqueRelevantReviews(reviews);
-        const relevantReviewsForCommit = relevantReviews.filter(review => review.commit_id === pullRequest.head.sha);
-        return (relevantReviewsForCommit.length > 0 &&
-            isReviewApproved(relevantReviewsForCommit[relevantReviewsForCommit.length - 1]));
+        const commit = pullRequest.head.sha;
+        const minimumApprovals = 1;
+        return commitHasMinimumApprovals(reviews, commit, minimumApprovals);
     });
 }
 exports.isPullRequestApproved = isPullRequestApproved;
-function uniqueRelevantReviews(reviews) {
-    const relevantReviews = reviews.filter(review => (review.state === 'APPROVED' || review.state === 'CHANGES_REQUESTED') && isReviewAuthorMember(review));
-    const reviewsByAuthor = {};
-    for (const relevantReview of relevantReviews) {
-        reviewsByAuthor[relevantReview.user.login] = relevantReview;
-    }
-    return Object.values(reviewsByAuthor);
-}
 function isReviewAuthorMember(review) {
     return review.author_association === 'OWNER' || review.author_association === 'MEMBER';
 }
 exports.isReviewAuthorMember = isReviewAuthorMember;
 function isReviewApproved(review) {
-    if (review.state.toUpperCase() !== 'APPROVED') {
+    if (!isApproval(review)) {
         core.debug(`Review ${review.id} is not approved.`);
         return false;
     }

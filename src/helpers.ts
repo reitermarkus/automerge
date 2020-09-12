@@ -5,6 +5,38 @@ import { Octokit, PullRequest, Review, WorkflowRun } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
+function isChangeRequested(review: Review): boolean {
+  return review.state.toUpperCase() === 'CHANGES_REQUESTED'
+}
+
+function isApproval(review: Review): boolean {
+  return review.state.toUpperCase() === 'APPROVED'
+}
+
+export function relevantReviewsForCommit(reviews: Review[], commit: string): Review[] {
+  return reviews
+    .filter(
+      review =>
+        review.commit_id === commit &&
+        (isApproval(review) || isChangeRequested(review)) &&
+        isReviewAuthorMember(review)
+    )
+    .sort((a, b) => Date.parse(b.submitted_at) - Date.parse(a.submitted_at))
+    .reduce(
+      (acc: Review[], review) => (acc.some(r => r.user.login === review.user.login) ? acc : [...acc, review]),
+      []
+    )
+    .reverse()
+}
+
+export function commitHasMinimumApprovals(reviews: Review[], commit: string, n: number): boolean {
+  const relevantReviews = relevantReviewsForCommit(reviews, commit)
+
+  // All last `n` reviews must be approvals.
+  const lastNReviews = relevantReviews.reverse().slice(0, n)
+  return lastNReviews.length >= n && lastNReviews.every(isApproval)
+}
+
 export async function isPullRequestApproved(octokit: Octokit, pullRequest: PullRequest): Promise<boolean> {
   const reviews = (
     await octokit.pulls.listReviews({
@@ -19,28 +51,9 @@ export async function isPullRequestApproved(octokit: Octokit, pullRequest: PullR
     return false
   }
 
-  const relevantReviews = uniqueRelevantReviews(reviews)
-  const relevantReviewsForCommit = relevantReviews.filter(review => review.commit_id === pullRequest.head.sha)
-
-  return (
-    relevantReviewsForCommit.length > 0 &&
-    isReviewApproved(relevantReviewsForCommit[relevantReviewsForCommit.length - 1])
-  )
-}
-
-function uniqueRelevantReviews(reviews: Review[]): Review[] {
-  const relevantReviews = reviews.filter(
-    review =>
-      (review.state === 'APPROVED' || review.state === 'CHANGES_REQUESTED') && isReviewAuthorMember(review)
-  )
-
-  const reviewsByAuthor: { [key: string]: Review } = {}
-
-  for (const relevantReview of relevantReviews) {
-    reviewsByAuthor[relevantReview.user.login] = relevantReview
-  }
-
-  return Object.values(reviewsByAuthor)
+  const commit = pullRequest.head.sha
+  const minimumApprovals = 1
+  return commitHasMinimumApprovals(reviews, commit, minimumApprovals)
 }
 
 export function isReviewAuthorMember(review: Review): boolean {
@@ -48,7 +61,7 @@ export function isReviewAuthorMember(review: Review): boolean {
 }
 
 export function isReviewApproved(review: Review): boolean {
-  if (review.state.toUpperCase() !== 'APPROVED') {
+  if (!isApproval(review)) {
     core.debug(`Review ${review.id} is not approved.`)
     return false
   }

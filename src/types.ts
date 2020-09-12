@@ -10,5 +10,6 @@ export interface Review {
   id: number
   user: { login: string }
   commit_id: string
+  submitted_at: string
 }
 export type MergeMethod = 'merge' | 'squash' | 'rebase' | undefined
