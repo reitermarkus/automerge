@@ -52,10 +52,6 @@ export async function isBranchProtected(octokit: Octokit, branchName: string): P
   return false
 }
 
-export function isPullRequestMergeable(pullRequest: PullRequest): boolean {
-  return !pullRequest.merged
-}
-
 // Loosely match a “do not merge” label's name.
 export function isDoNotMergeLabel(string: string): boolean {
   const label = string.toLowerCase().replace(/[^a-z0-9]/g, '')

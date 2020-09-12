@@ -244,7 +244,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isPullRequestMergeable = exports.isBranchProtected = exports.isReviewApproved = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isBranchProtected = exports.isReviewApproved = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 exports.UNMERGEABLE_STATES = ['blocked'];
@@ -285,10 +285,6 @@ function isBranchProtected(octokit, branchName) {
     });
 }
 exports.isBranchProtected = isBranchProtected;
-function isPullRequestMergeable(pullRequest) {
-    return !pullRequest.merged;
-}
-exports.isPullRequestMergeable = isPullRequestMergeable;
 // Loosely match a “do not merge” label's name.
 function isDoNotMergeLabel(string) {
     const label = string.toLowerCase().replace(/[^a-z0-9]/g, '');
