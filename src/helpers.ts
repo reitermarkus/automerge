@@ -45,6 +45,8 @@ export async function isBranchProtected(octokit: Octokit, branchName: string): P
         core.setFailed(
           `Failed getting protection rules for branch '${branchName}': ${error.message}\nMake sure the specified 'token' has the rights to view branch protection rules.`
         )
+      } else {
+        throw error
       }
     }
   }

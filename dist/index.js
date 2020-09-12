@@ -279,6 +279,9 @@ function isBranchProtected(octokit, branchName) {
                 if (error.status === 404) {
                     core.setFailed(`Failed getting protection rules for branch '${branchName}': ${error.message}\nMake sure the specified 'token' has the rights to view branch protection rules.`);
                 }
+                else {
+                    throw error;
+                }
             }
         }
         return false;
