@@ -127,13 +127,14 @@ class AutomergeAction {
                 case 'unknown':
                 case 'unstable': {
                     core.info(`Pull request ${number} is mergeable with state '${mergeableState}'.`);
+                    const mergeMethod = yield this.determineMergeMethod();
                     try {
                         if (this.input.dryRun) {
                             core.info(`Would try merging pull request ${number}.`);
                         }
                         else {
                             core.info(`Merging pull request ${number}:`);
-                            this.octokit.pulls.merge(Object.assign(Object.assign({}, github.context.repo), { pull_number: number, sha: pullRequest.head.sha, merge_method: yield this.determineMergeMethod() }));
+                            this.octokit.pulls.merge(Object.assign(Object.assign({}, github.context.repo), { pull_number: number, sha: pullRequest.head.sha, merge_method: mergeMethod }));
                             core.info(`Successfully merged pull request ${number}.`);
                         }
                         return false;

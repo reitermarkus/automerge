@@ -115,6 +115,8 @@ export class AutomergeAction {
       case 'unstable': {
         core.info(`Pull request ${number} is mergeable with state '${mergeableState}'.`)
 
+        const mergeMethod = await this.determineMergeMethod()
+
         try {
           if (this.input.dryRun) {
             core.info(`Would try merging pull request ${number}.`)
@@ -125,7 +127,7 @@ export class AutomergeAction {
               ...github.context.repo,
               pull_number: number,
               sha: pullRequest.head.sha,
-              merge_method: await this.determineMergeMethod(),
+              merge_method: mergeMethod,
             })
 
             core.info(`Successfully merged pull request ${number}.`)
