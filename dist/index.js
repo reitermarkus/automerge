@@ -61,6 +61,7 @@ class AutomergeAction {
                 if (retry) {
                     queue.push({ number, tries: tries + 1 });
                 }
+                core.info("\n");
             }
         });
     }
