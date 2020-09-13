@@ -1,6 +1,11 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: Auto-Merge Pull Request
+description: >
+  Automatically merge pull requests once they are approved and
+  required status checks are passing.
+author: reitermarkus
+branding:
+  icon: git-pull-request
+  color: purple
 
 inputs:
   token:
