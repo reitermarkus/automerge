@@ -372,7 +372,7 @@ exports.Input = void 0;
 const core = __importStar(__webpack_require__(186));
 function getNumber(input, options) {
     const stringValue = core.getInput(input, options);
-    if (stringValue === '' && !(options === null || options === void 0 ? void 0 : options.required)) {
+    if (!stringValue && !(options === null || options === void 0 ? void 0 : options.required)) {
         return null;
     }
     const numberValue = parseInt(stringValue, 10);

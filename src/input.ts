@@ -5,7 +5,7 @@ import { MergeMethod } from './types'
 function getNumber(input: string, options?: core.InputOptions): number | null {
   const stringValue = core.getInput(input, options)
 
-  if (stringValue === '' && !options?.required) {
+  if (!stringValue && !options?.required) {
     return null
   }
 
