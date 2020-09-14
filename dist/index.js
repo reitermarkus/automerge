@@ -306,11 +306,12 @@ function isReviewApproved(review) {
 }
 exports.isReviewApproved = isReviewApproved;
 function isBranchProtected(octokit, branchName) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const branch = (yield octokit.repos.getBranch(Object.assign(Object.assign({}, github.context.repo), { branch: branchName }))).data;
         if (branch.protected === true && branch.protection.enabled === true) {
             // Only auto-merge if there is at least one required status check.
-            const contexts = branch.protection.required_status_checks.contexts || [];
+            const contexts = (_a = branch.protection.required_status_checks.contexts) !== null && _a !== void 0 ? _a : [];
             return contexts.length >= 1;
         }
         return false;

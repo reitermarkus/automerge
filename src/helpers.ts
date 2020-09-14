@@ -84,7 +84,7 @@ export async function isBranchProtected(octokit: Octokit, branchName: string): P
 
   if (branch.protected === true && branch.protection.enabled === true) {
     // Only auto-merge if there is at least one required status check.
-    const contexts = branch.protection.required_status_checks.contexts || []
+    const contexts = branch.protection.required_status_checks.contexts ?? []
     return contexts.length >= 1
   }
 
