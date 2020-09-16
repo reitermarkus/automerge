@@ -136,7 +136,7 @@ export class AutomergeAction {
           } else {
             core.info(`Merging pull request ${number}:`)
 
-            this.octokit.pulls.merge({
+            await this.octokit.pulls.merge({
               ...github.context.repo,
               pull_number: number,
               sha: pullRequest.head.sha,

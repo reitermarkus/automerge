@@ -139,7 +139,7 @@ class AutomergeAction {
                         }
                         else {
                             core.info(`Merging pull request ${number}:`);
-                            this.octokit.pulls.merge(Object.assign(Object.assign({}, github.context.repo), { pull_number: number, sha: pullRequest.head.sha, merge_method: mergeMethod }));
+                            yield this.octokit.pulls.merge(Object.assign(Object.assign({}, github.context.repo), { pull_number: number, sha: pullRequest.head.sha, merge_method: mergeMethod }));
                             core.info(`Successfully merged pull request ${number}.`);
                         }
                         return false;
