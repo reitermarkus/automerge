@@ -90,8 +90,14 @@ class AutomergeAction {
             core.info(`Evaluating mergeability for pull request ${number}:`);
             const pullRequest = (yield this.octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }))).data;
             const baseBranch = pullRequest.base.ref;
-            if (!(yield helpers_1.isBranchProtected(this.octokit, baseBranch))) {
+            const requiredStatusChecks = yield helpers_1.requiredStatusChecksForBranch(this.octokit, baseBranch);
+            // Only auto-merge if there is at least one required status check.
+            if (requiredStatusChecks.length < 1) {
                 core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`);
+                return false;
+            }
+            if (!(yield helpers_1.passedRequiredStatusChecks(this.octokit, pullRequest, requiredStatusChecks))) {
+                core.info(`Required status checks for pull request ${number} are not successful.`);
                 return false;
             }
             if (!(yield helpers_1.isPullRequestApproved(this.octokit, pullRequest))) {
@@ -249,7 +255,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.isBranchProtected = exports.isReviewApproved = exports.isReviewAuthorMember = exports.isPullRequestApproved = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.passedRequiredStatusChecks = exports.requiredStatusChecksForBranch = exports.isReviewApproved = exports.isReviewAuthorMember = exports.isPullRequestApproved = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 exports.UNMERGEABLE_STATES = ['blocked'];
@@ -305,19 +311,24 @@ function isReviewApproved(review) {
     return true;
 }
 exports.isReviewApproved = isReviewApproved;
-function isBranchProtected(octokit, branchName) {
+function requiredStatusChecksForBranch(octokit, branchName) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const branch = (yield octokit.repos.getBranch(Object.assign(Object.assign({}, github.context.repo), { branch: branchName }))).data;
         if (branch.protected === true && branch.protection.enabled === true) {
-            // Only auto-merge if there is at least one required status check.
-            const contexts = (_a = branch.protection.required_status_checks.contexts) !== null && _a !== void 0 ? _a : [];
-            return contexts.length >= 1;
+            return (_a = branch.protection.required_status_checks.contexts) !== null && _a !== void 0 ? _a : [];
         }
-        return false;
+        return [];
     });
 }
-exports.isBranchProtected = isBranchProtected;
+exports.requiredStatusChecksForBranch = requiredStatusChecksForBranch;
+function passedRequiredStatusChecks(octokit, pullRequest, requiredChecks) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const checkRuns = (yield octokit.checks.listForRef(Object.assign(Object.assign({}, github.context.repo), { ref: pullRequest.head.sha }))).data.check_runs;
+        return requiredChecks.every(requiredCheck => checkRuns.some(checkRun => checkRun.name === requiredCheck && checkRun.conclusion === 'success'));
+    });
+}
+exports.passedRequiredStatusChecks = passedRequiredStatusChecks;
 // Loosely match a “do not merge” label's name.
 function isDoNotMergeLabel(string) {
     const label = string.toLowerCase().replace(/[^a-z0-9]/g, '');

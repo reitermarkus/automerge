@@ -74,7 +74,7 @@ export function isReviewApproved(review: Review): boolean {
   return true
 }
 
-export async function isBranchProtected(octokit: Octokit, branchName: string): Promise<boolean> {
+export async function requiredStatusChecksForBranch(octokit: Octokit, branchName: string): Promise<string[]> {
   const branch = (
     await octokit.repos.getBranch({
       ...github.context.repo,
@@ -83,12 +83,27 @@ export async function isBranchProtected(octokit: Octokit, branchName: string): P
   ).data
 
   if (branch.protected === true && branch.protection.enabled === true) {
-    // Only auto-merge if there is at least one required status check.
-    const contexts = branch.protection.required_status_checks.contexts ?? []
-    return contexts.length >= 1
+    return branch.protection.required_status_checks.contexts ?? []
   }
 
-  return false
+  return []
+}
+
+export async function passedRequiredStatusChecks(
+  octokit: Octokit,
+  pullRequest: PullRequest,
+  requiredChecks: string[]
+): Promise<boolean> {
+  const checkRuns = (
+    await octokit.checks.listForRef({
+      ...github.context.repo,
+      ref: pullRequest.head.sha,
+    })
+  ).data.check_runs
+
+  return requiredChecks.every(requiredCheck =>
+    checkRuns.some(checkRun => checkRun.name === requiredCheck && checkRun.conclusion === 'success')
+  )
 }
 
 // Loosely match a “do not merge” label's name.
