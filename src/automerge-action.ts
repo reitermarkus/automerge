@@ -139,21 +139,29 @@ export class AutomergeAction {
 
         const mergeMethod = await this.determineMergeMethod()
 
+        const useTitle = this.input.squashTitle && mergeMethod === 'squash'
+        const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})\n` : undefined
+        const commitMessage = useTitle ? '\n' : undefined
+
+        const titleMessage = useTitle ? ` with title '${commitTitle}'` : undefined
+
+        if (this.input.dryRun) {
+          core.info(`Would try merging pull request ${number}${titleMessage}.`)
+          return false
+        }
+
         try {
-          if (this.input.dryRun) {
-            core.info(`Would try merging pull request ${number}.`)
-          } else {
-            core.info(`Merging pull request ${number}:`)
+          core.info(`Merging pull request ${number}${titleMessage}:`)
+          await this.octokit.pulls.merge({
+            ...github.context.repo,
+            pull_number: number,
+            sha: pullRequest.head.sha,
+            merge_method: mergeMethod,
+            commit_title: commitTitle,
+            commit_message: commitMessage,
+          })
 
-            await this.octokit.pulls.merge({
-              ...github.context.repo,
-              pull_number: number,
-              sha: pullRequest.head.sha,
-              merge_method: mergeMethod,
-            })
-
-            core.info(`Successfully merged pull request ${number}.`)
-          }
+          core.info(`Successfully merged pull request ${number}.`)
 
           return false
         } catch (error) {

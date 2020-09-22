@@ -139,15 +139,18 @@ class AutomergeAction {
                 case 'unstable': {
                     core.info(`Pull request ${number} is mergeable with state '${mergeableState}'.`);
                     const mergeMethod = yield this.determineMergeMethod();
+                    const useTitle = this.input.squashTitle && mergeMethod === 'squash';
+                    const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})\n` : undefined;
+                    const commitMessage = useTitle ? '\n' : undefined;
+                    const titleMessage = useTitle ? ` with title '${commitTitle}'` : undefined;
+                    if (this.input.dryRun) {
+                        core.info(`Would try merging pull request ${number}${titleMessage}.`);
+                        return false;
+                    }
                     try {
-                        if (this.input.dryRun) {
-                            core.info(`Would try merging pull request ${number}.`);
-                        }
-                        else {
-                            core.info(`Merging pull request ${number}:`);
-                            yield this.octokit.pulls.merge(Object.assign(Object.assign({}, github.context.repo), { pull_number: number, sha: pullRequest.head.sha, merge_method: mergeMethod }));
-                            core.info(`Successfully merged pull request ${number}.`);
-                        }
+                        core.info(`Merging pull request ${number}${titleMessage}:`);
+                        yield this.octokit.pulls.merge(Object.assign(Object.assign({}, github.context.repo), { pull_number: number, sha: pullRequest.head.sha, merge_method: mergeMethod, commit_title: commitTitle, commit_message: commitMessage }));
+                        core.info(`Successfully merged pull request ${number}.`);
                         return false;
                     }
                     catch (error) {
@@ -409,6 +412,7 @@ class Input {
                 throw Error(`Unknown merge method: '${mergeMethod}'`);
             }
         }
+        this.squashTitle = core.getInput('squash-title') === 'true';
         this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',');
         this.pullRequest = getNumber('pull-request');
         this.dryRun = core.getInput('dry-run') === 'true';

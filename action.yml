@@ -18,6 +18,11 @@ inputs:
     description: >
       Specify which merge method to use. By default, will select the first one
       available in this order: `merge`, `squash`, `rebase`
+  squash-title:
+    required: false
+    description: >
+      Use the pull request title as the commit message when squashing.
+    default: false
   do-not-merge-labels:
     required: false
     description: >

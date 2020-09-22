@@ -38,5 +38,6 @@ jobs:
       - uses: ./
         with:
           token: ${{ secrets.MY_GITHUB_TOKEN }}
+          squash-title: true
           do-not-merge-labels: never-merge
           pull-request: ${{ github.event.inputs.pull-request }}
