@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/reitermarkus/automerge/actions"><img alt="typescript-action status" src="https://github.com/reitermarkus/automerge/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/reitermarkus/automerge/actions"><img alt="automerge build-test status" src="https://github.com/reitermarkus/automerge/workflows/build-test/badge.svg"></a>
 </p>
 
 # Automerge Action
