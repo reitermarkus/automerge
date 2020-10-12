@@ -23,7 +23,7 @@ jobs:
 
       - name: Create pull request
         id: create-pull-request
-        uses: peter-evans/create-pull-request@da928d5fcce0b0dd0c34642f77e862dc9cf76d8b
+        uses: peter-evans/create-pull-request@c7f493a8000b8aeb17a1332e326ba76b57cb83eb
         with:
           title: Test Pull Request (${{ steps.changes.outputs.number }})
           commit-message: Test commit by @github-actions.
