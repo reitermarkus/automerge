@@ -23,6 +23,7 @@ Auto-merging is enabled for a branch given the following criteria:
 | `merge-method` | no | Specify which merge method to use. By default, will select the first one available in this order: `merge`, `squash`, `rebase` |
 | `squash-title` | no | Use the pull request title as the commit message when squashing. |
 | `do-not-merge-labels` | no | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically. |
+| `required-labels` | no | Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically. |
 | `pull-request` | no | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event. |
 | `dry-run` | no | If set to `true`, will not actually merge pull requests but still perform all other checks. |
 
@@ -74,6 +75,7 @@ jobs:
           token: ${{ secrets.MY_GITHUB_TOKEN }}
           merge-method: rebase
           do-not-merge-labels: never-merge
+          required-labels: automerge
           pull-request: ${{ github.event.inputs.pull-request }}
           dry-run: true
 ```

@@ -4,6 +4,7 @@ const testEnvVars = {
   INPUT_TOKEN: 'deadbeefcafebabedeadbeefcafebabedeadbeef',
   'INPUT_MERGE-METHOD': '',
   'INPUT_DO-NOT-MERGE-LABELS': 'never-merge,blocked',
+  'INPUT_REQUIRED-LABELS': 'automerge',
   'INPUT_PULL-REQUEST': '',
   'INPUT_DRY-RUN': '',
 }
@@ -21,6 +22,7 @@ describe('input', () => {
     expect(input.token).toBe('deadbeefcafebabedeadbeefcafebabedeadbeef')
     expect(input.mergeMethod).toBe(undefined)
     expect(input.doNotMergeLabels).toStrictEqual(['never-merge', 'blocked'])
+    expect(input.requiredLabels).toStrictEqual(['automerge'])
     expect(input.pullRequest).toBe(null)
     expect(input.dryRun).toBe(false)
   })

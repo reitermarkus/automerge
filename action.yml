@@ -27,6 +27,10 @@ inputs:
     required: false
     description: >
       When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically.
+  required-labels:
+    required: false
+    description: >
+      Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically.
   pull-request:
     required: false
     description: >
