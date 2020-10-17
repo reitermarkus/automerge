@@ -23,6 +23,7 @@ export class Input {
   mergeMethod: MergeMethod
   squashTitle: boolean
   doNotMergeLabels: string[]
+  requiredLabels: string[]
   pullRequest: number | null
   dryRun: boolean
 
@@ -45,6 +46,7 @@ export class Input {
 
     this.squashTitle = core.getInput('squash-title') === 'true'
     this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',')
+    this.requiredLabels = core.getInput('required-labels').split(',')
     this.pullRequest = getNumber('pull-request')
     this.dryRun = core.getInput('dry-run') === 'true'
   }

@@ -116,6 +116,15 @@ export class AutomergeAction {
       return false
     }
 
+    for (const requiredLabel of this.input.requiredLabels) {
+      if (!labels.includes(requiredLabel)) {
+        core.info(
+          `Pull request ${number} is not mergeable because it does not have the required label: ${requiredLabel}`
+        )
+        return false
+      }
+    }
+
     // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
     const mergeableState = pullRequest.mergeable_state
     switch (mergeableState) {
