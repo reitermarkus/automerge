@@ -53,9 +53,12 @@ on:
     types:
       - submitted
 
-  # Try merging a pull request when a draft is marked as “ready for review.”
+  # Try merging a pull request when a draft is marked as “ready for review”, when
+  # a required label is applied or when a “do not merge” label is removed.
   pull_request_target:
     types:
+      - labeled
+      - unlabeled
       - ready_for_review
 
   # Try merging the specified pull request or all open pull requests if none is specified.

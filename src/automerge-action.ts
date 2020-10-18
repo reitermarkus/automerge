@@ -204,13 +204,18 @@ export class AutomergeAction {
   }
 
   async handlePullRequestTarget(): Promise<void> {
-    const { action, pull_request: pullRequest } = github.context.payload
+    const { action, label, pull_request: pullRequest } = github.context.payload
 
     if (!action || !pullRequest) {
       return
     }
 
-    if (action === 'ready_for_review') {
+    if (
+      action === 'ready_for_review' ||
+      (action === 'labeled' && this.input.requiredLabels.includes(label.name)) ||
+      (action === 'unlabeled' &&
+        (this.input.doNotMergeLabels.includes(label.name) || isDoNotMergeLabel(label.name)))
+    ) {
       await this.automergePullRequests([pullRequest.number])
     }
   }

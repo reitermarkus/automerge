@@ -191,11 +191,14 @@ class AutomergeAction {
     }
     handlePullRequestTarget() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { action, pull_request: pullRequest } = github.context.payload;
+            const { action, label, pull_request: pullRequest } = github.context.payload;
             if (!action || !pullRequest) {
                 return;
             }
-            if (action === 'ready_for_review') {
+            if (action === 'ready_for_review' ||
+                (action === 'labeled' && this.input.requiredLabels.includes(label.name)) ||
+                (action === 'unlabeled' &&
+                    (this.input.doNotMergeLabels.includes(label.name) || helpers_1.isDoNotMergeLabel(label.name)))) {
                 yield this.automergePullRequests([pullRequest.number]);
             }
         });
