@@ -57,12 +57,16 @@ export class Input {
     this.requiredLabels = getArray('required-labels')
 
     for (const requiredLabel of this.requiredLabels) {
-      if (this.doNotMergeLabels.includes(requiredLabel) || isDoNotMergeLabel(requiredLabel)) {
+      if (this.isDoNotMergeLabel(requiredLabel)) {
         throw new Error(`Cannot set a “do not merge” label as a required label.`)
       }
     }
 
     this.pullRequest = getNumber('pull-request')
     this.dryRun = core.getInput('dry-run') === 'true'
+  }
+
+  isDoNotMergeLabel(label: string): boolean {
+    return this.doNotMergeLabels.includes(label) || isDoNotMergeLabel(label)
   }
 }

@@ -3,7 +3,6 @@ import * as github from '@actions/github'
 
 import { Input } from './input'
 import {
-  isDoNotMergeLabel,
   isPullRequestApproved,
   isReviewApproved,
   passedRequiredStatusChecks,
@@ -104,9 +103,7 @@ export class AutomergeAction {
     }
 
     const labels = pullRequest.labels.map(({ name }) => name)
-    const doNotMergeLabels = labels.filter(
-      label => this.input.doNotMergeLabels.includes(label) || isDoNotMergeLabel(label)
-    )
+    const doNotMergeLabels = labels.filter(label => this.input.isDoNotMergeLabel(label))
     if (doNotMergeLabels.length > 0) {
       core.info(
         `Pull request ${number} is not mergeable because the following labels are applied: ${doNotMergeLabels.join(
@@ -213,8 +210,7 @@ export class AutomergeAction {
     if (
       action === 'ready_for_review' ||
       (action === 'labeled' && this.input.requiredLabels.includes(label.name)) ||
-      (action === 'unlabeled' &&
-        (this.input.doNotMergeLabels.includes(label.name) || isDoNotMergeLabel(label.name)))
+      (action === 'unlabeled' && this.input.isDoNotMergeLabel(label.name))
     ) {
       await this.automergePullRequests([pullRequest.number])
     }

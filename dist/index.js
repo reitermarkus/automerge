@@ -113,7 +113,7 @@ class AutomergeAction {
                 return false;
             }
             const labels = pullRequest.labels.map(({ name }) => name);
-            const doNotMergeLabels = labels.filter(label => this.input.doNotMergeLabels.includes(label) || helpers_1.isDoNotMergeLabel(label));
+            const doNotMergeLabels = labels.filter(label => this.input.isDoNotMergeLabel(label));
             if (doNotMergeLabels.length > 0) {
                 core.info(`Pull request ${number} is not mergeable because the following labels are applied: ${doNotMergeLabels.join(', ')}`);
                 return false;
@@ -197,8 +197,7 @@ class AutomergeAction {
             }
             if (action === 'ready_for_review' ||
                 (action === 'labeled' && this.input.requiredLabels.includes(label.name)) ||
-                (action === 'unlabeled' &&
-                    (this.input.doNotMergeLabels.includes(label.name) || helpers_1.isDoNotMergeLabel(label.name)))) {
+                (action === 'unlabeled' && this.input.isDoNotMergeLabel(label.name))) {
                 yield this.automergePullRequests([pullRequest.number]);
             }
         });
@@ -431,12 +430,15 @@ class Input {
         this.doNotMergeLabels = getArray('do-not-merge-labels');
         this.requiredLabels = getArray('required-labels');
         for (const requiredLabel of this.requiredLabels) {
-            if (this.doNotMergeLabels.includes(requiredLabel) || helpers_1.isDoNotMergeLabel(requiredLabel)) {
+            if (this.isDoNotMergeLabel(requiredLabel)) {
                 throw new Error(`Cannot set a “do not merge” label as a required label.`);
             }
         }
         this.pullRequest = getNumber('pull-request');
         this.dryRun = core.getInput('dry-run') === 'true';
+    }
+    isDoNotMergeLabel(label) {
+        return this.doNotMergeLabels.includes(label) || helpers_1.isDoNotMergeLabel(label);
     }
 }
 exports.Input = Input;
