@@ -1,21 +1,28 @@
 import * as core from '@actions/core'
 
+import { isDoNotMergeLabel } from './helpers'
 import { MergeMethod } from './types'
 
 function getNumber(input: string, options?: core.InputOptions): number | null {
   const stringValue = core.getInput(input, options)
 
-  if (!stringValue && !options?.required) {
+  if (!stringValue) {
     return null
   }
 
   const numberValue = parseInt(stringValue, 10)
 
   if (isNaN(numberValue)) {
-    throw Error(`Failed parsing input '${input}' to number: '${stringValue}'`)
+    throw new Error(`Failed parsing input '${input}' to number: '${stringValue}'`)
   }
 
   return numberValue
+}
+
+function getArray(input: string, options?: core.InputOptions): string[] {
+  const stringValue = core.getInput(input, options)
+
+  return (stringValue || null)?.split(',') ?? []
 }
 
 export class Input {
@@ -40,13 +47,21 @@ export class Input {
         break
       }
       default: {
-        throw Error(`Unknown merge method: '${mergeMethod}'`)
+        throw new Error(`Unknown merge method: '${mergeMethod}'`)
       }
     }
 
     this.squashTitle = core.getInput('squash-title') === 'true'
-    this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',')
-    this.requiredLabels = core.getInput('required-labels').split(',')
+
+    this.doNotMergeLabels = getArray('do-not-merge-labels')
+    this.requiredLabels = getArray('required-labels')
+
+    for (const requiredLabel of this.requiredLabels) {
+      if (this.doNotMergeLabels.includes(requiredLabel) || isDoNotMergeLabel(requiredLabel)) {
+        throw new Error(`Cannot set a “do not merge” label as a required label.`)
+      }
+    }
+
     this.pullRequest = getNumber('pull-request')
     this.dryRun = core.getInput('dry-run') === 'true'
   }

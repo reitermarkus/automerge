@@ -394,16 +394,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Input = void 0;
 const core = __importStar(__webpack_require__(186));
+const helpers_1 = __webpack_require__(8);
 function getNumber(input, options) {
     const stringValue = core.getInput(input, options);
-    if (!stringValue && !(options === null || options === void 0 ? void 0 : options.required)) {
+    if (!stringValue) {
         return null;
     }
     const numberValue = parseInt(stringValue, 10);
     if (isNaN(numberValue)) {
-        throw Error(`Failed parsing input '${input}' to number: '${stringValue}'`);
+        throw new Error(`Failed parsing input '${input}' to number: '${stringValue}'`);
     }
     return numberValue;
+}
+function getArray(input, options) {
+    var _a, _b;
+    const stringValue = core.getInput(input, options);
+    return (_b = (_a = (stringValue || null)) === null || _a === void 0 ? void 0 : _a.split(',')) !== null && _b !== void 0 ? _b : [];
 }
 class Input {
     constructor() {
@@ -418,12 +424,17 @@ class Input {
                 break;
             }
             default: {
-                throw Error(`Unknown merge method: '${mergeMethod}'`);
+                throw new Error(`Unknown merge method: '${mergeMethod}'`);
             }
         }
         this.squashTitle = core.getInput('squash-title') === 'true';
-        this.doNotMergeLabels = core.getInput('do-not-merge-labels').split(',');
-        this.requiredLabels = core.getInput('required-labels').split(',');
+        this.doNotMergeLabels = getArray('do-not-merge-labels');
+        this.requiredLabels = getArray('required-labels');
+        for (const requiredLabel of this.requiredLabels) {
+            if (this.doNotMergeLabels.includes(requiredLabel) || helpers_1.isDoNotMergeLabel(requiredLabel)) {
+                throw new Error(`Cannot set a “do not merge” label as a required label.`);
+            }
+        }
         this.pullRequest = getNumber('pull-request');
         this.dryRun = core.getInput('dry-run') === 'true';
     }

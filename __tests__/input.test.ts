@@ -27,6 +27,29 @@ describe('input', () => {
     expect(input.dryRun).toBe(false)
   })
 
+  it('does not contain any required labels if the corresponding input is empty', () => {
+    process.env['INPUT_REQUIRED-LABELS'] = ''
+
+    const input = new Input()
+
+    expect(input.requiredLabels).toStrictEqual([])
+  })
+
+  it('does not contain any “do not merge” labels if the corresponding input is empty', () => {
+    process.env['INPUT_DO-NOT-MERGE-LABELS'] = ''
+
+    const input = new Input()
+
+    expect(input.doNotMergeLabels).toStrictEqual([])
+  })
+
+  it('fails if a “do not merge” label is required', () => {
+    process.env['INPUT_DO-NOT-MERGE-LABELS'] = 'never-merge'
+    process.env['INPUT_REQUIRED-LABELS'] = 'never-merge'
+
+    expect(() => new Input()).toThrow()
+  })
+
   it('accepts an optional `merge-method` input', () => {
     process.env['INPUT_MERGE-METHOD'] = 'squash'
 
@@ -34,6 +57,7 @@ describe('input', () => {
 
     expect(input.mergeMethod).toBe('squash')
   })
+
   it('fails with an unknown `merge-method` input', () => {
     process.env['INPUT_MERGE-METHOD'] = 'fixup'
 
