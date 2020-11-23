@@ -3,13 +3,14 @@ import * as github from '@actions/github'
 
 import { Input } from './input'
 import {
-  isPullRequestApproved,
-  isReviewApproved,
+  isApprovedByAllowedAuthor,
+  isAuthorAllowed,
+  commitHasMinimumApprovals,
   passedRequiredStatusChecks,
   pullRequestsForWorkflowRun,
   requiredStatusChecksForBranch,
 } from './helpers'
-import { MergeMethod, Octokit } from './types'
+import { MergeMethod, Octokit, PullRequest } from './types'
 
 export class AutomergeAction {
   octokit: Octokit
@@ -73,6 +74,25 @@ export class AutomergeAction {
       })
     ).data
 
+    if (pullRequest.merged === true) {
+      core.info(`Pull request ${number} is already merged.`)
+      return false
+    }
+
+    if (pullRequest.state === 'closed') {
+      core.info(`Pull request ${number} is closed.`)
+      return false
+    }
+
+    const authorAssociations = this.input.pullRequestAuthorAssociations
+    if (authorAssociations.length > 0 && !isAuthorAllowed(pullRequest, authorAssociations)) {
+      core.info(
+        `Author of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
+          `${authorAssociations.join(', ')}`
+      )
+      return false
+    }
+
     const baseBranch = pullRequest.base.ref
     const requiredStatusChecks = await requiredStatusChecksForBranch(this.octokit, baseBranch)
 
@@ -87,18 +107,8 @@ export class AutomergeAction {
       return false
     }
 
-    if (!(await isPullRequestApproved(this.octokit, pullRequest))) {
+    if (!(await this.isPullRequestApproved(pullRequest))) {
       core.info(`Pull request ${number} is not approved.`)
-      return false
-    }
-
-    if (pullRequest.merged === true) {
-      core.info(`Pull request ${number} is already merged.`)
-      return false
-    }
-
-    if (pullRequest.state === 'closed') {
-      core.info(`Pull request ${number} is closed.`)
       return false
     }
 
@@ -106,9 +116,8 @@ export class AutomergeAction {
     const doNotMergeLabels = labels.filter(label => this.input.isDoNotMergeLabel(label))
     if (doNotMergeLabels.length > 0) {
       core.info(
-        `Pull request ${number} is not mergeable because the following labels are applied: ${doNotMergeLabels.join(
-          ', '
-        )}`
+        `Pull request ${number} is not mergeable because the following labels are applied: ` +
+          `${doNotMergeLabels.join(', ')}`
       )
       return false
     }
@@ -188,6 +197,25 @@ export class AutomergeAction {
     }
   }
 
+  async isPullRequestApproved(pullRequest: PullRequest): Promise<boolean> {
+    const reviews = (
+      await this.octokit.pulls.listReviews({
+        ...github.context.repo,
+        pull_number: pullRequest.number,
+        per_page: 100,
+      })
+    ).data
+
+    if (reviews.length === 100) {
+      core.setFailed('Handling pull requests with more than 100 reviews is not implemented.')
+      return false
+    }
+
+    const commit = pullRequest.head.sha
+    const minimumApprovals = 1
+    return commitHasMinimumApprovals(reviews, this.input.reviewAuthorAssociations, commit, minimumApprovals)
+  }
+
   async handlePullRequestReview(): Promise<void> {
     const { action, review, pull_request: pullRequest } = github.context.payload
 
@@ -195,7 +223,7 @@ export class AutomergeAction {
       return
     }
 
-    if (action === 'submitted' && isReviewApproved(review)) {
+    if (action === 'submitted' && isApprovedByAllowedAuthor(review, this.input.reviewAuthorAssociations)) {
       await this.automergePullRequests([pullRequest.number])
     }
   }

@@ -5,21 +5,50 @@ import { Octokit, PullRequest, Review, WorkflowRun } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
-function isChangeRequested(review: Review): boolean {
+export function isChangesRequested(review: Review): boolean {
   return review.state.toUpperCase() === 'CHANGES_REQUESTED'
 }
 
-function isApproval(review: Review): boolean {
+export function isApproved(review: Review): boolean {
   return review.state.toUpperCase() === 'APPROVED'
 }
 
-export function relevantReviewsForCommit(reviews: Review[], commit: string): Review[] {
+export function isAuthorAllowed(
+  pullRequestOrReview: PullRequest | Review,
+  reviewAuthorAssociations: string[]
+): boolean {
+  if (!pullRequestOrReview.author_association) {
+    return false
+  }
+
+  return reviewAuthorAssociations.includes(pullRequestOrReview.author_association)
+}
+
+export function isApprovedByAllowedAuthor(review: Review, reviewAuthorAssociations: string[]): boolean {
+  if (!isApproved(review)) {
+    core.debug(`Review ${review.id} is not approved.`)
+    return false
+  }
+
+  if (!isAuthorAllowed(review, reviewAuthorAssociations)) {
+    core.debug(`Review ${review.id} is approved but author is not a member or owner.`)
+    return false
+  }
+
+  return true
+}
+
+export function relevantReviewsForCommit(
+  reviews: Review[],
+  reviewAuthorAssociations: string[],
+  commit: string
+): Review[] {
   return reviews
     .filter(
       review =>
         review.commit_id === commit &&
-        (isApproval(review) || isChangeRequested(review)) &&
-        isReviewAuthorMember(review)
+        (isApproved(review) || isChangesRequested(review)) &&
+        isAuthorAllowed(review, reviewAuthorAssociations)
     )
     .sort((a, b) => Date.parse(b.submitted_at) - Date.parse(a.submitted_at))
     .reduce(
@@ -29,49 +58,17 @@ export function relevantReviewsForCommit(reviews: Review[], commit: string): Rev
     .reverse()
 }
 
-export function commitHasMinimumApprovals(reviews: Review[], commit: string, n: number): boolean {
-  const relevantReviews = relevantReviewsForCommit(reviews, commit)
+export function commitHasMinimumApprovals(
+  reviews: Review[],
+  reviewAuthorAssociations: string[],
+  commit: string,
+  n: number
+): boolean {
+  const relevantReviews = relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit)
 
   // All last `n` reviews must be approvals.
   const lastNReviews = relevantReviews.reverse().slice(0, n)
-  return lastNReviews.length >= n && lastNReviews.every(isApproval)
-}
-
-export async function isPullRequestApproved(octokit: Octokit, pullRequest: PullRequest): Promise<boolean> {
-  const reviews = (
-    await octokit.pulls.listReviews({
-      ...github.context.repo,
-      pull_number: pullRequest.number,
-      per_page: 100,
-    })
-  ).data
-
-  if (reviews.length === 100) {
-    core.setFailed('Handling pull requests with more than 100 reviews is not implemented.')
-    return false
-  }
-
-  const commit = pullRequest.head.sha
-  const minimumApprovals = 1
-  return commitHasMinimumApprovals(reviews, commit, minimumApprovals)
-}
-
-export function isReviewAuthorMember(review: Review): boolean {
-  return review.author_association === 'OWNER' || review.author_association === 'MEMBER'
-}
-
-export function isReviewApproved(review: Review): boolean {
-  if (!isApproval(review)) {
-    core.debug(`Review ${review.id} is not approved.`)
-    return false
-  }
-
-  if (!isReviewAuthorMember(review)) {
-    core.debug(`Review ${review.id} is approved but author is not a member or owner.`)
-    return false
-  }
-
-  return true
+  return lastNReviews.length >= n && lastNReviews.every(isApproved)
 }
 
 export async function requiredStatusChecksForBranch(octokit: Octokit, branchName: string): Promise<string[]> {
