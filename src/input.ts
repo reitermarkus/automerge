@@ -22,6 +22,8 @@ function getNumber(input: string, options?: core.InputOptions): number | null {
 function getArray(input: string, options?: core.InputOptions): string[] {
   const stringValue = core.getInput(input, options)
 
+  core.info(`input '${input}': '${stringValue}'`)
+
   return (stringValue || null)?.split(',') ?? []
 }
 
