@@ -1,3 +1,4 @@
+import { AutomergeAction } from '../src/automerge-action'
 import { commitHasMinimumApprovals, isDoNotMergeLabel, relevantReviewsForCommit } from '../src/helpers'
 import { Review } from '../src/types'
 
@@ -22,8 +23,6 @@ describe('isDoNotMergeLabel', () => {
     expect(isDoNotMergeLabel('do merge')).toBe(false)
   })
 })
-
-const commit = 'deadbeefcafebabedeadbeefcafebabedeadbeef'
 
 const reviews = [
   {
@@ -76,9 +75,15 @@ const reviews = [
   },
 ]
 
+const reviewAuthorAssociations = ['MEMBER', 'OWNER']
+
+const commit = 'deadbeefcafebabedeadbeefcafebabedeadbeef'
+
 describe('relevantReviewsForCommit', () => {
   it('returns the latest relevant review for each author who is a member or owner', () => {
-    expect(relevantReviewsForCommit(reviews, commit).map(r => [r.user.login, r.state])).toStrictEqual([
+    expect(
+      relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit).map(r => [r.user.login, r.state])
+    ).toStrictEqual([
       ['member1', 'CHANGES_REQUESTED'],
       ['reitermarkus', 'CHANGES_REQUESTED'],
     ])
@@ -87,10 +92,10 @@ describe('relevantReviewsForCommit', () => {
 
 describe('commitHasMinimumApprovals', () => {
   it('returns false if the last n relevent reviews are not approved', () => {
-    expect(commitHasMinimumApprovals(reviews, commit, 0)).toBe(true)
-    expect(commitHasMinimumApprovals(reviews, commit, 1)).toBe(false)
-    expect(commitHasMinimumApprovals(reviews, commit, 2)).toBe(false)
-    expect(commitHasMinimumApprovals(reviews, commit, 3)).toBe(false)
+    expect(commitHasMinimumApprovals(reviews, reviewAuthorAssociations, commit, 0)).toBe(true)
+    expect(commitHasMinimumApprovals(reviews, reviewAuthorAssociations, commit, 1)).toBe(false)
+    expect(commitHasMinimumApprovals(reviews, reviewAuthorAssociations, commit, 2)).toBe(false)
+    expect(commitHasMinimumApprovals(reviews, reviewAuthorAssociations, commit, 3)).toBe(false)
   })
 
   it('returns true if the last n relevent reviews are approved', () => {
@@ -106,10 +111,18 @@ describe('commitHasMinimumApprovals', () => {
       },
     ]
 
-    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, commit, 0)).toBe(true)
-    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, commit, 1)).toBe(true)
-    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, commit, 2)).toBe(false)
-    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, commit, 3)).toBe(false)
+    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, reviewAuthorAssociations, commit, 0)).toBe(
+      true
+    )
+    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, reviewAuthorAssociations, commit, 1)).toBe(
+      true
+    )
+    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, reviewAuthorAssociations, commit, 2)).toBe(
+      false
+    )
+    expect(commitHasMinimumApprovals(reviewsIncluding1Approval, reviewAuthorAssociations, commit, 3)).toBe(
+      false
+    )
   })
 
   it('returns true if the last n relevent reviews are approved', () => {
@@ -133,9 +146,17 @@ describe('commitHasMinimumApprovals', () => {
       },
     ]
 
-    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, commit, 0)).toBe(true)
-    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, commit, 1)).toBe(true)
-    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, commit, 2)).toBe(true)
-    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, commit, 3)).toBe(false)
+    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, reviewAuthorAssociations, commit, 0)).toBe(
+      true
+    )
+    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, reviewAuthorAssociations, commit, 1)).toBe(
+      true
+    )
+    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, reviewAuthorAssociations, commit, 2)).toBe(
+      true
+    )
+    expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, reviewAuthorAssociations, commit, 3)).toBe(
+      false
+    )
   })
 })
