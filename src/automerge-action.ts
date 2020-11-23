@@ -85,6 +85,9 @@ export class AutomergeAction {
     }
 
     const authorAssociations = this.input.pullRequestAuthorAssociations
+
+    core.info(`authorAssociations: ${authorAssociations.join(', ')}`)
+
     if (authorAssociations.length > 0 && !isAuthorAllowed(pullRequest, authorAssociations)) {
       core.info(
         `Author of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
@@ -155,7 +158,7 @@ export class AutomergeAction {
         const mergeMethod = await this.determineMergeMethod()
 
         const useTitle = this.input.squashTitle && mergeMethod === 'squash'
-        const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})\n` : undefined
+        const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})` : undefined
         const commitMessage = useTitle ? '\n' : undefined
 
         const titleMessage = useTitle ? ` with title '${commitTitle}'` : undefined

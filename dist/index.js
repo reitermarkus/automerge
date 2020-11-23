@@ -98,6 +98,7 @@ class AutomergeAction {
                 return false;
             }
             const authorAssociations = this.input.pullRequestAuthorAssociations;
+            core.info(`authorAssociations: ${authorAssociations.join(', ')}`);
             if (authorAssociations.length > 0 && !helpers_1.isAuthorAllowed(pullRequest, authorAssociations)) {
                 core.info(`Author of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
                     `${authorAssociations.join(', ')}`);
@@ -153,7 +154,7 @@ class AutomergeAction {
                     core.info(`Pull request ${number} is mergeable with state '${mergeableState}'.`);
                     const mergeMethod = yield this.determineMergeMethod();
                     const useTitle = this.input.squashTitle && mergeMethod === 'squash';
-                    const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})\n` : undefined;
+                    const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})` : undefined;
                     const commitMessage = useTitle ? '\n' : undefined;
                     const titleMessage = useTitle ? ` with title '${commitTitle}'` : undefined;
                     if (this.input.dryRun) {
@@ -306,11 +307,11 @@ function isAuthorAllowed(pullRequestOrReview, reviewAuthorAssociations) {
 exports.isAuthorAllowed = isAuthorAllowed;
 function isApprovedByAllowedAuthor(review, reviewAuthorAssociations) {
     if (!isApproved(review)) {
-        core.debug(`Review ${review.id} is not approved.`);
+        core.info(`Review ${review.id} is not approved.`);
         return false;
     }
     if (!isAuthorAllowed(review, reviewAuthorAssociations)) {
-        core.debug(`Review ${review.id} is approved but author is not a member or owner.`);
+        core.info(`Review ${review.id} is approved but author is not one of the following: ${reviewAuthorAssociations.join(', ')}`);
         return false;
     }
     return true;
@@ -419,6 +420,7 @@ function getNumber(input, options) {
 function getArray(input, options) {
     var _a, _b;
     const stringValue = core.getInput(input, options);
+    core.info(`input '${input}': '${stringValue}'`);
     return (_b = (_a = (stringValue || null)) === null || _a === void 0 ? void 0 : _a.split(',')) !== null && _b !== void 0 ? _b : [];
 }
 class Input {
