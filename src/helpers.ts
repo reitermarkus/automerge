@@ -26,13 +26,14 @@ export function isAuthorAllowed(
 
 export function isApprovedByAllowedAuthor(review: Review, reviewAuthorAssociations: string[]): boolean {
   if (!isApproved(review)) {
-    core.debug(`Review ${review.id} is not approved.`)
+    core.debug(`Review ${review.id} is not an approval.`)
     return false
   }
 
   if (!isAuthorAllowed(review, reviewAuthorAssociations)) {
     core.debug(
-      `Review ${review.id} is approved, however author is ${review.author_association} but must be one of the following:` +
+      `Review ${review.id} is approved, however author @${review.user.login} ` +
+        `is ${review.author_association} but must be one of the following:` +
         `${reviewAuthorAssociations.join(', ')}`
     )
     return false
