@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import { isPresent } from 'ts-is-present'
 
 import { Input } from './input'
 import {
@@ -112,7 +113,7 @@ export class AutomergeAction {
       return false
     }
 
-    const labels = pullRequest.labels.map(({ name }) => name)
+    const labels = pullRequest.labels.map(({ name }) => name).filter(isPresent)
     const doNotMergeLabels = labels.filter(label => this.input.isDoNotMergeLabel(label))
     if (doNotMergeLabels.length > 0) {
       core.info(

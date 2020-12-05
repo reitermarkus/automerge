@@ -32,7 +32,7 @@ export function isApprovedByAllowedAuthor(review: Review, reviewAuthorAssociatio
 
   if (!isAuthorAllowed(review, reviewAuthorAssociations)) {
     core.debug(
-      `Review ${review.id} is approved, however author @${review.user.login} ` +
+      `Review ${review.id} is approved, however author @${review.user?.login} ` +
         `is ${review.author_association} but must be one of the following:` +
         `${reviewAuthorAssociations.join(', ')}`
     )
@@ -54,9 +54,22 @@ export function relevantReviewsForCommit(
         (isApproved(review) || isChangesRequested(review)) &&
         isAuthorAllowed(review, reviewAuthorAssociations)
     )
-    .sort((a, b) => Date.parse(b.submitted_at) - Date.parse(a.submitted_at))
+    .sort((a, b) => {
+      const submittedA = a.submitted_at
+      const submittedB = b.submitted_at
+
+      return submittedA && submittedB ? Date.parse(submittedB) - Date.parse(submittedA) : 0
+    })
     .reduce(
-      (acc: Review[], review) => (acc.some(r => r.user.login === review.user.login) ? acc : [...acc, review]),
+      (acc: Review[], review) =>
+        acc.some(r => {
+          const loginA = r.user?.login
+          const loginB = review.user?.login
+
+          return loginA && loginB && loginA === loginB
+        })
+          ? acc
+          : [...acc, review],
       []
     )
     .reverse()

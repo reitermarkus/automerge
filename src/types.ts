@@ -1,15 +1,21 @@
 import * as github from '@actions/github'
-import { ActionsListWorkflowRunsResponseData, PullsGetResponseData } from '@octokit/types'
+import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types'
 
 export type Octokit = ReturnType<typeof github.getOctokit>
-export type PullRequest = PullsGetResponseData
-export type WorkflowRun = ActionsListWorkflowRunsResponseData['workflow_runs'][0]
-export interface Review {
-  state: string
-  author_association?: string
+
+export type WorkflowRun = GetResponseDataTypeFromEndpointMethod<
+  Octokit['actions']['listWorkflowRuns']
+>['workflow_runs'][0]
+
+export type PullRequest = GetResponseDataTypeFromEndpointMethod<Octokit['pulls']['get']>
+
+export type Review = {
   id: number
-  user: { login: string }
+  user: { login: string } | null
+  state: string
+  submitted_at?: string
   commit_id: string
-  submitted_at: string
+  author_association?: string // https://github.com/octokit/types.ts/issues/221
 }
+
 export type MergeMethod = 'merge' | 'squash' | 'rebase' | undefined

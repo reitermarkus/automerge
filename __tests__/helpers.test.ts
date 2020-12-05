@@ -82,7 +82,7 @@ const commit = 'deadbeefcafebabedeadbeefcafebabedeadbeef'
 describe('relevantReviewsForCommit', () => {
   it('returns the latest relevant review for each author who is a member or owner', () => {
     expect(
-      relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit).map(r => [r.user.login, r.state])
+      relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit).map(r => [r.user?.login, r.state])
     ).toStrictEqual([
       ['member1', 'CHANGES_REQUESTED'],
       ['reitermarkus', 'CHANGES_REQUESTED'],
