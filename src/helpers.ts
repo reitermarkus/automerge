@@ -82,6 +82,7 @@ export function commitHasMinimumApprovals(
   n: number
 ): boolean {
   const relevantReviews = relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit)
+  core.debug(`Commit ${commit} has ${relevantReviews.length} relevant reviews.`)
 
   // All last `n` reviews must be approvals.
   const lastNReviews = relevantReviews.reverse().slice(0, n)

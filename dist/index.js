@@ -200,6 +200,7 @@ class AutomergeAction {
     }
     handlePullRequestReview() {
         return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handlePullRequestReview()');
             const { action, review, pull_request: pullRequest } = github.context.payload;
             if (!action || !review || !pullRequest) {
                 return;
@@ -211,6 +212,7 @@ class AutomergeAction {
     }
     handlePullRequestTarget() {
         return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handlePullRequestTarget()');
             const { action, label, pull_request: pullRequest } = github.context.payload;
             if (!action || !pullRequest) {
                 return;
@@ -224,6 +226,7 @@ class AutomergeAction {
     }
     handleSchedule() {
         return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handleSchedule()');
             const pullRequests = (yield this.octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', sort: 'updated', direction: 'desc', per_page: 100 }))).data;
             if (pullRequests.length === 0) {
                 core.info(`No open pull requests found.`);
@@ -234,6 +237,7 @@ class AutomergeAction {
     }
     handleWorkflowRun() {
         return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handleWorkflowRun()');
             const { action, workflow_run: workflowRun } = github.context.payload;
             if (!action || !workflowRun) {
                 return;
@@ -343,6 +347,7 @@ function relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit) {
 exports.relevantReviewsForCommit = relevantReviewsForCommit;
 function commitHasMinimumApprovals(reviews, reviewAuthorAssociations, commit, n) {
     const relevantReviews = relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit);
+    core.debug(`Commit ${commit} has ${relevantReviews.length} relevant reviews.`);
     // All last `n` reviews must be approvals.
     const lastNReviews = relevantReviews.reverse().slice(0, n);
     return lastNReviews.length >= n && lastNReviews.every(isApproved);

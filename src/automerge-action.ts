@@ -218,6 +218,8 @@ export class AutomergeAction {
   }
 
   async handlePullRequestReview(): Promise<void> {
+    core.debug('handlePullRequestReview()')
+
     const { action, review, pull_request: pullRequest } = github.context.payload
 
     if (!action || !review || !pullRequest) {
@@ -230,6 +232,8 @@ export class AutomergeAction {
   }
 
   async handlePullRequestTarget(): Promise<void> {
+    core.debug('handlePullRequestTarget()')
+
     const { action, label, pull_request: pullRequest } = github.context.payload
 
     if (!action || !pullRequest) {
@@ -246,6 +250,8 @@ export class AutomergeAction {
   }
 
   async handleSchedule(): Promise<void> {
+    core.debug('handleSchedule()')
+
     const pullRequests = (
       await this.octokit.pulls.list({
         ...github.context.repo,
@@ -265,6 +271,8 @@ export class AutomergeAction {
   }
 
   async handleWorkflowRun(): Promise<void> {
+    core.debug('handleWorkflowRun()')
+
     const { action, workflow_run: workflowRun } = github.context.payload
 
     if (!action || !workflowRun) {
