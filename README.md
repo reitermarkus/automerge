@@ -72,7 +72,7 @@ on:
 
 jobs:
   automerge:
-    if: github.event.review.state == 'approved' || !github.event.review
+    if: github.event.review.state == 'APPROVED' || !github.event.review
     runs-on: ubuntu-latest
     steps:
       - uses: reitermarkus/automerge@v1
