@@ -24,7 +24,7 @@ describe('isDoNotMergeLabel', () => {
   })
 })
 
-const reviews = [
+const reviews: Review[] = [
   {
     state: 'APPROVED',
     author_association: 'NONE',
@@ -73,7 +73,7 @@ const reviews = [
     submitted_at: '2020-09-05T18:15:02Z',
     commit_id: 'deadbeefcafebabedeadbeefffffffffffffffff',
   },
-]
+] as any
 
 const reviewAuthorAssociations = ['MEMBER', 'OWNER']
 
@@ -99,7 +99,7 @@ describe('commitHasMinimumApprovals', () => {
   })
 
   it('returns true if the last n relevent reviews are approved', () => {
-    const reviewsIncluding1Approval = [
+    const reviewsIncluding1Approval: Review[] = [
       ...reviews,
       {
         state: 'APPROVED',
@@ -109,7 +109,7 @@ describe('commitHasMinimumApprovals', () => {
         submitted_at: '2020-09-05T19:15:02Z',
         commit_id: 'deadbeefcafebabedeadbeefcafebabedeadbeef',
       },
-    ]
+    ] as any
 
     expect(commitHasMinimumApprovals(reviewsIncluding1Approval, reviewAuthorAssociations, commit, 0)).toBe(
       true
@@ -126,7 +126,7 @@ describe('commitHasMinimumApprovals', () => {
   })
 
   it('returns true if the last n relevent reviews are approved', () => {
-    const reviewsIncluding2Approvals = [
+    const reviewsIncluding2Approvals: Review[] = [
       ...reviews,
       {
         state: 'APPROVED',
@@ -144,7 +144,7 @@ describe('commitHasMinimumApprovals', () => {
         submitted_at: '2020-09-05T22:15:02Z',
         commit_id: 'deadbeefcafebabedeadbeefcafebabedeadbeef',
       },
-    ]
+    ] as any
 
     expect(commitHasMinimumApprovals(reviewsIncluding2Approvals, reviewAuthorAssociations, commit, 0)).toBe(
       true

@@ -153,18 +153,22 @@ export async function pullRequestsForWorkflowRun(
     const headBranch = workflowRun.head_branch
     const headSha = workflowRun.head_sha
 
-    pullRequests = (
-      await octokit.pulls.list({
-        ...github.context.repo,
-        state: 'open',
-        head: `${headRepo.owner.login}:${headBranch}`,
-        sort: 'updated',
-        direction: 'desc',
-        per_page: 100,
-      })
-    ).data
-      .filter(pr => pr.head.sha === headSha)
-      .map(({ number }) => number)
+    const headRepoOwner = headRepo.owner?.login
+
+    if (headRepoOwner) {
+      pullRequests = (
+        await octokit.pulls.list({
+          ...github.context.repo,
+          state: 'open',
+          head: `${headRepoOwner}:${headBranch}`,
+          sort: 'updated',
+          direction: 'desc',
+          per_page: 100,
+        })
+      ).data
+        .filter(pr => pr.head.sha === headSha)
+        .map(({ number }) => number)
+    }
   }
 
   return pullRequests

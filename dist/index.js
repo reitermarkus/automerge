@@ -393,15 +393,19 @@ function isDoNotMergeLabel(string) {
 }
 exports.isDoNotMergeLabel = isDoNotMergeLabel;
 function pullRequestsForWorkflowRun(octokit, workflowRun) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         let pullRequests = workflowRun.pull_requests.map(({ number }) => number);
         if (pullRequests.length === 0) {
             const headRepo = workflowRun.head_repository;
             const headBranch = workflowRun.head_branch;
             const headSha = workflowRun.head_sha;
-            pullRequests = (yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', head: `${headRepo.owner.login}:${headBranch}`, sort: 'updated', direction: 'desc', per_page: 100 }))).data
-                .filter(pr => pr.head.sha === headSha)
-                .map(({ number }) => number);
+            const headRepoOwner = (_a = headRepo.owner) === null || _a === void 0 ? void 0 : _a.login;
+            if (headRepoOwner) {
+                pullRequests = (yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', head: `${headRepoOwner}:${headBranch}`, sort: 'updated', direction: 'desc', per_page: 100 }))).data
+                    .filter(pr => pr.head.sha === headSha)
+                    .map(({ number }) => number);
+            }
         }
         return pullRequests;
     });
