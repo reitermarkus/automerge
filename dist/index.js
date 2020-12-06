@@ -302,11 +302,11 @@ function isApproved(review) {
     return review.state.toUpperCase() === 'APPROVED';
 }
 exports.isApproved = isApproved;
-function isAuthorAllowed(pullRequestOrReview, reviewAuthorAssociations) {
+function isAuthorAllowed(pullRequestOrReview, authorAssociations) {
     if (!pullRequestOrReview.author_association) {
         return false;
     }
-    return reviewAuthorAssociations.includes(pullRequestOrReview.author_association);
+    return authorAssociations.includes(pullRequestOrReview.author_association);
 }
 exports.isAuthorAllowed = isAuthorAllowed;
 function isApprovedByAllowedAuthor(review, reviewAuthorAssociations) {
@@ -326,9 +326,21 @@ function isApprovedByAllowedAuthor(review, reviewAuthorAssociations) {
 exports.isApprovedByAllowedAuthor = isApprovedByAllowedAuthor;
 function relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit) {
     return reviews
-        .filter(review => review.commit_id === commit &&
-        (isApproved(review) || isChangesRequested(review)) &&
-        isAuthorAllowed(review, reviewAuthorAssociations))
+        .filter(review => review.commit_id === commit)
+        .filter(review => {
+        var _a;
+        const isRelevant = isApproved(review) || isChangesRequested(review);
+        if (!isRelevant) {
+            core.debug(`Review ${review.id} for commit ${commit} is not relevant.`);
+            return false;
+        }
+        const isReviewAuthorAllowed = isAuthorAllowed(review, reviewAuthorAssociations);
+        if (!isReviewAuthorAllowed) {
+            core.debug(`Author @${(_a = review.user) === null || _a === void 0 ? void 0 : _a.login} (${review.author_association}) of review ${review.id} for commit ${commit} is not allowed.`);
+            return false;
+        }
+        return true;
+    })
         .sort((a, b) => {
         const submittedA = a.submitted_at;
         const submittedB = b.submitted_at;
@@ -346,6 +358,8 @@ function relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit) {
 }
 exports.relevantReviewsForCommit = relevantReviewsForCommit;
 function commitHasMinimumApprovals(reviews, reviewAuthorAssociations, commit, n) {
+    core.debug(`Checking review for commit ${commit}:`);
+    core.debug(`Commit ${commit} has ${reviews.length} reviews.`);
     const relevantReviews = relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit);
     core.debug(`Commit ${commit} has ${relevantReviews.length} relevant reviews.`);
     // All last `n` reviews must be approvals.

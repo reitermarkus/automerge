@@ -15,13 +15,13 @@ export function isApproved(review: Review): boolean {
 
 export function isAuthorAllowed(
   pullRequestOrReview: PullRequest | Review,
-  reviewAuthorAssociations: string[]
+  authorAssociations: string[]
 ): boolean {
   if (!pullRequestOrReview.author_association) {
     return false
   }
 
-  return reviewAuthorAssociations.includes(pullRequestOrReview.author_association)
+  return authorAssociations.includes(pullRequestOrReview.author_association)
 }
 
 export function isApprovedByAllowedAuthor(review: Review, reviewAuthorAssociations: string[]): boolean {
@@ -48,12 +48,24 @@ export function relevantReviewsForCommit(
   commit: string
 ): Review[] {
   return reviews
-    .filter(
-      review =>
-        review.commit_id === commit &&
-        (isApproved(review) || isChangesRequested(review)) &&
-        isAuthorAllowed(review, reviewAuthorAssociations)
-    )
+    .filter(review => review.commit_id === commit)
+    .filter(review => {
+      const isRelevant = isApproved(review) || isChangesRequested(review)
+      if (!isRelevant) {
+        core.debug(`Review ${review.id} for commit ${commit} is not relevant.`)
+        return false
+      }
+
+      const isReviewAuthorAllowed = isAuthorAllowed(review, reviewAuthorAssociations)
+      if (!isReviewAuthorAllowed) {
+        core.debug(
+          `Author @${review.user?.login} (${review.author_association}) of review ${review.id} for commit ${commit} is not allowed.`
+        )
+        return false
+      }
+
+      return true
+    })
     .sort((a, b) => {
       const submittedA = a.submitted_at
       const submittedB = b.submitted_at
@@ -81,6 +93,8 @@ export function commitHasMinimumApprovals(
   commit: string,
   n: number
 ): boolean {
+  core.debug(`Checking review for commit ${commit}:`)
+  core.debug(`Commit ${commit} has ${reviews.length} reviews.`)
   const relevantReviews = relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit)
   core.debug(`Commit ${commit} has ${relevantReviews.length} relevant reviews.`)
 
