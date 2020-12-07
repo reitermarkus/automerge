@@ -235,6 +235,25 @@ class AutomergeAction {
             yield this.automergePullRequests(pullRequests.map(({ number }) => number));
         });
     }
+    handleCheckSuite() {
+        return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handleCheckSuite()');
+            const { action, check_suite: checkSuite } = github.context.payload;
+            if (!action || !checkSuite) {
+                return;
+            }
+            if (checkSuite.conclusion !== 'success') {
+                core.info(`Check suite conclusion is ${checkSuite.conclusion}, not attempting to merge.`);
+                return;
+            }
+            const pullRequests = yield helpers_1.pullRequestsForCheckSuite(this.octokit, checkSuite);
+            if (pullRequests.length === 0) {
+                core.info(`No open pull requests found for check suite ${checkSuite.id}.`);
+                return;
+            }
+            yield this.automergePullRequests(pullRequests);
+        });
+    }
     handleWorkflowRun() {
         return __awaiter(this, void 0, void 0, function* () {
             core.debug('handleWorkflowRun()');
@@ -290,7 +309,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.isDoNotMergeLabel = exports.passedRequiredStatusChecks = exports.requiredStatusChecksForBranch = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.isApprovedByAllowedAuthor = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.passedRequiredStatusChecks = exports.requiredStatusChecksForBranch = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.isApprovedByAllowedAuthor = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 exports.UNMERGEABLE_STATES = ['blocked'];
@@ -392,21 +411,30 @@ function isDoNotMergeLabel(string) {
     return match != null;
 }
 exports.isDoNotMergeLabel = isDoNotMergeLabel;
-function pullRequestsForWorkflowRun(octokit, workflowRun) {
+function pullRequestsMatching(octokit, repo, branch, sha) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        const repoOwner = (_a = repo.owner) === null || _a === void 0 ? void 0 : _a.login;
+        if (!repoOwner)
+            return [];
+        const pullRequests = (yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', head: `${repoOwner}:${branch}`, sort: 'updated', direction: 'desc', per_page: 100 }))).data;
+        return pullRequests.filter(pr => pr.head.sha === sha).map(({ number }) => number);
+    });
+}
+function pullRequestsForCheckSuite(octokit, checkSuite) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let pullRequests = checkSuite.pull_requests.map(({ number }) => number);
+        if (pullRequests.length === 0)
+            pullRequests = yield pullRequestsMatching(octokit, checkSuite.repository, checkSuite.head_branch, checkSuite.head_sha);
+        return pullRequests;
+    });
+}
+exports.pullRequestsForCheckSuite = pullRequestsForCheckSuite;
+function pullRequestsForWorkflowRun(octokit, workflowRun) {
+    return __awaiter(this, void 0, void 0, function* () {
         let pullRequests = workflowRun.pull_requests.map(({ number }) => number);
-        if (pullRequests.length === 0) {
-            const headRepo = workflowRun.head_repository;
-            const headBranch = workflowRun.head_branch;
-            const headSha = workflowRun.head_sha;
-            const headRepoOwner = (_a = headRepo.owner) === null || _a === void 0 ? void 0 : _a.login;
-            if (headRepoOwner) {
-                pullRequests = (yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', head: `${headRepoOwner}:${headBranch}`, sort: 'updated', direction: 'desc', per_page: 100 }))).data
-                    .filter(pr => pr.head.sha === headSha)
-                    .map(({ number }) => number);
-            }
-        }
+        if (pullRequests.length === 0)
+            pullRequests = yield pullRequestsMatching(octokit, workflowRun.head_repository, workflowRun.head_branch, workflowRun.head_sha);
         return pullRequests;
     });
 }
@@ -566,6 +594,10 @@ function run() {
                 }
                 case 'workflow_run': {
                     yield action.handleWorkflowRun();
+                    break;
+                }
+                case 'check_suite': {
+                    yield action.handleCheckSuite();
                     break;
                 }
                 default: {
