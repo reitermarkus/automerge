@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import { Octokit, PullRequest, Review, WorkflowRun } from './types'
+import { Octokit, PullRequest, Repo, Review, WorkflowRun } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
@@ -142,34 +142,43 @@ export function isDoNotMergeLabel(string: string): boolean {
   return match != null
 }
 
+async function pullRequestsMatching(
+  octokit: Octokit,
+  repo: Repo,
+  branch: String | null,
+  sha: String
+): Promise<number[]> {
+  const repoOwner = repo.owner?.login
+
+  if (!repoOwner) return []
+
+  const pullRequests = (
+    await octokit.pulls.list({
+      ...github.context.repo,
+      state: 'open',
+      head: `${repoOwner}:${branch}`,
+      sort: 'updated',
+      direction: 'desc',
+      per_page: 100,
+    })
+  ).data as PullRequest[]
+
+  return pullRequests.filter(pr => pr.head.sha === sha).map(({ number }) => number)
+}
+
 export async function pullRequestsForWorkflowRun(
   octokit: Octokit,
   workflowRun: WorkflowRun
 ): Promise<number[]> {
   let pullRequests = (workflowRun.pull_requests as PullRequest[]).map(({ number }) => number)
 
-  if (pullRequests.length === 0) {
-    const headRepo = workflowRun.head_repository
-    const headBranch = workflowRun.head_branch
-    const headSha = workflowRun.head_sha
-
-    const headRepoOwner = headRepo.owner?.login
-
-    if (headRepoOwner) {
-      pullRequests = (
-        await octokit.pulls.list({
-          ...github.context.repo,
-          state: 'open',
-          head: `${headRepoOwner}:${headBranch}`,
-          sort: 'updated',
-          direction: 'desc',
-          per_page: 100,
-        })
-      ).data
-        .filter(pr => pr.head.sha === headSha)
-        .map(({ number }) => number)
-    }
-  }
+  if (pullRequests.length === 0)
+    pullRequests = await pullRequestsMatching(
+      octokit,
+      workflowRun.head_repository,
+      workflowRun.head_branch,
+      workflowRun.head_sha
+    )
 
   return pullRequests
 }
