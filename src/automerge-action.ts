@@ -9,6 +9,7 @@ import {
   commitHasMinimumApprovals,
   passedRequiredStatusChecks,
   pullRequestsForWorkflowRun,
+  pullRequestsForCheckSuite,
   requiredStatusChecksForBranch,
 } from './helpers'
 import { MergeMethod, Octokit, PullRequest } from './types'
@@ -268,6 +269,30 @@ export class AutomergeAction {
     }
 
     await this.automergePullRequests(pullRequests.map(({ number }) => number))
+  }
+
+  async handleCheckSuite(): Promise<void> {
+    core.debug('handleCheckSuite()')
+
+    const { action, check_suite: checkSuite } = github.context.payload
+
+    if (!action || !checkSuite) {
+      return
+    }
+
+    if (checkSuite.conclusion !== 'success') {
+      core.info(`Check suite conclusion is ${checkSuite.conclusion}, not attempting to merge.`)
+      return
+    }
+
+    const pullRequests = await pullRequestsForCheckSuite(this.octokit, checkSuite)
+
+    if (pullRequests.length === 0) {
+      core.info(`No open pull requests found for check suite ${checkSuite.id}.`)
+      return
+    }
+
+    await this.automergePullRequests(pullRequests)
   }
 
   async handleWorkflowRun(): Promise<void> {

@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import { Octokit, PullRequest, Repo, Review, WorkflowRun } from './types'
+import { CheckSuite, Octokit, PullRequest, Repo, Review, WorkflowRun } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
@@ -164,6 +164,20 @@ async function pullRequestsMatching(
   ).data as PullRequest[]
 
   return pullRequests.filter(pr => pr.head.sha === sha).map(({ number }) => number)
+}
+
+export async function pullRequestsForCheckSuite(octokit: Octokit, checkSuite: CheckSuite): Promise<number[]> {
+  let pullRequests = (checkSuite.pull_requests as PullRequest[]).map(({ number }) => number)
+
+  if (pullRequests.length === 0)
+    pullRequests = await pullRequestsMatching(
+      octokit,
+      checkSuite.repository,
+      checkSuite.head_branch,
+      checkSuite.head_sha
+    )
+
+  return pullRequests
 }
 
 export async function pullRequestsForWorkflowRun(

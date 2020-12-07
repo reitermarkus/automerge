@@ -37,6 +37,10 @@ async function run(): Promise<void> {
         await action.handleWorkflowRun()
         break
       }
+      case 'check_suite': {
+        await action.handleCheckSuite()
+        break
+      }
       default: {
         core.warning(`This action does not support the '${eventName}' event.`)
         break
