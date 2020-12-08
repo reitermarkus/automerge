@@ -50,6 +50,11 @@ on:
     types:
       - completed
 
+  # Try merging pull requests upon successful build
+  check_suite:
+    types:
+      - completed
+
   # Try merging a pull request when it is approved.
   pull_request_review:
     types:
