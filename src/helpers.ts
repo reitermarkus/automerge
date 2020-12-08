@@ -167,7 +167,7 @@ async function pullRequestsMatching(
 }
 
 export async function pullRequestsForCheckSuite(octokit: Octokit, checkSuite: CheckSuite): Promise<number[]> {
-  let pullRequests = (checkSuite.pull_requests as PullRequest[]).map(({ number }) => number)
+  let pullRequests = (checkSuite.pull_requests || []).map(({ number }) => number)
 
   if (pullRequests.length === 0)
     pullRequests = await pullRequestsMatching(
@@ -184,7 +184,7 @@ export async function pullRequestsForWorkflowRun(
   octokit: Octokit,
   workflowRun: WorkflowRun
 ): Promise<number[]> {
-  let pullRequests = (workflowRun.pull_requests as PullRequest[]).map(({ number }) => number)
+  let pullRequests = (workflowRun.pull_requests || []).map(({ number }) => number)
 
   if (pullRequests.length === 0)
     pullRequests = await pullRequestsMatching(
