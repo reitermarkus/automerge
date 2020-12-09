@@ -17,6 +17,10 @@ export function isAuthorAllowed(
   pullRequestOrReview: PullRequest | Review,
   authorAssociations: string[]
 ): boolean {
+  if (pullRequestOrReview.user?.login === 'github-actions[bot]') {
+    return true
+  }
+
   if (!pullRequestOrReview.author_association) {
     return false
   }

@@ -322,6 +322,10 @@ function isApproved(review) {
 }
 exports.isApproved = isApproved;
 function isAuthorAllowed(pullRequestOrReview, authorAssociations) {
+    var _a;
+    if (((_a = pullRequestOrReview.user) === null || _a === void 0 ? void 0 : _a.login) === 'github-actions[bot]') {
+        return true;
+    }
     if (!pullRequestOrReview.author_association) {
         return false;
     }
