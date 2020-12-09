@@ -281,7 +281,9 @@ export class AutomergeAction {
     }
 
     if (checkSuite.conclusion !== 'success') {
-      core.info(`Conclusion for check suite ${checkSuite.id} is ${checkSuite.conclusion}, not attempting to merge.`)
+      core.info(
+        `Conclusion for check suite ${checkSuite.id} is ${checkSuite.conclusion}, not attempting to merge.`
+      )
       return
     }
 

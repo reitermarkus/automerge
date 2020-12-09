@@ -243,7 +243,7 @@ class AutomergeAction {
                 return;
             }
             if (checkSuite.conclusion !== 'success') {
-                core.info(`Check suite conclusion is ${checkSuite.conclusion}, not attempting to merge.`);
+                core.info(`Conclusion for check suite ${checkSuite.id} is ${checkSuite.conclusion}, not attempting to merge.`);
                 return;
             }
             const pullRequests = yield helpers_1.pullRequestsForCheckSuite(this.octokit, checkSuite);
@@ -422,8 +422,9 @@ function pullRequestsMatching(octokit, repo, branch, sha) {
     });
 }
 function pullRequestsForCheckSuite(octokit, checkSuite) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        let pullRequests = checkSuite.pull_requests.map(({ number }) => number);
+        let pullRequests = (_b = (_a = checkSuite.pull_requests) === null || _a === void 0 ? void 0 : _a.map(({ number }) => number)) !== null && _b !== void 0 ? _b : [];
         if (pullRequests.length === 0)
             pullRequests = yield pullRequestsMatching(octokit, checkSuite.repository, checkSuite.head_branch, checkSuite.head_sha);
         return pullRequests;
@@ -431,8 +432,9 @@ function pullRequestsForCheckSuite(octokit, checkSuite) {
 }
 exports.pullRequestsForCheckSuite = pullRequestsForCheckSuite;
 function pullRequestsForWorkflowRun(octokit, workflowRun) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        let pullRequests = workflowRun.pull_requests.map(({ number }) => number);
+        let pullRequests = (_b = (_a = workflowRun.pull_requests) === null || _a === void 0 ? void 0 : _a.map(({ number }) => number)) !== null && _b !== void 0 ? _b : [];
         if (pullRequests.length === 0)
             pullRequests = yield pullRequestsMatching(octokit, workflowRun.head_repository, workflowRun.head_branch, workflowRun.head_sha);
         return pullRequests;
