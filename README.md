@@ -50,7 +50,7 @@ on:
     types:
       - completed
 
-  # Try merging pull requests upon successful build
+  # Try merging pull requests belonging to a check suite.
   check_suite:
     types:
       - completed
