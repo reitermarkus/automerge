@@ -142,7 +142,7 @@ export function isDoNotMergeLabel(string: string): boolean {
   return match != null
 }
 
-async function pullRequestsMatching(
+async function pullRequestsForCommit(
   octokit: Octokit,
   repo: Repo,
   branch: String | null,
@@ -170,7 +170,7 @@ export async function pullRequestsForCheckSuite(octokit: Octokit, checkSuite: Ch
   let pullRequests = checkSuite.pull_requests?.map(({ number }) => number) ?? []
 
   if (pullRequests.length === 0)
-    pullRequests = await pullRequestsMatching(
+    pullRequests = await pullRequestsForCommit(
       octokit,
       checkSuite.repository,
       checkSuite.head_branch,
@@ -187,7 +187,7 @@ export async function pullRequestsForWorkflowRun(
   let pullRequests = workflowRun.pull_requests?.map(({ number }) => number) ?? []
 
   if (pullRequests.length === 0)
-    pullRequests = await pullRequestsMatching(
+    pullRequests = await pullRequestsForCommit(
       octokit,
       workflowRun.head_repository,
       workflowRun.head_branch,

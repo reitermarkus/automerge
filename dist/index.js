@@ -411,7 +411,7 @@ function isDoNotMergeLabel(string) {
     return match != null;
 }
 exports.isDoNotMergeLabel = isDoNotMergeLabel;
-function pullRequestsMatching(octokit, repo, branch, sha) {
+function pullRequestsForCommit(octokit, repo, branch, sha) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const repoOwner = (_a = repo.owner) === null || _a === void 0 ? void 0 : _a.login;
@@ -426,7 +426,7 @@ function pullRequestsForCheckSuite(octokit, checkSuite) {
     return __awaiter(this, void 0, void 0, function* () {
         let pullRequests = (_b = (_a = checkSuite.pull_requests) === null || _a === void 0 ? void 0 : _a.map(({ number }) => number)) !== null && _b !== void 0 ? _b : [];
         if (pullRequests.length === 0)
-            pullRequests = yield pullRequestsMatching(octokit, checkSuite.repository, checkSuite.head_branch, checkSuite.head_sha);
+            pullRequests = yield pullRequestsForCommit(octokit, checkSuite.repository, checkSuite.head_branch, checkSuite.head_sha);
         return pullRequests;
     });
 }
@@ -436,7 +436,7 @@ function pullRequestsForWorkflowRun(octokit, workflowRun) {
     return __awaiter(this, void 0, void 0, function* () {
         let pullRequests = (_b = (_a = workflowRun.pull_requests) === null || _a === void 0 ? void 0 : _a.map(({ number }) => number)) !== null && _b !== void 0 ? _b : [];
         if (pullRequests.length === 0)
-            pullRequests = yield pullRequestsMatching(octokit, workflowRun.head_repository, workflowRun.head_branch, workflowRun.head_sha);
+            pullRequests = yield pullRequestsForCommit(octokit, workflowRun.head_repository, workflowRun.head_branch, workflowRun.head_sha);
         return pullRequests;
     });
 }
