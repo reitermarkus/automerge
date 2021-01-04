@@ -21,28 +21,18 @@ jobs:
           echo "${number}" >> README.md
           echo "::set-output name=number::${number}"
 
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@36464acb844fc53b9b8b2401da68844f6b05ebb0
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_KEY }}
+
       - name: Create pull request
         id: create-pull-request
         uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
         with:
+          token: ${{ steps.generate_token.outputs.token }}
           title: Test Pull Request (${{ steps.changes.outputs.number }})
-          commit-message: Test commit by @github-actions.
+          commit-message: Test commit.
           branch: test-pr-${{ steps.changes.outputs.number }}
-
-      - name: Check out pull request branch
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
-          ref: test-pr-${{ steps.changes.outputs.number }}
-
-      - name: Push more changes to the pull request
-        run: |
-          echo >> README.md
-          echo '${{ steps.changes.outputs.number }}' >> README.md
-
-          git config --global user.email "me@reitermark.us"
-          git config --global user.name "Markus Reiter"
-
-          git add README.md
-          git commit -m 'Test commit by @reitermarkus.'
-          git push
