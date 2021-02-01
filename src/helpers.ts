@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import { CheckRun, CheckSuite, Octokit, PullRequest, Repo, Review, WorkflowRun } from './types'
+import { CheckRun, CheckSuite, CommitStatus, Octokit, PullRequest, Repo, Review, WorkflowRun } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
@@ -134,11 +134,21 @@ export async function passedRequiredStatusChecks(
     })
   ).data.check_runs
 
-  return requiredChecks.every(requiredCheck => checkSucceeded(requiredCheck, checkRuns))
+  const commitStatuses = (
+    await octokit.repos.getCombinedStatusForRef({
+      ...github.context.repo,
+      ref: pullRequest.head.sha,
+    })
+  ).data.statuses
+
+  return requiredChecks.every(requiredCheck => checkSucceeded(requiredCheck, checkRuns, commitStatuses))
 }
 
-function checkSucceeded(name: string, checkRuns: CheckRun[]): boolean {
-  return checkRuns.some(checkRun => checkRun.name === name && checkRun.conclusion === 'success')
+function checkSucceeded(name: string, checkRuns: CheckRun[], statuses: CommitStatus[]): boolean {
+  return (
+    checkRuns.some(checkRun => checkRun.name === name && checkRun.conclusion === 'success') ||
+    statuses.some(status => status.context === name && status.state === 'success')
+  )
 }
 
 // Loosely match a “do not merge” label's name.
