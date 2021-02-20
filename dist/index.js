@@ -309,7 +309,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.passedRequiredStatusChecks = exports.requiredStatusChecksForBranch = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.isApprovedByAllowedAuthor = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.passedRequiredStatusChecks = exports.requiredStatusChecksForBranch = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const github = __importStar(__nccwpck_require__(438));
 exports.UNMERGEABLE_STATES = ['blocked'];
@@ -332,37 +332,35 @@ function isAuthorAllowed(pullRequestOrReview, authorAssociations) {
     return authorAssociations.includes(pullRequestOrReview.author_association);
 }
 exports.isAuthorAllowed = isAuthorAllowed;
-function isApprovedByAllowedAuthor(review, reviewAuthorAssociations) {
+function isReviewAuthorAllowed(review, authorAssociations) {
     var _a;
+    if (!isAuthorAllowed(review, authorAssociations)) {
+        core.debug(`Author @${(_a = review.user) === null || _a === void 0 ? void 0 : _a.login} of review ${review.id} ` +
+            `is ${review.author_association} but must be one of the following:` +
+            `${authorAssociations.join(', ')}`);
+        return false;
+    }
+    return true;
+}
+exports.isReviewAuthorAllowed = isReviewAuthorAllowed;
+function isApprovedByAllowedAuthor(review, authorAssociations) {
     if (!isApproved(review)) {
         core.debug(`Review ${review.id} is not an approval.`);
         return false;
     }
-    if (!isAuthorAllowed(review, reviewAuthorAssociations)) {
-        core.debug(`Review ${review.id} is approved, however author @${(_a = review.user) === null || _a === void 0 ? void 0 : _a.login} ` +
-            `is ${review.author_association} but must be one of the following:` +
-            `${reviewAuthorAssociations.join(', ')}`);
-        return false;
-    }
-    return true;
+    return isReviewAuthorAllowed(review, authorAssociations);
 }
 exports.isApprovedByAllowedAuthor = isApprovedByAllowedAuthor;
 function relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit) {
     return reviews
         .filter(review => review.commit_id === commit)
         .filter(review => {
-        var _a;
         const isRelevant = isApproved(review) || isChangesRequested(review);
         if (!isRelevant) {
             core.debug(`Review ${review.id} for commit ${commit} is not relevant.`);
             return false;
         }
-        const isReviewAuthorAllowed = isAuthorAllowed(review, reviewAuthorAssociations);
-        if (!isReviewAuthorAllowed) {
-            core.debug(`Author @${(_a = review.user) === null || _a === void 0 ? void 0 : _a.login} (${review.author_association}) of review ${review.id} for commit ${commit} is not allowed.`);
-            return false;
-        }
-        return true;
+        return isReviewAuthorAllowed(review, reviewAuthorAssociations);
     })
         .sort((a, b) => {
         const submittedA = a.submitted_at;

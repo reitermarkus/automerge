@@ -28,22 +28,27 @@ export function isAuthorAllowed(
   return authorAssociations.includes(pullRequestOrReview.author_association)
 }
 
-export function isApprovedByAllowedAuthor(review: Review, reviewAuthorAssociations: string[]): boolean {
+export function isReviewAuthorAllowed(review: Review, authorAssociations: string[]): boolean {
+  if (!isAuthorAllowed(review, authorAssociations)) {
+    core.debug(
+      `Author @${review.user?.login} of review ${review.id} ` +
+        `is ${review.author_association} but must be one of the following:` +
+        `${authorAssociations.join(', ')}`
+    )
+
+    return false
+  }
+
+  return true
+}
+
+export function isApprovedByAllowedAuthor(review: Review, authorAssociations: string[]): boolean {
   if (!isApproved(review)) {
     core.debug(`Review ${review.id} is not an approval.`)
     return false
   }
 
-  if (!isAuthorAllowed(review, reviewAuthorAssociations)) {
-    core.debug(
-      `Review ${review.id} is approved, however author @${review.user?.login} ` +
-        `is ${review.author_association} but must be one of the following:` +
-        `${reviewAuthorAssociations.join(', ')}`
-    )
-    return false
-  }
-
-  return true
+  return isReviewAuthorAllowed(review, authorAssociations)
 }
 
 export function relevantReviewsForCommit(
@@ -60,15 +65,7 @@ export function relevantReviewsForCommit(
         return false
       }
 
-      const isReviewAuthorAllowed = isAuthorAllowed(review, reviewAuthorAssociations)
-      if (!isReviewAuthorAllowed) {
-        core.debug(
-          `Author @${review.user?.login} (${review.author_association}) of review ${review.id} for commit ${commit} is not allowed.`
-        )
-        return false
-      }
-
-      return true
+      return isReviewAuthorAllowed(review, reviewAuthorAssociations)
     })
     .sort((a, b) => {
       const submittedA = a.submitted_at
