@@ -158,7 +158,7 @@ class AutomergeAction {
                         const query = graphql_1.EnableAutoMerge.loc.source.body;
                         const result = yield this.octokit.graphql({
                             query,
-                            pullRequestId: pullRequest.id,
+                            pullRequestId: pullRequest.node_id,
                             commitHeadline: commitTitle,
                             commitBody: commitMessage,
                             mergeMethod: mergeMethod === null || mergeMethod === void 0 ? void 0 : mergeMethod.toUpperCase(),

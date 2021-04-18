@@ -171,7 +171,7 @@ export class AutomergeAction {
 
           const result: EnableAutoMergeMutation = await this.octokit.graphql({
             query,
-            pullRequestId: pullRequest.id,
+            pullRequestId: pullRequest.node_id,
             commitHeadline: commitTitle,
             commitBody: commitMessage,
             mergeMethod: mergeMethod?.toUpperCase(),
