@@ -182,8 +182,12 @@ export class AutomergeAction {
 
           core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`)
           const result = await this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod)
-          core.info(JSON.stringify(result, null, 2))
-          core.info(`Successfully enabled auto-merge for pull request ${number}.`)
+
+          if (result.enablePullRequestAutoMerge?.pullRequest?.autoMergeRequest?.enabledAt) {
+            core.info(`Successfully enabled auto-merge for pull request ${number}.`)
+          } else {
+            core.setFailed(`Enabling auto-merge for pull request ${number} failed.`)
+          }
           return
         } catch (error) {
           const message = `Failed to enable auto-merge for pull request ${number}: ${error.message}`

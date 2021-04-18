@@ -93,6 +93,7 @@ class AutomergeAction {
         });
     }
     autoMergePullRequest(number) {
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             core.info(`Evaluating mergeability for pull request ${number}:`);
             const pullRequest = (yield this.octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }))).data;
@@ -171,8 +172,12 @@ class AutomergeAction {
                         }
                         core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
                         const result = yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
-                        core.info(JSON.stringify(result, null, 2));
-                        core.info(`Successfully enabled auto-merge for pull request ${number}.`);
+                        if ((_c = (_b = (_a = result.enablePullRequestAutoMerge) === null || _a === void 0 ? void 0 : _a.pullRequest) === null || _b === void 0 ? void 0 : _b.autoMergeRequest) === null || _c === void 0 ? void 0 : _c.enabledAt) {
+                            core.info(`Successfully enabled auto-merge for pull request ${number}.`);
+                        }
+                        else {
+                            core.setFailed(`Enabling auto-merge for pull request ${number} failed.`);
+                        }
                         return;
                     }
                     catch (error) {
