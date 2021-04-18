@@ -1,3 +1,4 @@
 dist/
 lib/
+src/generated/graphql.ts
 node_modules/
