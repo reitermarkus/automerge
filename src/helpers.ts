@@ -119,35 +119,6 @@ export async function requiredStatusChecksForBranch(octokit: Octokit, branchName
   return []
 }
 
-export async function passedRequiredStatusChecks(
-  octokit: Octokit,
-  pullRequest: PullRequest,
-  requiredChecks: string[]
-): Promise<boolean> {
-  const checkRuns = (
-    await octokit.checks.listForRef({
-      ...github.context.repo,
-      ref: pullRequest.head.sha,
-    })
-  ).data.check_runs
-
-  const commitStatuses = (
-    await octokit.repos.getCombinedStatusForRef({
-      ...github.context.repo,
-      ref: pullRequest.head.sha,
-    })
-  ).data.statuses
-
-  return requiredChecks.every(requiredCheck => checkSucceeded(requiredCheck, checkRuns, commitStatuses))
-}
-
-function checkSucceeded(name: string, checkRuns: CheckRun[], statuses: CommitStatus[]): boolean {
-  return (
-    checkRuns.some(checkRun => checkRun.name === name && checkRun.conclusion === 'success') ||
-    statuses.some(status => status.context === name && status.state === 'success')
-  )
-}
-
 // Loosely match a “do not merge” label's name.
 export function isDoNotMergeLabel(string: string): boolean {
   const label = string.toLowerCase().replace(/[^a-z0-9]/g, '')

@@ -14,7 +14,6 @@ import {
   isApprovedByAllowedAuthor,
   isAuthorAllowed,
   commitHasMinimumApprovals,
-  passedRequiredStatusChecks,
   pullRequestsForWorkflowRun,
   pullRequestsForCheckSuite,
   requiredStatusChecksForBranch,
@@ -108,11 +107,6 @@ export class AutomergeAction {
     // Only auto-merge if there is at least one required status check.
     if (requiredStatusChecks.length < 1) {
       core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`)
-      return false
-    }
-
-    if (!(await passedRequiredStatusChecks(this.octokit, pullRequest, requiredStatusChecks))) {
-      core.info(`Required status checks for pull request ${number} are not successful.`)
       return false
     }
 
