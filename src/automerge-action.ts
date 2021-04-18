@@ -2,6 +2,13 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { isPresent } from 'ts-is-present'
 
+import {
+  EnableAutoMerge,
+  EnableAutoMergeMutation,
+  DisableAutoMerge,
+  DisableAutoMergeMutation,
+} from './generated/graphql'
+
 import { Input } from './input'
 import {
   isApprovedByAllowedAuthor,
@@ -140,14 +147,8 @@ export class AutomergeAction {
         core.info(`Pull request ${number} is not mergeable because it is a draft.`)
         return false
       }
-      case 'dirty': {
-        core.info(`Pull request ${number} is not mergeable because it is dirty.`)
-        return false
-      }
-      case 'blocked': {
-        core.info(`Merging is blocked for pull request ${number}.`)
-        return false
-      }
+      case 'dirty':
+      case 'blocked':
       case 'clean':
       case 'has_hooks':
       case 'unknown':
@@ -163,26 +164,32 @@ export class AutomergeAction {
         const titleMessage = useTitle ? ` with title '${commitTitle}'` : undefined
 
         if (this.input.dryRun) {
-          core.info(`Would try merging pull request ${number}${titleMessage}.`)
+          core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage}.`)
           return false
         }
 
         try {
-          core.info(`Merging pull request ${number}${titleMessage}:`)
-          await this.octokit.pulls.merge({
-            ...github.context.repo,
-            pull_number: number,
-            sha: pullRequest.head.sha,
-            merge_method: mergeMethod,
-            commit_title: commitTitle,
-            commit_message: commitMessage,
+          core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`)
+
+          // We need to get the source code of the query since the `@octokit/graphql`
+          // API doesn't (yet) support passing a `DocumentNode` object.
+          const query = EnableAutoMerge.loc!.source!.body
+
+          const result: EnableAutoMergeMutation = await this.octokit.graphql({
+            query,
+            pullRequestId: pullRequest.id,
+            commitHeadline: commitTitle,
+            commitBody: commitMessage,
+            mergeMethod,
           })
 
-          core.info(`Successfully merged pull request ${number}.`)
+          core.info(JSON.stringify(result, null, 2))
+
+          core.info(`Successfully enabled auto-merge for pull request ${number}.`)
 
           return false
         } catch (error) {
-          const message = `Failed to merge pull request ${number} (${triesLeft} tries left): ${error.message}`
+          const message = `Failed to enable auto-merge for pull request ${number} (${triesLeft} tries left): ${error.message}`
           if (triesLeft === 0) {
             core.setFailed(message)
             return false

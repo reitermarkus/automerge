@@ -1,0 +1,14 @@
+mutation EnableAutoMerge($pullRequestId: ID!, $commitHeadline: String, $commitBody: String, $mergeMethod: PullRequestMergeMethod!) {
+  enablePullRequestAutoMerge(input: {
+    pullRequestId: $pullRequestId,
+    commitHeadline: $commitHeadline,
+    commitBody: $commitBody,
+    mergeMethod: $mergeMethod,
+  }) {
+    pullRequest {
+      autoMergeRequest {
+        enabledAt
+      }
+    }
+  }
+}
