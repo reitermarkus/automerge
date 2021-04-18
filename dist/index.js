@@ -161,7 +161,7 @@ class AutomergeAction {
                             pullRequestId: pullRequest.id,
                             commitHeadline: commitTitle,
                             commitBody: commitMessage,
-                            mergeMethod,
+                            mergeMethod: mergeMethod === null || mergeMethod === void 0 ? void 0 : mergeMethod.toUpperCase(),
                         });
                         core.info(JSON.stringify(result, null, 2));
                         core.info(`Successfully enabled auto-merge for pull request ${number}.`);

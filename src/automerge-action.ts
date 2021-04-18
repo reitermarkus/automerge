@@ -174,7 +174,7 @@ export class AutomergeAction {
             pullRequestId: pullRequest.id,
             commitHeadline: commitTitle,
             commitBody: commitMessage,
-            mergeMethod,
+            mergeMethod: mergeMethod?.toUpperCase(),
           })
 
           core.info(JSON.stringify(result, null, 2))
