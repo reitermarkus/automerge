@@ -141,6 +141,7 @@ class AutomergeAction {
                     core.info(`Pull request ${number} is not mergeable because it is a draft.`);
                     yield this.disableAutoMerge(pullRequest);
                     return;
+                    break;
                 }
                 case 'dirty':
                 case 'blocked':
@@ -170,14 +171,19 @@ class AutomergeAction {
                         }
                         yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
                         core.info(`Successfully enabled auto-merge for pull request ${number}.`);
+                        return;
                     }
                     catch (error) {
                         const message = `Failed to enable auto-merge for pull request ${number}: ${error.message}`;
                         core.setFailed(message);
+                        return;
                     }
+                    break;
                 }
                 default: {
                     core.setFailed(`Unknown state for pull request ${number}: '${mergeableState}'`);
+                    return;
+                    break;
                 }
             }
         });
