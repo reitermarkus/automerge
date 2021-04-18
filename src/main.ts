@@ -23,6 +23,12 @@ async function run(): Promise<void> {
         await action.handlePullRequestTarget()
         break
       }
+      case 'push':
+      case 'schedule':
+      case 'workflow_dispatch': {
+        await action.handleSchedule()
+        break
+      }
       default: {
         core.warning(`This action does not support the '${eventName}' event.`)
         break

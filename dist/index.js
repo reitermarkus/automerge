@@ -170,7 +170,8 @@ class AutomergeAction {
                             }
                         }
                         core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
-                        yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
+                        const result = yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
+                        core.info(JSON.stringify(result, null, 2));
                         core.info(`Successfully enabled auto-merge for pull request ${number}.`);
                         return;
                     }
@@ -197,6 +198,19 @@ class AutomergeAction {
                 return;
             }
             yield this.autoMergePullRequest(pullRequest.number);
+        });
+    }
+    handleSchedule() {
+        return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handleSchedule()');
+            const pullRequests = (yield this.octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', sort: 'updated', direction: 'desc', per_page: 100 }))).data;
+            if (pullRequests.length === 0) {
+                core.info(`No open pull requests found.`);
+                return;
+            }
+            for (const pullRequest of pullRequests) {
+                yield this.autoMergePullRequest(pullRequest.number);
+            }
         });
     }
 }
@@ -2161,6 +2175,12 @@ function run() {
             switch (eventName) {
                 case 'pull_request_target': {
                     yield action.handlePullRequestTarget();
+                    break;
+                }
+                case 'push':
+                case 'schedule':
+                case 'workflow_dispatch': {
+                    yield action.handleSchedule();
                     break;
                 }
                 default: {

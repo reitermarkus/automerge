@@ -181,7 +181,8 @@ export class AutomergeAction {
           }
 
           core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`)
-          await this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod)
+          const result = await this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod)
+          core.info(JSON.stringify(result, null, 2))
           core.info(`Successfully enabled auto-merge for pull request ${number}.`)
           return
         } catch (error) {
@@ -211,5 +212,28 @@ export class AutomergeAction {
     }
 
     await this.autoMergePullRequest(pullRequest.number)
+  }
+
+  async handleSchedule(): Promise<void> {
+    core.debug('handleSchedule()')
+
+    const pullRequests = (
+      await this.octokit.pulls.list({
+        ...github.context.repo,
+        state: 'open',
+        sort: 'updated',
+        direction: 'desc',
+        per_page: 100,
+      })
+    ).data
+
+    if (pullRequests.length === 0) {
+      core.info(`No open pull requests found.`)
+      return
+    }
+
+    for (const pullRequest of pullRequests) {
+      await this.autoMergePullRequest(pullRequest.number)
+    }
   }
 }

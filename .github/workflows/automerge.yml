@@ -1,6 +1,8 @@
 name: automerge
 
 on:
+  schedule:
+    - cron: 0 * * * *
   pull_request_target:
     types:
       - opened
