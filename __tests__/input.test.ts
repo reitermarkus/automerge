@@ -7,7 +7,6 @@ const testEnvVars = {
   'INPUT_REQUIRED-LABELS': 'automerge',
   'INPUT_PULL-REQUEST': '',
   'INPUT_PULL-REQUEST-AUTHOR-ASSOCIATION': '',
-  'INPUT_REVIEW-AUTHOR-ASSOCIATION': '',
   'INPUT_DRY-RUN': '',
 }
 
@@ -27,7 +26,6 @@ describe('input', () => {
     expect(input.requiredLabels).toStrictEqual(['automerge'])
     expect(input.pullRequest).toBe(null)
     expect(input.pullRequestAuthorAssociations).toStrictEqual([])
-    expect(input.reviewAuthorAssociations).toStrictEqual(['COLLABORATOR', 'MEMBER', 'OWNER'])
     expect(input.dryRun).toBe(false)
   })
 
@@ -88,14 +86,6 @@ describe('input', () => {
     const input = new Input()
 
     expect(input.pullRequestAuthorAssociations).toStrictEqual(['COLLABORATOR', 'MEMBER', 'OWNER'])
-  })
-
-  it('accepts an optional `review-author-associations` input', () => {
-    process.env['INPUT_REVIEW-AUTHOR-ASSOCIATIONS'] = 'MEMBER,OWNER'
-
-    const input = new Input()
-
-    expect(input.reviewAuthorAssociations).toStrictEqual(['MEMBER', 'OWNER'])
   })
 
   it('accepts an optional `dry-run` input', () => {

@@ -1,18 +1,11 @@
 name: automerge
 
 on:
-  schedule:
-    - cron: 0 * * * *
-  workflow_run:
-    workflows:
-      - build-test
-    types:
-      - completed
-  pull_request_review:
-    types:
-      - submitted
   pull_request_target:
     types:
+      - opened
+      - synchronized
+      - closed
       - labeled
       - unlabeled
       - ready_for_review
