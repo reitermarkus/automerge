@@ -31,7 +31,7 @@ jobs:
           ref: main
       - uses: ./
         with:
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          token: ${{ github.token }}
           squash-title: true
           do-not-merge-labels: never-merge
           required-labels: automerge
