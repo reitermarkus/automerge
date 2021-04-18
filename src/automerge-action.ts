@@ -72,6 +72,36 @@ export class AutomergeAction {
     }
   }
 
+  async disableAutoMerge(pullRequest: PullRequest): Promise<DisableAutoMergeMutation> {
+    // We need to get the source code of the query since the `@octokit/graphql`
+    // API doesn't (yet) support passing a `DocumentNode` object.
+    const query = DisableAutoMerge.loc!.source!.body
+
+    return await this.octokit.graphql({
+      query,
+      pullRequestId: pullRequest.node_id,
+    })
+  }
+
+  async enableAutoMerge(
+    pullRequest: PullRequest,
+    commitTitle: string | undefined,
+    commitMessage: string | undefined,
+    mergeMethod: MergeMethod
+  ): Promise<EnableAutoMergeMutation> {
+    // We need to get the source code of the query since the `@octokit/graphql`
+    // API doesn't (yet) support passing a `DocumentNode` object.
+    const query = EnableAutoMerge.loc!.source!.body
+
+    return await this.octokit.graphql({
+      query,
+      pullRequestId: pullRequest.node_id,
+      commitHeadline: commitTitle,
+      commitBody: commitMessage,
+      mergeMethod: mergeMethod?.toUpperCase(),
+    })
+  }
+
   async automergePullRequest(number: number, triesLeft: number): Promise<boolean> {
     core.info(`Evaluating mergeability for pull request ${number}:`)
 
@@ -165,18 +195,7 @@ export class AutomergeAction {
         try {
           core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`)
 
-          // We need to get the source code of the query since the `@octokit/graphql`
-          // API doesn't (yet) support passing a `DocumentNode` object.
-          const query = EnableAutoMerge.loc!.source!.body
-
-          const result: EnableAutoMergeMutation = await this.octokit.graphql({
-            query,
-            pullRequestId: pullRequest.node_id,
-            commitHeadline: commitTitle,
-            commitBody: commitMessage,
-            mergeMethod: mergeMethod?.toUpperCase(),
-          })
-
+          const result = await this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod)
           core.info(JSON.stringify(result, null, 2))
 
           core.info(`Successfully enabled auto-merge for pull request ${number}.`)

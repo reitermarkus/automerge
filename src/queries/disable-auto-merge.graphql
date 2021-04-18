@@ -5,6 +5,9 @@ mutation DisableAutoMerge($pullRequestId: ID!) {
     pullRequest {
       autoMergeRequest {
         enabledAt
+        enabledBy {
+          login
+        }
       }
     }
   }

@@ -86,6 +86,31 @@ class AutomergeAction {
             }
         });
     }
+    disableAutoMerge(pullRequest) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // We need to get the source code of the query since the `@octokit/graphql`
+            // API doesn't (yet) support passing a `DocumentNode` object.
+            const query = graphql_1.DisableAutoMerge.loc.source.body;
+            return yield this.octokit.graphql({
+                query,
+                pullRequestId: pullRequest.node_id,
+            });
+        });
+    }
+    enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // We need to get the source code of the query since the `@octokit/graphql`
+            // API doesn't (yet) support passing a `DocumentNode` object.
+            const query = graphql_1.EnableAutoMerge.loc.source.body;
+            return yield this.octokit.graphql({
+                query,
+                pullRequestId: pullRequest.node_id,
+                commitHeadline: commitTitle,
+                commitBody: commitMessage,
+                mergeMethod: mergeMethod === null || mergeMethod === void 0 ? void 0 : mergeMethod.toUpperCase(),
+            });
+        });
+    }
     automergePullRequest(number, triesLeft) {
         return __awaiter(this, void 0, void 0, function* () {
             core.info(`Evaluating mergeability for pull request ${number}:`);
@@ -153,16 +178,7 @@ class AutomergeAction {
                     }
                     try {
                         core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
-                        // We need to get the source code of the query since the `@octokit/graphql`
-                        // API doesn't (yet) support passing a `DocumentNode` object.
-                        const query = graphql_1.EnableAutoMerge.loc.source.body;
-                        const result = yield this.octokit.graphql({
-                            query,
-                            pullRequestId: pullRequest.node_id,
-                            commitHeadline: commitTitle,
-                            commitBody: commitMessage,
-                            mergeMethod: mergeMethod === null || mergeMethod === void 0 ? void 0 : mergeMethod.toUpperCase(),
-                        });
+                        const result = yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
                         core.info(JSON.stringify(result, null, 2));
                         core.info(`Successfully enabled auto-merge for pull request ${number}.`);
                         return false;
@@ -1942,6 +1958,9 @@ exports.DisableAutoMerge = graphql_tag_1.default `
     pullRequest {
       autoMergeRequest {
         enabledAt
+        enabledBy {
+          login
+        }
       }
     }
   }
@@ -1955,6 +1974,9 @@ exports.EnableAutoMerge = graphql_tag_1.default `
     pullRequest {
       autoMergeRequest {
         enabledAt
+        enabledBy {
+          login
+        }
       }
     }
   }

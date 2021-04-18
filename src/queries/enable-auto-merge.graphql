@@ -8,6 +8,9 @@ mutation EnableAutoMerge($pullRequestId: ID!, $commitHeadline: String, $commitBo
     pullRequest {
       autoMergeRequest {
         enabledAt
+        enabledBy {
+          login
+        }
       }
     }
   }
