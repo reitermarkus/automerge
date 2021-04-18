@@ -13,7 +13,6 @@ import { Input } from './input'
 import {
   isApprovedByAllowedAuthor,
   isAuthorAllowed,
-  commitHasMinimumApprovals,
   pullRequestsForWorkflowRun,
   pullRequestsForCheckSuite,
   requiredStatusChecksForBranch,
@@ -140,11 +139,6 @@ export class AutomergeAction {
       return false
     }
 
-    if (!(await this.isPullRequestApproved(pullRequest))) {
-      core.info(`Pull request ${number} is not approved.`)
-      return false
-    }
-
     const labels = pullRequest.labels.map(({ name }) => name).filter(isPresent)
     const doNotMergeLabels = labels.filter(label => this.input.isDoNotMergeLabel(label))
     if (doNotMergeLabels.length > 0) {
@@ -226,25 +220,6 @@ export class AutomergeAction {
         return false
       }
     }
-  }
-
-  async isPullRequestApproved(pullRequest: PullRequest): Promise<boolean> {
-    const reviews = (
-      await this.octokit.pulls.listReviews({
-        ...github.context.repo,
-        pull_number: pullRequest.number,
-        per_page: 100,
-      })
-    ).data
-
-    if (reviews.length === 100) {
-      core.setFailed('Handling pull requests with more than 100 reviews is not implemented.')
-      return false
-    }
-
-    const commit = pullRequest.head.sha
-    const minimumApprovals = 1
-    return commitHasMinimumApprovals(reviews, this.input.reviewAuthorAssociations, commit, minimumApprovals)
   }
 
   async handlePullRequestReview(): Promise<void> {

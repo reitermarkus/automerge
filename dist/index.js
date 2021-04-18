@@ -136,10 +136,6 @@ class AutomergeAction {
                 core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`);
                 return false;
             }
-            if (!(yield this.isPullRequestApproved(pullRequest))) {
-                core.info(`Pull request ${number} is not approved.`);
-                return false;
-            }
             const labels = pullRequest.labels.map(({ name }) => name).filter(ts_is_present_1.isPresent);
             const doNotMergeLabels = labels.filter(label => this.input.isDoNotMergeLabel(label));
             if (doNotMergeLabels.length > 0) {
@@ -208,18 +204,6 @@ class AutomergeAction {
                     return false;
                 }
             }
-        });
-    }
-    isPullRequestApproved(pullRequest) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const reviews = (yield this.octokit.pulls.listReviews(Object.assign(Object.assign({}, github.context.repo), { pull_number: pullRequest.number, per_page: 100 }))).data;
-            if (reviews.length === 100) {
-                core.setFailed('Handling pull requests with more than 100 reviews is not implemented.');
-                return false;
-            }
-            const commit = pullRequest.head.sha;
-            const minimumApprovals = 1;
-            return helpers_1.commitHasMinimumApprovals(reviews, this.input.reviewAuthorAssociations, commit, minimumApprovals);
         });
     }
     handlePullRequestReview() {
@@ -2028,7 +2012,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.requiredStatusChecksForBranch = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.requiredStatusChecksForBranch = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 exports.UNMERGEABLE_STATES = ['blocked'];
@@ -2070,43 +2054,6 @@ function isApprovedByAllowedAuthor(review, authorAssociations) {
     return isReviewAuthorAllowed(review, authorAssociations);
 }
 exports.isApprovedByAllowedAuthor = isApprovedByAllowedAuthor;
-function relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit) {
-    return reviews
-        .filter(review => review.commit_id === commit)
-        .filter(review => {
-        const isRelevant = isApproved(review) || isChangesRequested(review);
-        if (!isRelevant) {
-            core.debug(`Review ${review.id} for commit ${commit} is not relevant.`);
-            return false;
-        }
-        return isReviewAuthorAllowed(review, reviewAuthorAssociations);
-    })
-        .sort((a, b) => {
-        const submittedA = a.submitted_at;
-        const submittedB = b.submitted_at;
-        return submittedA && submittedB ? Date.parse(submittedB) - Date.parse(submittedA) : 0;
-    })
-        .reduce((acc, review) => acc.some(r => {
-        var _a, _b;
-        const loginA = (_a = r.user) === null || _a === void 0 ? void 0 : _a.login;
-        const loginB = (_b = review.user) === null || _b === void 0 ? void 0 : _b.login;
-        return loginA && loginB && loginA === loginB;
-    })
-        ? acc
-        : [...acc, review], [])
-        .reverse();
-}
-exports.relevantReviewsForCommit = relevantReviewsForCommit;
-function commitHasMinimumApprovals(reviews, reviewAuthorAssociations, commit, n) {
-    core.debug(`Checking review for commit ${commit}:`);
-    core.debug(`Commit ${commit} has ${reviews.length} reviews.`);
-    const relevantReviews = relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit);
-    core.debug(`Commit ${commit} has ${relevantReviews.length} relevant reviews.`);
-    // All last `n` reviews must be approvals.
-    const lastNReviews = relevantReviews.reverse().slice(0, n);
-    return lastNReviews.length >= n && lastNReviews.every(isApproved);
-}
-exports.commitHasMinimumApprovals = commitHasMinimumApprovals;
 function requiredStatusChecksForBranch(octokit, branchName) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {

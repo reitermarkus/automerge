@@ -51,59 +51,6 @@ export function isApprovedByAllowedAuthor(review: Review, authorAssociations: st
   return isReviewAuthorAllowed(review, authorAssociations)
 }
 
-export function relevantReviewsForCommit(
-  reviews: Review[],
-  reviewAuthorAssociations: string[],
-  commit: string
-): Review[] {
-  return reviews
-    .filter(review => review.commit_id === commit)
-    .filter(review => {
-      const isRelevant = isApproved(review) || isChangesRequested(review)
-      if (!isRelevant) {
-        core.debug(`Review ${review.id} for commit ${commit} is not relevant.`)
-        return false
-      }
-
-      return isReviewAuthorAllowed(review, reviewAuthorAssociations)
-    })
-    .sort((a, b) => {
-      const submittedA = a.submitted_at
-      const submittedB = b.submitted_at
-
-      return submittedA && submittedB ? Date.parse(submittedB) - Date.parse(submittedA) : 0
-    })
-    .reduce(
-      (acc: Review[], review) =>
-        acc.some(r => {
-          const loginA = r.user?.login
-          const loginB = review.user?.login
-
-          return loginA && loginB && loginA === loginB
-        })
-          ? acc
-          : [...acc, review],
-      []
-    )
-    .reverse()
-}
-
-export function commitHasMinimumApprovals(
-  reviews: Review[],
-  reviewAuthorAssociations: string[],
-  commit: string,
-  n: number
-): boolean {
-  core.debug(`Checking review for commit ${commit}:`)
-  core.debug(`Commit ${commit} has ${reviews.length} reviews.`)
-  const relevantReviews = relevantReviewsForCommit(reviews, reviewAuthorAssociations, commit)
-  core.debug(`Commit ${commit} has ${relevantReviews.length} relevant reviews.`)
-
-  // All last `n` reviews must be approvals.
-  const lastNReviews = relevantReviews.reverse().slice(0, n)
-  return lastNReviews.length >= n && lastNReviews.every(isApproved)
-}
-
 export async function requiredStatusChecksForBranch(octokit: Octokit, branchName: string): Promise<string[]> {
   const branch = (
     await octokit.repos.getBranch({
