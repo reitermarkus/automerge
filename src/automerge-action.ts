@@ -62,11 +62,11 @@ export class AutomergeAction {
     const repo = (await this.octokit.repos.get({ ...github.context.repo })).data
 
     if (repo.allow_merge_commit === true) {
-      return 'merge'
+      return 'MERGE'
     } else if (repo.allow_squash_merge === true) {
-      return 'squash'
+      return 'SQUASH'
     } else if (repo.allow_rebase_merge === true) {
-      return 'rebase'
+      return 'REBASE'
     } else {
       return undefined
     }
@@ -151,7 +151,7 @@ export class AutomergeAction {
 
         const mergeMethod = await this.determineMergeMethod()
 
-        const useTitle = this.input.squashTitle && mergeMethod === 'squash'
+        const useTitle = this.input.squashTitle && mergeMethod === 'SQUASH'
         const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})` : undefined
         const commitMessage = useTitle ? '\n' : undefined
 
