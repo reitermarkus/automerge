@@ -178,6 +178,14 @@ class AutomergeAction {
                     }
                     try {
                         core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
+                        // If auto-merge is already enabled with the same merge method, disable it
+                        // in order to update the commit title and message.
+                        const { auto_merge: autoMerge } = pullRequest;
+                        if (autoMerge && commitTitle && commitMessage && autoMerge.merge_method == mergeMethod) {
+                            if (autoMerge.commit_title != commitTitle || autoMerge.commit_message != commitMessage) {
+                                yield this.disableAutoMerge(pullRequest);
+                            }
+                        }
                         const result = yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
                         core.info(JSON.stringify(result, null, 2));
                         core.info(`Successfully enabled auto-merge for pull request ${number}.`);
