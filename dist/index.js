@@ -111,10 +111,6 @@ class AutomergeAction {
                 core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`);
                 return false;
             }
-            if (!(yield helpers_1.passedRequiredStatusChecks(this.octokit, pullRequest, requiredStatusChecks))) {
-                core.info(`Required status checks for pull request ${number} are not successful.`);
-                return false;
-            }
             if (!(yield this.isPullRequestApproved(pullRequest))) {
                 core.info(`Pull request ${number} is not approved.`);
                 return false;
@@ -2002,7 +1998,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.passedRequiredStatusChecks = exports.requiredStatusChecksForBranch = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
+exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.requiredStatusChecksForBranch = exports.commitHasMinimumApprovals = exports.relevantReviewsForCommit = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 exports.UNMERGEABLE_STATES = ['blocked'];
@@ -2092,18 +2088,6 @@ function requiredStatusChecksForBranch(octokit, branchName) {
     });
 }
 exports.requiredStatusChecksForBranch = requiredStatusChecksForBranch;
-function passedRequiredStatusChecks(octokit, pullRequest, requiredChecks) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const checkRuns = (yield octokit.checks.listForRef(Object.assign(Object.assign({}, github.context.repo), { ref: pullRequest.head.sha }))).data.check_runs;
-        const commitStatuses = (yield octokit.repos.getCombinedStatusForRef(Object.assign(Object.assign({}, github.context.repo), { ref: pullRequest.head.sha }))).data.statuses;
-        return requiredChecks.every(requiredCheck => checkSucceeded(requiredCheck, checkRuns, commitStatuses));
-    });
-}
-exports.passedRequiredStatusChecks = passedRequiredStatusChecks;
-function checkSucceeded(name, checkRuns, statuses) {
-    return (checkRuns.some(checkRun => checkRun.name === name && checkRun.conclusion === 'success') ||
-        statuses.some(status => status.context === name && status.state === 'success'));
-}
 // Loosely match a “do not merge” label's name.
 function isDoNotMergeLabel(string) {
     const label = string.toLowerCase().replace(/[^a-z0-9]/g, '');
