@@ -68,6 +68,7 @@ class AutomergeAction {
     }
     disableAutoMerge(pullRequest) {
         return __awaiter(this, void 0, void 0, function* () {
+            core.info(`Disabling auto-merge for pull request ${pullRequest.number}.`);
             // We need to get the source code of the query since the `@octokit/graphql`
             // API doesn't (yet) support passing a `DocumentNode` object.
             const query = graphql_1.DisableAutoMerge.loc.source.body;
@@ -160,7 +161,6 @@ class AutomergeAction {
                         return;
                     }
                     try {
-                        core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
                         // If auto-merge is already enabled with the same merge method, disable it
                         // in order to update the commit title and message.
                         const { auto_merge: autoMerge } = pullRequest;
@@ -169,6 +169,7 @@ class AutomergeAction {
                                 yield this.disableAutoMerge(pullRequest);
                             }
                         }
+                        core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
                         yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
                         core.info(`Successfully enabled auto-merge for pull request ${number}.`);
                         return;
