@@ -7,6 +7,7 @@ on:
       - synchronized
       - closed
       - reopened
+      - edited
       - labeled
       - unlabeled
       - ready_for_review
