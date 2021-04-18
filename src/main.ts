@@ -13,32 +13,14 @@ async function run(): Promise<void> {
     const action = new AutomergeAction(octokit, input)
 
     if (input.pullRequest) {
-      await action.automergePullRequests([input.pullRequest])
+      await action.autoMergePullRequest(input.pullRequest)
       return
     }
 
     const eventName = github.context.eventName
     switch (eventName) {
-      case 'pull_request_review': {
-        await action.handlePullRequestReview()
-        break
-      }
       case 'pull_request_target': {
         await action.handlePullRequestTarget()
-        break
-      }
-      case 'push':
-      case 'schedule':
-      case 'workflow_dispatch': {
-        await action.handleSchedule()
-        break
-      }
-      case 'workflow_run': {
-        await action.handleWorkflowRun()
-        break
-      }
-      case 'check_suite': {
-        await action.handleCheckSuite()
         break
       }
       default: {

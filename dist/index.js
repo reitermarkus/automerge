@@ -46,26 +46,6 @@ class AutomergeAction {
         this.octokit = octokit;
         this.input = input;
     }
-    automergePullRequests(numbers) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const maxTries = 5;
-            const retries = maxTries - 1;
-            const queue = numbers.map(number => ({ number, tries: 0 }));
-            let arg;
-            while ((arg = queue.shift())) {
-                const { number, tries } = arg;
-                if (tries > 0) {
-                    yield new Promise(r => setTimeout(r, Math.pow(2, tries) * 1000));
-                }
-                const triesLeft = retries - tries;
-                const retry = yield this.automergePullRequest(number, triesLeft);
-                if (retry) {
-                    queue.push({ number, tries: tries + 1 });
-                }
-                core.info('');
-            }
-        });
-    }
     determineMergeMethod() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.input.mergeMethod) {
@@ -111,7 +91,7 @@ class AutomergeAction {
             });
         });
     }
-    automergePullRequest(number, triesLeft) {
+    autoMergePullRequest(number) {
         return __awaiter(this, void 0, void 0, function* () {
             core.info(`Evaluating mergeability for pull request ${number}:`);
             const pullRequest = (yield this.octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }))).data;
@@ -141,11 +121,13 @@ class AutomergeAction {
             if (doNotMergeLabels.length > 0) {
                 core.info(`Pull request ${number} is not mergeable because the following labels are applied: ` +
                     `${doNotMergeLabels.join(', ')}`);
+                yield this.disableAutoMerge(pullRequest);
                 return false;
             }
             for (const requiredLabel of this.input.requiredLabels) {
                 if (!labels.includes(requiredLabel)) {
                     core.info(`Pull request ${number} is not mergeable because it does not have the required label: ${requiredLabel}`);
+                    yield this.disableAutoMerge(pullRequest);
                     return false;
                 }
             }
@@ -188,33 +170,15 @@ class AutomergeAction {
                         return false;
                     }
                     catch (error) {
-                        const message = `Failed to enable auto-merge for pull request ${number} (${triesLeft} tries left): ${error.message}`;
-                        if (triesLeft === 0) {
-                            core.setFailed(message);
-                            return false;
-                        }
-                        else {
-                            core.error(message);
-                            return true;
-                        }
+                        const message = `Failed to enable auto-merge for pull request ${number}: ${error.message}`;
+                        core.setFailed(message);
+                        return false;
                     }
                 }
                 default: {
                     core.warning(`Unknown state for pull request ${number}: '${mergeableState}'`);
                     return false;
                 }
-            }
-        });
-    }
-    handlePullRequestReview() {
-        return __awaiter(this, void 0, void 0, function* () {
-            core.debug('handlePullRequestReview()');
-            const { action, review, pull_request: pullRequest } = github.context.payload;
-            if (!action || !review || !pullRequest) {
-                return;
-            }
-            if (action === 'submitted' && helpers_1.isApprovedByAllowedAuthor(review, this.input.reviewAuthorAssociations)) {
-                yield this.automergePullRequests([pullRequest.number]);
             }
         });
     }
@@ -225,56 +189,7 @@ class AutomergeAction {
             if (!action || !pullRequest) {
                 return;
             }
-            if (action === 'ready_for_review' ||
-                (action === 'labeled' && this.input.requiredLabels.includes(label.name)) ||
-                (action === 'unlabeled' && this.input.isDoNotMergeLabel(label.name))) {
-                yield this.automergePullRequests([pullRequest.number]);
-            }
-        });
-    }
-    handleSchedule() {
-        return __awaiter(this, void 0, void 0, function* () {
-            core.debug('handleSchedule()');
-            const pullRequests = (yield this.octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open', sort: 'updated', direction: 'desc', per_page: 100 }))).data;
-            if (pullRequests.length === 0) {
-                core.info(`No open pull requests found.`);
-                return;
-            }
-            yield this.automergePullRequests(pullRequests.map(({ number }) => number));
-        });
-    }
-    handleCheckSuite() {
-        return __awaiter(this, void 0, void 0, function* () {
-            core.debug('handleCheckSuite()');
-            const { action, check_suite: checkSuite } = github.context.payload;
-            if (!action || !checkSuite) {
-                return;
-            }
-            if (checkSuite.conclusion !== 'success') {
-                core.info(`Conclusion for check suite ${checkSuite.id} is ${checkSuite.conclusion}, not attempting to merge.`);
-                return;
-            }
-            const pullRequests = yield helpers_1.pullRequestsForCheckSuite(this.octokit, checkSuite);
-            if (pullRequests.length === 0) {
-                core.info(`No open pull requests found for check suite ${checkSuite.id}.`);
-                return;
-            }
-            yield this.automergePullRequests(pullRequests);
-        });
-    }
-    handleWorkflowRun() {
-        return __awaiter(this, void 0, void 0, function* () {
-            core.debug('handleWorkflowRun()');
-            const { action, workflow_run: workflowRun } = github.context.payload;
-            if (!action || !workflowRun) {
-                return;
-            }
-            const pullRequests = yield helpers_1.pullRequestsForWorkflowRun(this.octokit, workflowRun);
-            if (pullRequests.length === 0) {
-                core.info(`No open pull requests found for workflow run ${workflowRun.id}.`);
-                return;
-            }
-            yield this.automergePullRequests(pullRequests);
+            yield this.autoMergePullRequest(pullRequest.number);
         });
     }
 }
@@ -2176,10 +2091,6 @@ class Input {
         }
         this.pullRequest = getNumber('pull-request');
         this.pullRequestAuthorAssociations = getArray('pull-request-author-associations');
-        this.reviewAuthorAssociations = getArray('review-author-associations');
-        if (this.reviewAuthorAssociations.length === 0) {
-            this.reviewAuthorAssociations = ['COLLABORATOR', 'MEMBER', 'OWNER'];
-        }
         this.dryRun = core.getInput('dry-run') === 'true';
     }
     isDoNotMergeLabel(label) {
@@ -2236,31 +2147,13 @@ function run() {
             const octokit = github.getOctokit(input.token);
             const action = new automerge_action_1.AutomergeAction(octokit, input);
             if (input.pullRequest) {
-                yield action.automergePullRequests([input.pullRequest]);
+                yield action.autoMergePullRequest(input.pullRequest);
                 return;
             }
             const eventName = github.context.eventName;
             switch (eventName) {
-                case 'pull_request_review': {
-                    yield action.handlePullRequestReview();
-                    break;
-                }
                 case 'pull_request_target': {
                     yield action.handlePullRequestTarget();
-                    break;
-                }
-                case 'push':
-                case 'schedule':
-                case 'workflow_dispatch': {
-                    yield action.handleSchedule();
-                    break;
-                }
-                case 'workflow_run': {
-                    yield action.handleWorkflowRun();
-                    break;
-                }
-                case 'check_suite': {
-                    yield action.handleCheckSuite();
                     break;
                 }
                 default: {
