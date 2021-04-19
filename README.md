@@ -8,7 +8,7 @@ This action automatically enables “auto-merge” for pull requests under the f
 
 - The pull request is not a draft.
 - The associated branch has at least one required status check.
-- All “required” labels are applied.
+- All required labels are applied.
 - No “do not merge” labels are applied.
 
 Ensure the following is set up in your repository settings before enabling this action:
