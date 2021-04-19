@@ -32,6 +32,7 @@ Auto-merging is enabled for a branch given the following criteria:
 
 ## Example Workflow
 
+
 ```yml
 name: Automerge
 
