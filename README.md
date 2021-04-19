@@ -13,12 +13,12 @@ This action automatically enables “auto-merge” for pull requests under the f
 
 Ensure the following is set up in your repository settings before enabling this action:
 
-- The **Require pull request reviews before merging** rule and the additional **Dismiss stale pull request approvals when new commits are pushed** rule
+- The **“Require pull request reviews before merging”** rule and the additional **“Dismiss stale pull request approvals when new commits are pushed”** rule
   are enabled for the branch. This ensures that no changes to the pull request are possible between the approval and the automatic merging.
 
-- The **Require status checks to pass before merging** rule is enabled and at least one status check is selected.
+- The **“Require status checks to pass before merging”** rule is enabled and at least one status check is selected.
 
-- **Allow auto-merge** is enabled.
+- **“Allow auto-merge”** is enabled.
 
 
 ## Inputs
