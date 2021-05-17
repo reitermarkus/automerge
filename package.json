@@ -39,7 +39,7 @@
     "@octokit/graphql-schema": "^10.35.0",
     "@octokit/openapi-types": "^6.0.0",
     "@types/jest": "^26.0.23",
-    "@types/node": "^15.0.1",
+    "@types/node": "^15.3.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.23.0",
     "@vercel/ncc": "^0.28.3",
