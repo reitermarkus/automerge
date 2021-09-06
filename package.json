@@ -33,7 +33,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^2.1.1",
     "@graphql-codegen/typescript": "^2.1.2",
-    "@graphql-codegen/typescript-document-nodes": "^1.17.16",
+    "@graphql-codegen/typescript-document-nodes": "^2.1.3",
     "@graphql-codegen/typescript-operations": "^2.1.2",
     "@graphql-codegen/typescript-resolvers": "^2.0.0",
     "@octokit/graphql-schema": "^10.67.0",
