@@ -13,12 +13,12 @@ jobs:
       - uses: peter-evans/find-comment@v1
         id: find-comment
         with:
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: '@dependabot merge'
       - uses: peter-evans/create-or-update-comment@v1
         with:
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: '@dependabot merge'
