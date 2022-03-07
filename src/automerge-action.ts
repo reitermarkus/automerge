@@ -193,10 +193,10 @@ export class AutomergeAction {
           if (error instanceof Error) {
             const message = `Failed to enable auto-merge for pull request ${number}: ${error.message}`
             core.setFailed(message)
-          } else {
-            throw error
+            return
           }
-          return
+
+          throw error
         }
 
         break
