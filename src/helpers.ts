@@ -53,7 +53,7 @@ export function isApprovedByAllowedAuthor(review: Review, authorAssociations: st
 
 export async function requiredStatusChecksForBranch(octokit: Octokit, branchName: string): Promise<string[]> {
   const branch = (
-    await octokit.repos.getBranch({
+    await octokit.rest.repos.getBranch({
       ...github.context.repo,
       branch: branchName,
     })
@@ -84,7 +84,7 @@ async function pullRequestsForCommit(
   if (!repoOwner) return []
 
   const pullRequests = (
-    await octokit.pulls.list({
+    await octokit.rest.pulls.list({
       ...github.context.repo,
       state: 'open',
       head: `${repoOwner}:${branch}`,

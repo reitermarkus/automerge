@@ -32,7 +32,7 @@ export class AutomergeAction {
       return this.input.mergeMethod
     }
 
-    const repo = (await this.octokit.repos.get({ ...github.context.repo })).data
+    const repo = (await this.octokit.rest.repos.get({ ...github.context.repo })).data
 
     if (repo.allow_merge_commit === true) {
       return 'merge'
@@ -81,7 +81,7 @@ export class AutomergeAction {
     core.info(`Evaluating mergeability for pull request ${number}:`)
 
     const pullRequest = (
-      await this.octokit.pulls.get({
+      await this.octokit.rest.pulls.get({
         ...github.context.repo,
         pull_number: number,
       })
@@ -226,7 +226,7 @@ export class AutomergeAction {
     core.debug('handleSchedule()')
 
     const pullRequests = (
-      await this.octokit.pulls.list({
+      await this.octokit.rest.pulls.list({
         ...github.context.repo,
         state: 'open',
         sort: 'updated',
