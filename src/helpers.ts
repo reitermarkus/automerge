@@ -60,7 +60,7 @@ export async function requiredStatusChecksForBranch(octokit: Octokit, branchName
   ).data
 
   if (branch.protected === true && branch.protection.enabled === true) {
-    return branch.protection.required_status_checks.contexts ?? []
+    return branch.protection.required_status_checks?.contexts ?? []
   }
 
   return []
