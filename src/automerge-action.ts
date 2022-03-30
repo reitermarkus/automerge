@@ -87,6 +87,8 @@ export class AutomergeAction {
       })
     ).data
 
+    core.debug(`Evaluating pull request: ${JSON.stringify(pullRequest, null, 2)}`)
+
     if (pullRequest.merged === true) {
       core.info(`Pull request ${number} is already merged.`)
       return

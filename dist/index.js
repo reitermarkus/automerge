@@ -101,6 +101,7 @@ class AutomergeAction {
         return __awaiter(this, void 0, void 0, function* () {
             core.info(`Evaluating mergeability for pull request ${number}:`);
             const pullRequest = (yield this.octokit.rest.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: number }))).data;
+            core.debug(`Evaluating pull request: ${JSON.stringify(pullRequest, null, 2)}`);
             if (pullRequest.merged === true) {
                 core.info(`Pull request ${number} is already merged.`);
                 return;
