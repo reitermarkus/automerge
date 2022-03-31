@@ -18,6 +18,8 @@ Ensure the following is set up in your repository settings before enabling this 
 
 - The **“Require status checks to pass before merging”** rule is enabled and at least one status check is selected.
 
+  Consider also adding this action as an additional required status check. Read the [Known Issues](#known-issues) section on why.
+
 - **“Allow auto-merge”** is enabled.
 
 
@@ -81,3 +83,8 @@ jobs:
           pull-request: ${{ github.event.inputs.pull-request }}
           dry-run: true
 ```
+
+
+## Known Issues
+
+If the action is triggered via a label on a pull request that is already ready to merge, the GitHub auto-merge feature cannot be enabled on that pull request anymore. A workaround is to add the workflow containing this actions as a required status check. This way the pull request will become unmergable while the action is running, allowing auto-merge to be enabled.
