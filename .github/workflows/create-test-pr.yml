@@ -23,14 +23,14 @@ jobs:
 
       - name: Generate token
         id: generate_token
-        uses: tibdex/github-app-token@7ce9ffdcdeb2ba82b01b51d6584a6a85872336d4
+        uses: tibdex/github-app-token@7ce9ffdcdeb2ba82b01b51d6584a6a85872336d4 # renovate: tag=v1.5.2
         with:
           app_id: ${{ secrets.GH_APP_ID }}
           private_key: ${{ secrets.GH_APP_KEY }}
 
       - name: Create pull request
         id: create-pull-request
-        uses: peter-evans/create-pull-request@bd72e1b7922d417764d27d30768117ad7da78a0e
+        uses: peter-evans/create-pull-request@bd72e1b7922d417764d27d30768117ad7da78a0e # renovate: tag=v4.0.2
         with:
           token: ${{ steps.generate_token.outputs.token }}
           title: Test Pull Request (${{ steps.changes.outputs.number }})
