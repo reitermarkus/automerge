@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
-      - uses: peter-evans/find-comment@v2
+      - uses: peter-evans/find-comment@1769778a0c5bd330272d749d12c036d65e70d39d # tag=v2
         id: find-comment
         with:
           token: ${{ secrets.GH_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body-includes: '@dependabot merge'
-      - uses: peter-evans/create-or-update-comment@v2
+      - uses: peter-evans/create-or-update-comment@c9fcb64660bc90ec1cc535646af190c992007c32 # tag=v2
         with:
           token: ${{ secrets.GH_TOKEN }}
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
