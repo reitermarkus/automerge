@@ -38,7 +38,7 @@
     "@graphql-codegen/typescript-resolvers": "^2.6.6",
     "@octokit/graphql-schema": "^10.73.0",
     "@octokit/openapi-types": "^12.0.0",
-    "@types/jest": "^27.5.0",
+    "@types/jest": "^28.0.0",
     "@types/node": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
@@ -47,11 +47,11 @@
     "eslint-plugin-github": "^4.3.6",
     "eslint-plugin-jest": "^26.5.3",
     "graphql": "^16.5.0",
-    "jest": "^27.0.0",
-    "jest-circus": "^27.1.0",
+    "jest": "^28.0.0",
+    "jest-circus": "^28.0.0",
     "js-yaml": "^4.1.0",
     "prettier": "2.7.1",
-    "ts-jest": "^27.1.4",
+    "ts-jest": "^28.0.0",
     "typescript": "^4.7.4"
   }
 }
