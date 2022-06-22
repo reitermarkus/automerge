@@ -1101,10 +1101,7 @@ var PackageType;
 (function (PackageType) {
     /** A debian package. */
     PackageType["Debian"] = "DEBIAN";
-    /**
-     * A docker image.
-     * @deprecated DOCKER will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2021-06-21 UTC.
-     */
+    /** A docker image. */
     PackageType["Docker"] = "DOCKER";
     /** A maven package. */
     PackageType["Maven"] = "MAVEN";
@@ -1618,10 +1615,7 @@ var RepositoryInvitationOrderField;
 (function (RepositoryInvitationOrderField) {
     /** Order repository invitations by creation time */
     RepositoryInvitationOrderField["CreatedAt"] = "CREATED_AT";
-    /**
-     * Order repository invitations by invitee login
-     * @deprecated `INVITEE_LOGIN` is no longer a valid field value. Repository invitations can now be associated with an email, not only an invitee. Removal on 2020-10-01 UTC.
-     */
+    /** Order repository invitations by invitee login */
     RepositoryInvitationOrderField["InviteeLogin"] = "INVITEE_LOGIN";
 })(RepositoryInvitationOrderField = exports.RepositoryInvitationOrderField || (exports.RepositoryInvitationOrderField = {}));
 /** The possible reasons a given repository could be in a locked state. */
