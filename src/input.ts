@@ -27,6 +27,7 @@ function getArray(input: string, options?: core.InputOptions): string[] {
 export class Input {
   token: string
   mergeMethod: MergeMethod
+  squashTitle: boolean
   squashCommitTitle: string | undefined
   squashCommitMessage: string | undefined
   doNotMergeLabels: string[]
@@ -51,6 +52,8 @@ export class Input {
         throw new Error(`Unknown merge method: '${mergeMethod}'`)
       }
     }
+
+    this.squashTitle = core.getInput('squash-title') === 'true'
 
     this.squashCommitTitle = core.getInput('squash-commit-title') || undefined
     this.squashCommitMessage = core.getInput('squash-commit-message') || undefined

@@ -28,6 +28,7 @@ Ensure the following is set up in your repository settings before enabling this 
 | ---------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `token`                            | yes      | A GitHub Token other than the default `GITHUB_TOKEN` needs to be specified in order to be able to enable auto-merge.                           |
 | `merge-method`                     | no       | Specify which merge method to use. By default, will select the first one available in this order: `merge`, `squash`, `rebase`                  |
+| `squash-title`                     | no       | Use the pull request title as the commit message when squashing.                                                                               |
 | `squash-commit-title`              | no       | Set the squash commit title to the supplied string. Available template variables include `${pull_request.title}` and `${pull_request.number}`. |
 | `squash-commit-message`            | no       | Set the squash commit body to the supplied string. Available template variables include `${pull_request.body}`.                                |
 | `do-not-merge-labels`              | no       | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically.                         |
