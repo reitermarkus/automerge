@@ -164,7 +164,6 @@ export class AutomergeAction {
 
         const {title: commitTitle, message: commitMessage} = squashCommit(
           mergeMethod === 'squash',
-          this.input.squashTitle,
           this.input.squashCommitTitle,
           this.input.squashCommitMessage,
           pullRequest
