@@ -27,8 +27,8 @@ function getArray(input: string, options?: core.InputOptions): string[] {
 export class Input {
   token: string
   mergeMethod: MergeMethod
-  squashCommitTitle: string
-  squashCommitMessage: string
+  squashCommitTitle: string | undefined
+  squashCommitMessage: string | undefined
   doNotMergeLabels: string[]
   requiredLabels: string[]
   pullRequest: number | null
@@ -52,8 +52,8 @@ export class Input {
       }
     }
 
-    this.squashCommitTitle = core.getInput('squash-commit-title')
-    this.squashCommitMessage = core.getInput('squash-commit-message')
+    this.squashCommitTitle = core.getInput('squash-commit-title') || undefined
+    this.squashCommitMessage = core.getInput('squash-commit-message') || undefined
 
     this.doNotMergeLabels = getArray('do-not-merge-labels')
     this.requiredLabels = getArray('required-labels')
