@@ -24,17 +24,17 @@ Ensure the following is set up in your repository settings before enabling this 
 
 ## Inputs
 
-| Name                               | Required | Description                                                                                                                                                                                                       |
-| ---------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `token`                            | yes      | A GitHub Token other than the default `GITHUB_TOKEN` needs to be specified in order to be able to enable auto-merge.                                                                                              |
-| `merge-method`                     | no       | Specify which merge method to use. By default, will select the first one available in this order: `merge`, `squash`, `rebase`                                                                                     |
-| `squash-commit-title`              | no       | Set the squash commit title to the supplied string. Available template variables include `${pull_request.title}` and `${pull_request.number}`. (default value: `${pull_request.title} (#${pull_request.number})`) |
-| `squash-commit-message`            | no       | Set the squash commit body to the supplied string. Available template variables include `${pull_request.body}`. (default value: `${pull_request.body}`)                                                           |
-| `do-not-merge-labels`              | no       | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically.                                                                                            |
-| `required-labels`                  | no       | Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically.                                                                                               |
-| `pull-request`                     | no       | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event.                                                                                        |
-| `pull-request-author-associations` | no       | Comma-separated list of required author associations for the pull request author. (By default, pull requests by any author are allowed.)                                                                          |
-| `dry-run`                          | no       | If set to `true`, will not actually merge pull requests but still perform all other checks.                                                                                                                       |
+| Name                               | Required | Description                                                                                                                                    |
+| ---------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `token`                            | yes      | A GitHub Token other than the default `GITHUB_TOKEN` needs to be specified in order to be able to enable auto-merge.                           |
+| `merge-method`                     | no       | Specify which merge method to use. By default, will select the first one available in this order: `merge`, `squash`, `rebase`                  |
+| `squash-commit-title`              | no       | Set the squash commit title to the supplied string. Available template variables include `${pull_request.title}` and `${pull_request.number}`. |
+| `squash-commit-message`            | no       | Set the squash commit body to the supplied string. Available template variables include `${pull_request.body}`.                                |
+| `do-not-merge-labels`              | no       | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically.                         |
+| `required-labels`                  | no       | Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically.                            |
+| `pull-request`                     | no       | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event.                     |
+| `pull-request-author-associations` | no       | Comma-separated list of required author associations for the pull request author. (By default, pull requests by any author are allowed.)       |
+| `dry-run`                          | no       | If set to `true`, will not actually merge pull requests but still perform all other checks.                                                    |
 
 ## Example Workflow
 

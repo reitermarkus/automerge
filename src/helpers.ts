@@ -130,8 +130,8 @@ export async function pullRequestsForWorkflowRun(
 
 export function squashCommit(
   isSquashCommit: boolean,
-  squashCommitTitle: string | null,
-  squashCommitMessage: string | null,
+  squashCommitTitle: string | undefined,
+  squashCommitMessage: string | undefined,
   pullRequest: PullRequest,
 ): {title: string | undefined, message: string | undefined} {
   if (!isSquashCommit) {
