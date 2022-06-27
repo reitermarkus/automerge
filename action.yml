@@ -23,6 +23,16 @@ inputs:
     description: >
       Use the pull request title as the commit message when squashing.
     default: false
+  squash-commit-title:
+    required: false
+    description: >
+      Set the squash commit title to the supplied string. Available template variables include ${pull_request.title} and ${pull_request.number}.
+    defualt: ${pull_request.title} (#${pull_request.number})
+  squash-commit-message:
+      required: false
+      description: >
+        Set the squash commit body to the supplied string. Available template variables include ${pull_request.body}.
+      default: ${pull_request.body}
   do-not-merge-labels:
     required: false
     description: >

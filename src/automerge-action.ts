@@ -15,6 +15,7 @@ import {
   pullRequestsForWorkflowRun,
   pullRequestsForCheckSuite,
   requiredStatusChecksForBranch,
+  squashCommit,
 } from './helpers'
 import { MergeMethod, Octokit, PullRequest } from './types'
 
@@ -161,11 +162,15 @@ export class AutomergeAction {
 
         const mergeMethod = await this.determineMergeMethod()
 
-        const useTitle = this.input.squashTitle && mergeMethod === 'squash'
-        const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})` : undefined
-        const commitMessage = useTitle ? '\n' : undefined
+        const {title: commitTitle, message: commitMessage} = squashCommit(
+          mergeMethod === 'squash',
+          this.input.squashTitle,
+          this.input.squashCommitTitle,
+          this.input.squashCommitMessage,
+          pullRequest
+        )
 
-        const titleMessage = useTitle ? ` with title '${commitTitle}'` : undefined
+        const titleMessage = commitTitle ? ` with title '${commitTitle}'` : undefined
 
         if (this.input.dryRun) {
           core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage}.`)

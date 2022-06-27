@@ -28,6 +28,8 @@ export class Input {
   token: string
   mergeMethod: MergeMethod
   squashTitle: boolean
+  squashCommitTitle: string | null
+  squashCommitMessage: string | null
   doNotMergeLabels: string[]
   requiredLabels: string[]
   pullRequest: number | null
@@ -52,6 +54,9 @@ export class Input {
     }
 
     this.squashTitle = core.getInput('squash-title') === 'true'
+
+    this.squashCommitTitle = core.getInput('squash-commit-title')
+    this.squashCommitMessage = core.getInput('squash-commit-message')
 
     this.doNotMergeLabels = getArray('do-not-merge-labels')
     this.requiredLabels = getArray('required-labels')
