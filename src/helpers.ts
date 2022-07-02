@@ -127,3 +127,31 @@ export async function pullRequestsForWorkflowRun(
 
   return pullRequests
 }
+
+export function squashCommit(
+  isSquashCommit: boolean,
+  squashCommitTitle: string | undefined,
+  squashCommitMessage: string | undefined,
+  pullRequest: PullRequest,
+): {title: string | undefined, message: string | undefined} {
+  if (!isSquashCommit) {
+    return {title: undefined, message: undefined}
+  }
+
+  const title = squashCommitTitle ? substitutePullRequestParams(squashCommitTitle, pullRequest, true) : undefined
+  const message = squashCommitMessage ? substitutePullRequestParams(squashCommitMessage, pullRequest, false) : undefined
+  return {title: title, message: message}
+}
+
+function substitutePullRequestParams(input: string, pullRequest: PullRequest, isTitle: boolean): string {
+  const output = input
+    .replace('${pull_request.title}', pullRequest.title)
+    .replace('${pull_request.number}', `${pullRequest.number}`)
+
+  if (isTitle) {
+    return output
+  } else {
+    // reserve these replacements for the commit message only
+    return output.replace('${pull_request.body}', pullRequest.body ? pullRequest.body : '\n')
+  }
+}
