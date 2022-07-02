@@ -35,7 +35,8 @@ jobs:
       - uses: ./
         with:
           token: ${{ secrets.GH_TOKEN }}
-          squash-title: true
+          squash-commit-title: ${pull_request.title} (#${pull_request.number})
+          squash-commit-message: "\n"
           do-not-merge-labels: never-merge
           required-labels: automerge
           pull-request: ${{ github.event.inputs.pull-request }}
