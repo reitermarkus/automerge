@@ -158,10 +158,8 @@ class AutomergeAction {
                 case 'unstable': {
                     core.info(`Pull request ${number} is mergeable with state '${mergeableState}'.`);
                     const mergeMethod = yield this.determineMergeMethod();
-                    const useTitle = this.input.squashTitle && mergeMethod === 'squash';
-                    const commitTitle = useTitle ? `${pullRequest.title} (#${pullRequest.number})` : undefined;
-                    const commitMessage = useTitle ? '\n' : undefined;
-                    const titleMessage = useTitle ? ` with title '${commitTitle}'` : undefined;
+                    const { title: commitTitle, message: commitMessage } = (0, helpers_1.squashCommit)(mergeMethod === 'squash', this.input.squashCommitTitle, this.input.squashCommitMessage, pullRequest);
+                    const titleMessage = commitTitle ? ` with title '${commitTitle}'` : undefined;
                     if (this.input.dryRun) {
                         core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage}.`);
                         return;
@@ -241,11 +239,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.MergeableState = exports.LockReason = exports.LanguageOrderField = exports.LabelOrderField = exports.IssueTimelineItemsItemType = exports.IssueState = exports.IssueOrderField = exports.IssueCommentOrderField = exports.IpAllowListForInstalledAppsEnabledSettingValue = exports.IpAllowListEntryOrderField = exports.IpAllowListEnabledSettingValue = exports.IdentityProviderConfigurationState = exports.GitSignatureState = exports.GistPrivacy = exports.GistOrderField = exports.FundingPlatform = exports.FileViewedState = exports.EnterpriseUserDeployment = exports.EnterpriseUserAccountMembershipRole = exports.EnterpriseServerUserAccountsUploadSyncState = exports.EnterpriseServerUserAccountsUploadOrderField = exports.EnterpriseServerUserAccountOrderField = exports.EnterpriseServerUserAccountEmailOrderField = exports.EnterpriseServerInstallationOrderField = exports.EnterpriseMembersCanMakePurchasesSettingValue = exports.EnterpriseMembersCanCreateRepositoriesSettingValue = exports.EnterpriseMemberOrderField = exports.EnterpriseEnabledSettingValue = exports.EnterpriseEnabledDisabledSettingValue = exports.EnterpriseDefaultRepositoryPermissionSettingValue = exports.EnterpriseAdministratorRole = exports.EnterpriseAdministratorInvitationOrderField = exports.DiscussionOrderField = exports.DiffSide = exports.DeploymentStatusState = exports.DeploymentState = exports.DeploymentReviewState = exports.DeploymentProtectionRuleType = exports.DeploymentOrderField = exports.DefaultRepositoryPermissionField = exports.ContributionLevel = exports.CommitContributionOrderField = exports.CommentCannotUpdateReason = exports.CommentAuthorAssociation = exports.CollaboratorAffiliation = exports.CheckStatusState = exports.CheckRunType = exports.CheckConclusionState = exports.CheckAnnotationLevel = exports.AuditLogOrderField = void 0;
-exports.RepoArchivedAuditEntryVisibility = exports.RepoAddMemberAuditEntryVisibility = exports.RepoAccessAuditEntryVisibility = exports.ReleaseOrderField = exports.RefOrderField = exports.ReactionOrderField = exports.ReactionContent = exports.PullRequestUpdateState = exports.PullRequestTimelineItemsItemType = exports.PullRequestState = exports.PullRequestReviewState = exports.PullRequestReviewEvent = exports.PullRequestReviewDecision = exports.PullRequestReviewCommentState = exports.PullRequestOrderField = exports.PullRequestMergeMethod = exports.ProjectTemplate = exports.ProjectState = exports.ProjectOrderField = exports.ProjectColumnPurpose = exports.ProjectCardState = exports.ProjectCardArchivedState = exports.PinnedDiscussionPattern = exports.PinnedDiscussionGradient = exports.PinnableItemType = exports.PackageVersionOrderField = exports.PackageType = exports.PackageOrderField = exports.PackageFileOrderField = exports.OrganizationOrderField = exports.OrganizationMembersCanCreateRepositoriesSettingValue = exports.OrganizationMemberRole = exports.OrganizationInvitationType = exports.OrganizationInvitationRole = exports.OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility = exports.OrgUpdateMemberAuditEntryPermission = exports.OrgUpdateDefaultRepositoryPermissionAuditEntryPermission = exports.OrgRemoveOutsideCollaboratorAuditEntryReason = exports.OrgRemoveOutsideCollaboratorAuditEntryMembershipType = exports.OrgRemoveMemberAuditEntryReason = exports.OrgRemoveMemberAuditEntryMembershipType = exports.OrgRemoveBillingManagerAuditEntryReason = exports.OrgCreateAuditEntryBillingPlan = exports.OrgAddMemberAuditEntryPermission = exports.OrderDirection = exports.OperationType = exports.OauthApplicationCreateAuditEntryState = exports.NotificationRestrictionSettingValue = exports.MilestoneState = exports.MilestoneOrderField = void 0;
-exports.UserBlockDuration = exports.TopicSuggestionDeclineReason = exports.TeamRole = exports.TeamRepositoryOrderField = exports.TeamPrivacy = exports.TeamOrderField = exports.TeamMembershipType = exports.TeamMemberRole = exports.TeamMemberOrderField = exports.TeamDiscussionOrderField = exports.TeamDiscussionCommentOrderField = exports.SubscriptionState = exports.StatusState = exports.StarOrderField = exports.SponsorshipPrivacy = exports.SponsorshipOrderField = exports.SponsorshipNewsletterOrderField = exports.SponsorsTierOrderField = exports.SponsorsGoalKind = exports.SponsorsActivityPeriod = exports.SponsorsActivityOrderField = exports.SponsorsActivityAction = exports.SponsorableOrderField = exports.SponsorOrderField = exports.SecurityVulnerabilityOrderField = exports.SecurityAdvisorySeverity = exports.SecurityAdvisoryOrderField = exports.SecurityAdvisoryIdentifierType = exports.SecurityAdvisoryEcosystem = exports.SearchType = exports.SavedReplyOrderField = exports.SamlSignatureAlgorithm = exports.SamlDigestAlgorithm = exports.RequestableCheckStatusState = exports.RepositoryVisibility = exports.RepositoryPrivacy = exports.RepositoryPermission = exports.RepositoryOrderField = exports.RepositoryLockReason = exports.RepositoryInvitationOrderField = exports.RepositoryInteractionLimitOrigin = exports.RepositoryInteractionLimitExpiry = exports.RepositoryInteractionLimit = exports.RepositoryContributionType = exports.RepositoryAffiliation = exports.ReportedContentClassifiers = exports.RepoRemoveMemberAuditEntryVisibility = exports.RepoDestroyAuditEntryVisibility = exports.RepoCreateAuditEntryVisibility = exports.RepoChangeMergeSettingAuditEntryMergeType = void 0;
-exports.EnableAutoMerge = exports.DisableAutoMerge = exports.VerifiableDomainOrderField = exports.UserStatusOrderField = void 0;
+exports.IssueState = exports.IssueOrderField = exports.IssueCommentOrderField = exports.IssueClosedStateReason = exports.IpAllowListForInstalledAppsEnabledSettingValue = exports.IpAllowListEntryOrderField = exports.IpAllowListEnabledSettingValue = exports.IdentityProviderConfigurationState = exports.GitSignatureState = exports.GistPrivacy = exports.GistOrderField = exports.FundingPlatform = exports.FileViewedState = exports.EnterpriseUserDeployment = exports.EnterpriseUserAccountMembershipRole = exports.EnterpriseServerUserAccountsUploadSyncState = exports.EnterpriseServerUserAccountsUploadOrderField = exports.EnterpriseServerUserAccountOrderField = exports.EnterpriseServerUserAccountEmailOrderField = exports.EnterpriseServerInstallationOrderField = exports.EnterpriseMembersCanMakePurchasesSettingValue = exports.EnterpriseMembersCanCreateRepositoriesSettingValue = exports.EnterpriseMemberOrderField = exports.EnterpriseEnabledSettingValue = exports.EnterpriseEnabledDisabledSettingValue = exports.EnterpriseDefaultRepositoryPermissionSettingValue = exports.EnterpriseAdministratorRole = exports.EnterpriseAdministratorInvitationOrderField = exports.DismissReason = exports.DiscussionPollOptionOrderField = exports.DiscussionOrderField = exports.DiffSide = exports.DeploymentStatusState = exports.DeploymentState = exports.DeploymentReviewState = exports.DeploymentProtectionRuleType = exports.DeploymentOrderField = exports.DependencyGraphEcosystem = exports.DefaultRepositoryPermissionField = exports.ContributionLevel = exports.CommitContributionOrderField = exports.CommentCannotUpdateReason = exports.CommentAuthorAssociation = exports.CollaboratorAffiliation = exports.CheckStatusState = exports.CheckRunType = exports.CheckConclusionState = exports.CheckAnnotationLevel = exports.AuditLogOrderField = exports.ActorType = void 0;
+exports.ProjectV2ItemType = exports.ProjectV2FieldType = exports.ProjectTemplate = exports.ProjectState = exports.ProjectOrderField = exports.ProjectNextOrderField = exports.ProjectNextFieldType = exports.ProjectItemType = exports.ProjectColumnPurpose = exports.ProjectCardState = exports.ProjectCardArchivedState = exports.PinnedDiscussionPattern = exports.PinnedDiscussionGradient = exports.PinnableItemType = exports.PatchStatus = exports.PackageVersionOrderField = exports.PackageType = exports.PackageOrderField = exports.PackageFileOrderField = exports.OrganizationOrderField = exports.OrganizationMembersCanCreateRepositoriesSettingValue = exports.OrganizationMemberRole = exports.OrganizationInvitationType = exports.OrganizationInvitationRole = exports.OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility = exports.OrgUpdateMemberAuditEntryPermission = exports.OrgUpdateDefaultRepositoryPermissionAuditEntryPermission = exports.OrgRemoveOutsideCollaboratorAuditEntryReason = exports.OrgRemoveOutsideCollaboratorAuditEntryMembershipType = exports.OrgRemoveMemberAuditEntryReason = exports.OrgRemoveMemberAuditEntryMembershipType = exports.OrgRemoveBillingManagerAuditEntryReason = exports.OrgEnterpriseOwnerOrderField = exports.OrgCreateAuditEntryBillingPlan = exports.OrgAddMemberAuditEntryPermission = exports.OrderDirection = exports.OperationType = exports.OauthApplicationCreateAuditEntryState = exports.OidcProviderType = exports.NotificationRestrictionSettingValue = exports.MilestoneState = exports.MilestoneOrderField = exports.MigrationState = exports.MigrationSourceType = exports.MergeableState = exports.LockReason = exports.LanguageOrderField = exports.LabelOrderField = exports.IssueTimelineItemsItemType = exports.IssueStateReason = void 0;
+exports.SecurityVulnerabilityOrderField = exports.SecurityAdvisorySeverity = exports.SecurityAdvisoryOrderField = exports.SecurityAdvisoryIdentifierType = exports.SecurityAdvisoryEcosystem = exports.SecurityAdvisoryClassification = exports.SearchType = exports.SavedReplyOrderField = exports.SamlSignatureAlgorithm = exports.SamlDigestAlgorithm = exports.RoleInOrganization = exports.RequestableCheckStatusState = exports.RepositoryVulnerabilityAlertState = exports.RepositoryVisibility = exports.RepositoryPrivacy = exports.RepositoryPermission = exports.RepositoryOrderField = exports.RepositoryMigrationOrderField = exports.RepositoryMigrationOrderDirection = exports.RepositoryLockReason = exports.RepositoryInvitationOrderField = exports.RepositoryInteractionLimitOrigin = exports.RepositoryInteractionLimitExpiry = exports.RepositoryInteractionLimit = exports.RepositoryContributionType = exports.RepositoryAffiliation = exports.ReportedContentClassifiers = exports.RepoRemoveMemberAuditEntryVisibility = exports.RepoDestroyAuditEntryVisibility = exports.RepoCreateAuditEntryVisibility = exports.RepoChangeMergeSettingAuditEntryMergeType = exports.RepoArchivedAuditEntryVisibility = exports.RepoAddMemberAuditEntryVisibility = exports.RepoAccessAuditEntryVisibility = exports.ReleaseOrderField = exports.RefOrderField = exports.ReactionOrderField = exports.ReactionContent = exports.PullRequestUpdateState = exports.PullRequestTimelineItemsItemType = exports.PullRequestState = exports.PullRequestReviewState = exports.PullRequestReviewEvent = exports.PullRequestReviewDecision = exports.PullRequestReviewCommentState = exports.PullRequestOrderField = exports.PullRequestMergeMethod = exports.ProjectViewLayout = exports.ProjectV2ViewLayout = exports.ProjectV2OrderField = void 0;
+exports.EnableAutoMerge = exports.DisableAutoMerge = exports.VerifiableDomainOrderField = exports.UserStatusOrderField = exports.UserBlockDuration = exports.TrackedIssueStates = exports.TopicSuggestionDeclineReason = exports.TeamRole = exports.TeamRepositoryOrderField = exports.TeamPrivacy = exports.TeamOrderField = exports.TeamMembershipType = exports.TeamMemberRole = exports.TeamMemberOrderField = exports.TeamDiscussionOrderField = exports.TeamDiscussionCommentOrderField = exports.SubscriptionState = exports.StatusState = exports.StarOrderField = exports.SponsorshipPrivacy = exports.SponsorshipOrderField = exports.SponsorshipNewsletterOrderField = exports.SponsorsTierOrderField = exports.SponsorsGoalKind = exports.SponsorsActivityPeriod = exports.SponsorsActivityOrderField = exports.SponsorsActivityAction = exports.SponsorableOrderField = exports.SponsorOrderField = void 0;
 const graphql_tag_1 = __importDefault(__nccwpck_require__(8435));
+/** The actor's type. */
+var ActorType;
+(function (ActorType) {
+    /** Indicates a team actor. */
+    ActorType["Team"] = "TEAM";
+    /** Indicates a user actor. */
+    ActorType["User"] = "USER";
+})(ActorType = exports.ActorType || (exports.ActorType = {}));
 /** Properties by which Audit Log connections can be ordered. */
 var AuditLogOrderField;
 (function (AuditLogOrderField) {
@@ -390,6 +396,28 @@ var DefaultRepositoryPermissionField;
     /** Can read and write repos by default */
     DefaultRepositoryPermissionField["Write"] = "WRITE";
 })(DefaultRepositoryPermissionField = exports.DefaultRepositoryPermissionField || (exports.DefaultRepositoryPermissionField = {}));
+/** The possible ecosystems of a dependency graph package. */
+var DependencyGraphEcosystem;
+(function (DependencyGraphEcosystem) {
+    /** GitHub Actions */
+    DependencyGraphEcosystem["Actions"] = "ACTIONS";
+    /** PHP packages hosted at packagist.org */
+    DependencyGraphEcosystem["Composer"] = "COMPOSER";
+    /** Go modules */
+    DependencyGraphEcosystem["Go"] = "GO";
+    /** Java artifacts hosted at the Maven central repository */
+    DependencyGraphEcosystem["Maven"] = "MAVEN";
+    /** JavaScript packages hosted at npmjs.com */
+    DependencyGraphEcosystem["Npm"] = "NPM";
+    /** .NET packages hosted at the NuGet Gallery */
+    DependencyGraphEcosystem["Nuget"] = "NUGET";
+    /** Python packages hosted at PyPI.org */
+    DependencyGraphEcosystem["Pip"] = "PIP";
+    /** Ruby gems hosted at RubyGems.org */
+    DependencyGraphEcosystem["Rubygems"] = "RUBYGEMS";
+    /** Rust crates */
+    DependencyGraphEcosystem["Rust"] = "RUST";
+})(DependencyGraphEcosystem = exports.DependencyGraphEcosystem || (exports.DependencyGraphEcosystem = {}));
 /** Properties by which deployment connections can be ordered. */
 var DeploymentOrderField;
 (function (DeploymentOrderField) {
@@ -472,6 +500,28 @@ var DiscussionOrderField;
     /** Order discussions by most recent modification time. */
     DiscussionOrderField["UpdatedAt"] = "UPDATED_AT";
 })(DiscussionOrderField = exports.DiscussionOrderField || (exports.DiscussionOrderField = {}));
+/** Properties by which discussion poll option connections can be ordered. */
+var DiscussionPollOptionOrderField;
+(function (DiscussionPollOptionOrderField) {
+    /** Order poll options by the order that the poll author specified when creating the poll. */
+    DiscussionPollOptionOrderField["AuthoredOrder"] = "AUTHORED_ORDER";
+    /** Order poll options by the number of votes it has. */
+    DiscussionPollOptionOrderField["VoteCount"] = "VOTE_COUNT";
+})(DiscussionPollOptionOrderField = exports.DiscussionPollOptionOrderField || (exports.DiscussionPollOptionOrderField = {}));
+/** The possible reasons that a Dependabot alert was dismissed. */
+var DismissReason;
+(function (DismissReason) {
+    /** A fix has already been started */
+    DismissReason["FixStarted"] = "FIX_STARTED";
+    /** This alert is inaccurate or incorrect */
+    DismissReason["Inaccurate"] = "INACCURATE";
+    /** Vulnerable code is not actually used */
+    DismissReason["NotUsed"] = "NOT_USED";
+    /** No bandwidth to fix this */
+    DismissReason["NoBandwidth"] = "NO_BANDWIDTH";
+    /** Risk is tolerable to this project */
+    DismissReason["TolerableRisk"] = "TOLERABLE_RISK";
+})(DismissReason = exports.DismissReason || (exports.DismissReason = {}));
 /** Properties by which enterprise administrator invitation connections can be ordered. */
 var EnterpriseAdministratorInvitationOrderField;
 (function (EnterpriseAdministratorInvitationOrderField) {
@@ -591,9 +641,9 @@ var EnterpriseServerUserAccountsUploadSyncState;
 /** The possible roles for enterprise membership. */
 var EnterpriseUserAccountMembershipRole;
 (function (EnterpriseUserAccountMembershipRole) {
-    /** The user is a member of the enterprise membership. */
+    /** The user is a member of an organization in the enterprise. */
     EnterpriseUserAccountMembershipRole["Member"] = "MEMBER";
-    /** The user is an owner of the enterprise membership. */
+    /** The user is an owner of an organization in the enterprise. */
     EnterpriseUserAccountMembershipRole["Owner"] = "OWNER";
 })(EnterpriseUserAccountMembershipRole = exports.EnterpriseUserAccountMembershipRole || (exports.EnterpriseUserAccountMembershipRole = {}));
 /** The possible GitHub Enterprise deployments where this user can exist. */
@@ -627,6 +677,8 @@ var FundingPlatform;
     FundingPlatform["Issuehunt"] = "ISSUEHUNT";
     /** Ko-fi funding platform. */
     FundingPlatform["KoFi"] = "KO_FI";
+    /** LFX Crowdfunding funding platform. */
+    FundingPlatform["LfxCrowdfunding"] = "LFX_CROWDFUNDING";
     /** Liberapay funding platform. */
     FundingPlatform["Liberapay"] = "LIBERAPAY";
     /** Open Collective funding platform. */
@@ -730,6 +782,14 @@ var IpAllowListForInstalledAppsEnabledSettingValue;
     /** The setting is enabled for the owner. */
     IpAllowListForInstalledAppsEnabledSettingValue["Enabled"] = "ENABLED";
 })(IpAllowListForInstalledAppsEnabledSettingValue = exports.IpAllowListForInstalledAppsEnabledSettingValue || (exports.IpAllowListForInstalledAppsEnabledSettingValue = {}));
+/** The possible state reasons of a closed issue. */
+var IssueClosedStateReason;
+(function (IssueClosedStateReason) {
+    /** An issue that has been closed as completed */
+    IssueClosedStateReason["Completed"] = "COMPLETED";
+    /** An issue that has been closed as not planned */
+    IssueClosedStateReason["NotPlanned"] = "NOT_PLANNED";
+})(IssueClosedStateReason = exports.IssueClosedStateReason || (exports.IssueClosedStateReason = {}));
 /** Properties by which issue comment connections can be ordered. */
 var IssueCommentOrderField;
 (function (IssueCommentOrderField) {
@@ -754,6 +814,16 @@ var IssueState;
     /** An issue that is still open */
     IssueState["Open"] = "OPEN";
 })(IssueState = exports.IssueState || (exports.IssueState = {}));
+/** The possible state reasons of an issue. */
+var IssueStateReason;
+(function (IssueStateReason) {
+    /** An issue that has been closed as completed */
+    IssueStateReason["Completed"] = "COMPLETED";
+    /** An issue that has been closed as not planned */
+    IssueStateReason["NotPlanned"] = "NOT_PLANNED";
+    /** An issue that has been reopened */
+    IssueStateReason["Reopened"] = "REOPENED";
+})(IssueStateReason = exports.IssueStateReason || (exports.IssueStateReason = {}));
 /** The possible item types found in a timeline. */
 var IssueTimelineItemsItemType;
 (function (IssueTimelineItemsItemType) {
@@ -769,6 +839,8 @@ var IssueTimelineItemsItemType;
     IssueTimelineItemsItemType["ConnectedEvent"] = "CONNECTED_EVENT";
     /** Represents a 'converted_note_to_issue' event on a given issue or pull request. */
     IssueTimelineItemsItemType["ConvertedNoteToIssueEvent"] = "CONVERTED_NOTE_TO_ISSUE_EVENT";
+    /** Represents a 'converted_to_discussion' event on a given issue. */
+    IssueTimelineItemsItemType["ConvertedToDiscussionEvent"] = "CONVERTED_TO_DISCUSSION_EVENT";
     /** Represents a mention made by one issue or pull request to another. */
     IssueTimelineItemsItemType["CrossReferencedEvent"] = "CROSS_REFERENCED_EVENT";
     /** Represents a 'demilestoned' event on a given issue or pull request. */
@@ -854,6 +926,38 @@ var MergeableState;
     /** The mergeability of the pull request is still being calculated. */
     MergeableState["Unknown"] = "UNKNOWN";
 })(MergeableState = exports.MergeableState || (exports.MergeableState = {}));
+/** Represents the different Octoshift migration sources. */
+var MigrationSourceType;
+(function (MigrationSourceType) {
+    /** An Azure DevOps migration source. */
+    MigrationSourceType["AzureDevops"] = "AZURE_DEVOPS";
+    /** A Bitbucket Server migration source. */
+    MigrationSourceType["BitbucketServer"] = "BITBUCKET_SERVER";
+    /** A GitHub migration source. */
+    MigrationSourceType["Github"] = "GITHUB";
+    /** A GitHub Migration API source. */
+    MigrationSourceType["GithubArchive"] = "GITHUB_ARCHIVE";
+    /** A GitLab migration source. */
+    MigrationSourceType["Gitlab"] = "GITLAB";
+})(MigrationSourceType = exports.MigrationSourceType || (exports.MigrationSourceType = {}));
+/** The Octoshift migration state. */
+var MigrationState;
+(function (MigrationState) {
+    /** The Octoshift migration has failed. */
+    MigrationState["Failed"] = "FAILED";
+    /** The Octoshift migration has invalid credentials. */
+    MigrationState["FailedValidation"] = "FAILED_VALIDATION";
+    /** The Octoshift migration is in progress. */
+    MigrationState["InProgress"] = "IN_PROGRESS";
+    /** The Octoshift migration has not started. */
+    MigrationState["NotStarted"] = "NOT_STARTED";
+    /** The Octoshift migration needs to have its credentials validated. */
+    MigrationState["PendingValidation"] = "PENDING_VALIDATION";
+    /** The Octoshift migration has been queued. */
+    MigrationState["Queued"] = "QUEUED";
+    /** The Octoshift migration has succeeded. */
+    MigrationState["Succeeded"] = "SUCCEEDED";
+})(MigrationState = exports.MigrationState || (exports.MigrationState = {}));
 /** Properties by which milestone connections can be ordered. */
 var MilestoneOrderField;
 (function (MilestoneOrderField) {
@@ -882,6 +986,12 @@ var NotificationRestrictionSettingValue;
     /** The setting is enabled for the owner. */
     NotificationRestrictionSettingValue["Enabled"] = "ENABLED";
 })(NotificationRestrictionSettingValue = exports.NotificationRestrictionSettingValue || (exports.NotificationRestrictionSettingValue = {}));
+/** The OIDC identity provider type */
+var OidcProviderType;
+(function (OidcProviderType) {
+    /** Azure Active Directory */
+    OidcProviderType["Aad"] = "AAD";
+})(OidcProviderType = exports.OidcProviderType || (exports.OidcProviderType = {}));
 /** The state of an OAuth Application when it was created. */
 var OauthApplicationCreateAuditEntryState;
 (function (OauthApplicationCreateAuditEntryState) {
@@ -940,6 +1050,12 @@ var OrgCreateAuditEntryBillingPlan;
     /** Legacy Unlimited Plan */
     OrgCreateAuditEntryBillingPlan["Unlimited"] = "UNLIMITED";
 })(OrgCreateAuditEntryBillingPlan = exports.OrgCreateAuditEntryBillingPlan || (exports.OrgCreateAuditEntryBillingPlan = {}));
+/** Properties by which enterprise owners can be ordered. */
+var OrgEnterpriseOwnerOrderField;
+(function (OrgEnterpriseOwnerOrderField) {
+    /** Order enterprise owners by login. */
+    OrgEnterpriseOwnerOrderField["Login"] = "LOGIN";
+})(OrgEnterpriseOwnerOrderField = exports.OrgEnterpriseOwnerOrderField || (exports.OrgEnterpriseOwnerOrderField = {}));
 /** The reason a billing manager was removed from an Organization. */
 var OrgRemoveBillingManagerAuditEntryReason;
 (function (OrgRemoveBillingManagerAuditEntryReason) {
@@ -961,6 +1077,8 @@ var OrgRemoveMemberAuditEntryMembershipType;
     OrgRemoveMemberAuditEntryMembershipType["DirectMember"] = "DIRECT_MEMBER";
     /** An outside collaborator is a person who isn't explicitly a member of the Organization, but who has Read, Write, or Admin permissions to one or more repositories in the organization. */
     OrgRemoveMemberAuditEntryMembershipType["OutsideCollaborator"] = "OUTSIDE_COLLABORATOR";
+    /** A suspended member. */
+    OrgRemoveMemberAuditEntryMembershipType["Suspended"] = "SUSPENDED";
     /** An unaffiliated collaborator is a person who is not a member of the Organization and does not have access to any repositories in the Organization. */
     OrgRemoveMemberAuditEntryMembershipType["Unaffiliated"] = "UNAFFILIATED";
 })(OrgRemoveMemberAuditEntryMembershipType = exports.OrgRemoveMemberAuditEntryMembershipType || (exports.OrgRemoveMemberAuditEntryMembershipType = {}));
@@ -1123,6 +1241,22 @@ var PackageVersionOrderField;
     /** Order package versions by creation time */
     PackageVersionOrderField["CreatedAt"] = "CREATED_AT";
 })(PackageVersionOrderField = exports.PackageVersionOrderField || (exports.PackageVersionOrderField = {}));
+/** The possible types of patch statuses. */
+var PatchStatus;
+(function (PatchStatus) {
+    /** The file was added. Git status 'A'. */
+    PatchStatus["Added"] = "ADDED";
+    /** The file's type was changed. Git status 'T'. */
+    PatchStatus["Changed"] = "CHANGED";
+    /** The file was copied. Git status 'C'. */
+    PatchStatus["Copied"] = "COPIED";
+    /** The file was deleted. Git status 'D'. */
+    PatchStatus["Deleted"] = "DELETED";
+    /** The file's contents were changed. Git status 'M'. */
+    PatchStatus["Modified"] = "MODIFIED";
+    /** The file was renamed. Git status 'R'. */
+    PatchStatus["Renamed"] = "RENAMED";
+})(PatchStatus = exports.PatchStatus || (exports.PatchStatus = {}));
 /** Represents items that can be pinned to a profile page or dashboard. */
 var PinnableItemType;
 (function (PinnableItemType) {
@@ -1201,6 +1335,111 @@ var ProjectColumnPurpose;
     /** The column contains cards still to be worked on */
     ProjectColumnPurpose["Todo"] = "TODO";
 })(ProjectColumnPurpose = exports.ProjectColumnPurpose || (exports.ProjectColumnPurpose = {}));
+/** The type of a project item. */
+var ProjectItemType;
+(function (ProjectItemType) {
+    /** Draft Issue */
+    ProjectItemType["DraftIssue"] = "DRAFT_ISSUE";
+    /** Issue */
+    ProjectItemType["Issue"] = "ISSUE";
+    /** Pull Request */
+    ProjectItemType["PullRequest"] = "PULL_REQUEST";
+    /** Redacted Item */
+    ProjectItemType["Redacted"] = "REDACTED";
+})(ProjectItemType = exports.ProjectItemType || (exports.ProjectItemType = {}));
+/** The type of a project next field. */
+var ProjectNextFieldType;
+(function (ProjectNextFieldType) {
+    /**
+     * Assignees
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Assignees"] = "ASSIGNEES";
+    /**
+     * Date
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Date"] = "DATE";
+    /**
+     * Iteration
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Iteration"] = "ITERATION";
+    /**
+     * Labels
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Labels"] = "LABELS";
+    /**
+     * Linked Pull Requests
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["LinkedPullRequests"] = "LINKED_PULL_REQUESTS";
+    /**
+     * Milestone
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Milestone"] = "MILESTONE";
+    /**
+     * Number
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Number"] = "NUMBER";
+    /**
+     * Repository
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Repository"] = "REPOSITORY";
+    /**
+     * Reviewers
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Reviewers"] = "REVIEWERS";
+    /**
+     * Single Select
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["SingleSelect"] = "SINGLE_SELECT";
+    /**
+     * Text
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Text"] = "TEXT";
+    /**
+     * Title
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Title"] = "TITLE";
+    /**
+     * Tracks
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextFieldType["Tracks"] = "TRACKS";
+})(ProjectNextFieldType = exports.ProjectNextFieldType || (exports.ProjectNextFieldType = {}));
+/** Properties by which the return project can be ordered. */
+var ProjectNextOrderField;
+(function (ProjectNextOrderField) {
+    /**
+     * The project's date and time of creation
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextOrderField["CreatedAt"] = "CREATED_AT";
+    /**
+     * The project's number
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextOrderField["Number"] = "NUMBER";
+    /**
+     * The project's title
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextOrderField["Title"] = "TITLE";
+    /**
+     * The project's date and time of update
+     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+     */
+    ProjectNextOrderField["UpdatedAt"] = "UPDATED_AT";
+})(ProjectNextOrderField = exports.ProjectNextOrderField || (exports.ProjectNextOrderField = {}));
 /** Properties by which project connections can be ordered. */
 var ProjectOrderField;
 (function (ProjectOrderField) {
@@ -1231,6 +1470,76 @@ var ProjectTemplate;
     /** Create a board to triage and prioritize bugs with To do, priority, and Done columns. */
     ProjectTemplate["BugTriage"] = "BUG_TRIAGE";
 })(ProjectTemplate = exports.ProjectTemplate || (exports.ProjectTemplate = {}));
+/** The type of a project field. */
+var ProjectV2FieldType;
+(function (ProjectV2FieldType) {
+    /** Assignees */
+    ProjectV2FieldType["Assignees"] = "ASSIGNEES";
+    /** Date */
+    ProjectV2FieldType["Date"] = "DATE";
+    /** Iteration */
+    ProjectV2FieldType["Iteration"] = "ITERATION";
+    /** Labels */
+    ProjectV2FieldType["Labels"] = "LABELS";
+    /** Linked Pull Requests */
+    ProjectV2FieldType["LinkedPullRequests"] = "LINKED_PULL_REQUESTS";
+    /** Milestone */
+    ProjectV2FieldType["Milestone"] = "MILESTONE";
+    /** Number */
+    ProjectV2FieldType["Number"] = "NUMBER";
+    /** Repository */
+    ProjectV2FieldType["Repository"] = "REPOSITORY";
+    /** Reviewers */
+    ProjectV2FieldType["Reviewers"] = "REVIEWERS";
+    /** Single Select */
+    ProjectV2FieldType["SingleSelect"] = "SINGLE_SELECT";
+    /** Text */
+    ProjectV2FieldType["Text"] = "TEXT";
+    /** Title */
+    ProjectV2FieldType["Title"] = "TITLE";
+    /** Tracks */
+    ProjectV2FieldType["Tracks"] = "TRACKS";
+})(ProjectV2FieldType = exports.ProjectV2FieldType || (exports.ProjectV2FieldType = {}));
+/** The type of a project item. */
+var ProjectV2ItemType;
+(function (ProjectV2ItemType) {
+    /** Draft Issue */
+    ProjectV2ItemType["DraftIssue"] = "DRAFT_ISSUE";
+    /** Issue */
+    ProjectV2ItemType["Issue"] = "ISSUE";
+    /** Pull Request */
+    ProjectV2ItemType["PullRequest"] = "PULL_REQUEST";
+    /** Redacted Item */
+    ProjectV2ItemType["Redacted"] = "REDACTED";
+})(ProjectV2ItemType = exports.ProjectV2ItemType || (exports.ProjectV2ItemType = {}));
+/** Properties by which projects can be ordered. */
+var ProjectV2OrderField;
+(function (ProjectV2OrderField) {
+    /** The project's date and time of creation */
+    ProjectV2OrderField["CreatedAt"] = "CREATED_AT";
+    /** The project's number */
+    ProjectV2OrderField["Number"] = "NUMBER";
+    /** The project's title */
+    ProjectV2OrderField["Title"] = "TITLE";
+    /** The project's date and time of update */
+    ProjectV2OrderField["UpdatedAt"] = "UPDATED_AT";
+})(ProjectV2OrderField = exports.ProjectV2OrderField || (exports.ProjectV2OrderField = {}));
+/** The layout of a project v2 view. */
+var ProjectV2ViewLayout;
+(function (ProjectV2ViewLayout) {
+    /** Board layout */
+    ProjectV2ViewLayout["BoardLayout"] = "BOARD_LAYOUT";
+    /** Table layout */
+    ProjectV2ViewLayout["TableLayout"] = "TABLE_LAYOUT";
+})(ProjectV2ViewLayout = exports.ProjectV2ViewLayout || (exports.ProjectV2ViewLayout = {}));
+/** The layout of a project view. */
+var ProjectViewLayout;
+(function (ProjectViewLayout) {
+    /** Board layout */
+    ProjectViewLayout["BoardLayout"] = "BOARD_LAYOUT";
+    /** Table layout */
+    ProjectViewLayout["TableLayout"] = "TABLE_LAYOUT";
+})(ProjectViewLayout = exports.ProjectViewLayout || (exports.ProjectViewLayout = {}));
 /** Represents available types of methods to use when merging a pull request. */
 var PullRequestMergeMethod;
 (function (PullRequestMergeMethod) {
@@ -1306,6 +1615,8 @@ var PullRequestState;
 /** The possible item types found in a timeline. */
 var PullRequestTimelineItemsItemType;
 (function (PullRequestTimelineItemsItemType) {
+    /** Represents an 'added_to_merge_queue' event on a given pull request. */
+    PullRequestTimelineItemsItemType["AddedToMergeQueueEvent"] = "ADDED_TO_MERGE_QUEUE_EVENT";
     /** Represents a 'added_to_project' event on a given issue or pull request. */
     PullRequestTimelineItemsItemType["AddedToProjectEvent"] = "ADDED_TO_PROJECT_EVENT";
     /** Represents an 'assigned' event on any assignable object. */
@@ -1336,6 +1647,8 @@ var PullRequestTimelineItemsItemType;
     PullRequestTimelineItemsItemType["ConnectedEvent"] = "CONNECTED_EVENT";
     /** Represents a 'converted_note_to_issue' event on a given issue or pull request. */
     PullRequestTimelineItemsItemType["ConvertedNoteToIssueEvent"] = "CONVERTED_NOTE_TO_ISSUE_EVENT";
+    /** Represents a 'converted_to_discussion' event on a given issue. */
+    PullRequestTimelineItemsItemType["ConvertedToDiscussionEvent"] = "CONVERTED_TO_DISCUSSION_EVENT";
     /** Represents a 'convert_to_draft' event on a given pull request. */
     PullRequestTimelineItemsItemType["ConvertToDraftEvent"] = "CONVERT_TO_DRAFT_EVENT";
     /** Represents a mention made by one issue or pull request to another. */
@@ -1386,6 +1699,8 @@ var PullRequestTimelineItemsItemType;
     PullRequestTimelineItemsItemType["ReadyForReviewEvent"] = "READY_FOR_REVIEW_EVENT";
     /** Represents a 'referenced' event on a given `ReferencedSubject`. */
     PullRequestTimelineItemsItemType["ReferencedEvent"] = "REFERENCED_EVENT";
+    /** Represents a 'removed_from_merge_queue' event on a given pull request. */
+    PullRequestTimelineItemsItemType["RemovedFromMergeQueueEvent"] = "REMOVED_FROM_MERGE_QUEUE_EVENT";
     /** Represents a 'removed_from_project' event on a given issue or pull request. */
     PullRequestTimelineItemsItemType["RemovedFromProjectEvent"] = "REMOVED_FROM_PROJECT_EVENT";
     /** Represents a 'renamed' event on a given issue or pull request */
@@ -1618,11 +1933,6 @@ var RepositoryInvitationOrderField;
 (function (RepositoryInvitationOrderField) {
     /** Order repository invitations by creation time */
     RepositoryInvitationOrderField["CreatedAt"] = "CREATED_AT";
-    /**
-     * Order repository invitations by invitee login
-     * @deprecated `INVITEE_LOGIN` is no longer a valid field value. Repository invitations can now be associated with an email, not only an invitee. Removal on 2020-10-01 UTC.
-     */
-    RepositoryInvitationOrderField["InviteeLogin"] = "INVITEE_LOGIN";
 })(RepositoryInvitationOrderField = exports.RepositoryInvitationOrderField || (exports.RepositoryInvitationOrderField = {}));
 /** The possible reasons a given repository could be in a locked state. */
 var RepositoryLockReason;
@@ -1636,6 +1946,20 @@ var RepositoryLockReason;
     /** The repository is locked due to a rename. */
     RepositoryLockReason["Rename"] = "RENAME";
 })(RepositoryLockReason = exports.RepositoryLockReason || (exports.RepositoryLockReason = {}));
+/** Possible directions in which to order a list of repository migrations when provided an `orderBy` argument. */
+var RepositoryMigrationOrderDirection;
+(function (RepositoryMigrationOrderDirection) {
+    /** Specifies an ascending order for a given `orderBy` argument. */
+    RepositoryMigrationOrderDirection["Asc"] = "ASC";
+    /** Specifies a descending order for a given `orderBy` argument. */
+    RepositoryMigrationOrderDirection["Desc"] = "DESC";
+})(RepositoryMigrationOrderDirection = exports.RepositoryMigrationOrderDirection || (exports.RepositoryMigrationOrderDirection = {}));
+/** Properties by which repository migrations can be ordered. */
+var RepositoryMigrationOrderField;
+(function (RepositoryMigrationOrderField) {
+    /** Order mannequins why when they were created. */
+    RepositoryMigrationOrderField["CreatedAt"] = "CREATED_AT";
+})(RepositoryMigrationOrderField = exports.RepositoryMigrationOrderField || (exports.RepositoryMigrationOrderField = {}));
 /** Properties by which repository connections can be ordered. */
 var RepositoryOrderField;
 (function (RepositoryOrderField) {
@@ -1682,6 +2006,16 @@ var RepositoryVisibility;
     /** The repository is visible to everyone. */
     RepositoryVisibility["Public"] = "PUBLIC";
 })(RepositoryVisibility = exports.RepositoryVisibility || (exports.RepositoryVisibility = {}));
+/** The possible states of an alert */
+var RepositoryVulnerabilityAlertState;
+(function (RepositoryVulnerabilityAlertState) {
+    /** An alert that has been manually closed by a user. */
+    RepositoryVulnerabilityAlertState["Dismissed"] = "DISMISSED";
+    /** An alert that has been resolved by a code change. */
+    RepositoryVulnerabilityAlertState["Fixed"] = "FIXED";
+    /** An alert that is still open. */
+    RepositoryVulnerabilityAlertState["Open"] = "OPEN";
+})(RepositoryVulnerabilityAlertState = exports.RepositoryVulnerabilityAlertState || (exports.RepositoryVulnerabilityAlertState = {}));
 /** The possible states that can be requested when creating a check run. */
 var RequestableCheckStatusState;
 (function (RequestableCheckStatusState) {
@@ -1696,6 +2030,16 @@ var RequestableCheckStatusState;
     /** The check suite or run is in waiting state. */
     RequestableCheckStatusState["Waiting"] = "WAITING";
 })(RequestableCheckStatusState = exports.RequestableCheckStatusState || (exports.RequestableCheckStatusState = {}));
+/** Possible roles a user may have in relation to an organization. */
+var RoleInOrganization;
+(function (RoleInOrganization) {
+    /** A user who is a direct member of the organization. */
+    RoleInOrganization["DirectMember"] = "DIRECT_MEMBER";
+    /** A user with full administrative access to the organization. */
+    RoleInOrganization["Owner"] = "OWNER";
+    /** A user who is unaffiliated with the organization. */
+    RoleInOrganization["Unaffiliated"] = "UNAFFILIATED";
+})(RoleInOrganization = exports.RoleInOrganization || (exports.RoleInOrganization = {}));
 /** The possible digest algorithms used to sign SAML requests for an identity provider. */
 var SamlDigestAlgorithm;
 (function (SamlDigestAlgorithm) {
@@ -1738,11 +2082,21 @@ var SearchType;
     /** Returns results matching users and organizations on GitHub. */
     SearchType["User"] = "USER";
 })(SearchType = exports.SearchType || (exports.SearchType = {}));
+/** Classification of the advisory. */
+var SecurityAdvisoryClassification;
+(function (SecurityAdvisoryClassification) {
+    /** Classification of general advisories. */
+    SecurityAdvisoryClassification["General"] = "GENERAL";
+    /** Classification of malware advisories. */
+    SecurityAdvisoryClassification["Malware"] = "MALWARE";
+})(SecurityAdvisoryClassification = exports.SecurityAdvisoryClassification || (exports.SecurityAdvisoryClassification = {}));
 /** The possible ecosystems of a security vulnerability's package. */
 var SecurityAdvisoryEcosystem;
 (function (SecurityAdvisoryEcosystem) {
     /** PHP packages hosted at packagist.org */
     SecurityAdvisoryEcosystem["Composer"] = "COMPOSER";
+    /** Erlang/Elixir packages hosted at hex.pm */
+    SecurityAdvisoryEcosystem["Erlang"] = "ERLANG";
     /** Go modules */
     SecurityAdvisoryEcosystem["Go"] = "GO";
     /** Java artifacts hosted at the Maven central repository */
@@ -1994,6 +2348,14 @@ var TopicSuggestionDeclineReason;
     /** The suggested topic is too specific for the repository (e.g. #ruby-on-rails-version-4-2-1). */
     TopicSuggestionDeclineReason["TooSpecific"] = "TOO_SPECIFIC";
 })(TopicSuggestionDeclineReason = exports.TopicSuggestionDeclineReason || (exports.TopicSuggestionDeclineReason = {}));
+/** The possible states of a tracked issue. */
+var TrackedIssueStates;
+(function (TrackedIssueStates) {
+    /** The tracked issue is closed */
+    TrackedIssueStates["Closed"] = "CLOSED";
+    /** The tracked issue is open */
+    TrackedIssueStates["Open"] = "OPEN";
+})(TrackedIssueStates = exports.TrackedIssueStates || (exports.TrackedIssueStates = {}));
 /** The possible durations that a user can be blocked for. */
 var UserBlockDuration;
 (function (UserBlockDuration) {
@@ -2094,7 +2456,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.requiredStatusChecksForBranch = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
+exports.squashCommit = exports.pullRequestsForWorkflowRun = exports.pullRequestsForCheckSuite = exports.isDoNotMergeLabel = exports.requiredStatusChecksForBranch = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 exports.UNMERGEABLE_STATES = ['blocked'];
@@ -2184,6 +2546,31 @@ function pullRequestsForWorkflowRun(octokit, workflowRun) {
     });
 }
 exports.pullRequestsForWorkflowRun = pullRequestsForWorkflowRun;
+function squashCommit(isSquashCommit, squashCommitTitle, squashCommitMessage, pullRequest) {
+    if (!isSquashCommit) {
+        return { title: undefined, message: undefined };
+    }
+    const title = squashCommitTitle
+        ? substitutePullRequestParams(squashCommitTitle, pullRequest, true)
+        : undefined;
+    const message = squashCommitMessage
+        ? substitutePullRequestParams(squashCommitMessage, pullRequest, false)
+        : undefined;
+    return { title: title, message: message };
+}
+exports.squashCommit = squashCommit;
+function substitutePullRequestParams(input, pullRequest, isTitle) {
+    const output = input
+        .replace('${pull_request.title}', pullRequest.title)
+        .replace('${pull_request.number}', `${pullRequest.number}`);
+    if (isTitle) {
+        return output;
+    }
+    else {
+        // reserve these replacements for the commit message only
+        return output.replace('${pull_request.body}', pullRequest.body ? pullRequest.body : '\n');
+    }
+}
 
 
 /***/ }),
@@ -2252,7 +2639,14 @@ class Input {
                 throw new Error(`Unknown merge method: '${mergeMethod}'`);
             }
         }
-        this.squashTitle = core.getInput('squash-title') === 'true';
+        if (core.getInput('squash-title') === 'true') {
+            this.squashCommitTitle = '${pull_request.title} (#${pull_request.number})';
+            this.squashCommitMessage = '\n';
+        }
+        else {
+            this.squashCommitTitle = core.getInput('squash-commit-title') || undefined;
+            this.squashCommitMessage = core.getInput('squash-commit-message') || undefined;
+        }
         this.doNotMergeLabels = getArray('do-not-merge-labels');
         this.requiredLabels = getArray('required-labels');
         for (const requiredLabel of this.requiredLabels) {
@@ -5090,7 +5484,7 @@ exports.withCustomRequest = withCustomRequest;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-const VERSION = "2.19.0";
+const VERSION = "2.21.0";
 
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
@@ -5262,7 +5656,7 @@ const composePaginateRest = Object.assign(paginate, {
   iterator
 });
 
-const paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/actions/runners/downloads", "GET /enterprises/{enterprise}/actions/runners/{runner_id}/labels", "GET /enterprises/{enterprise}/secret-scanning/alerts", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /organizations/{organization_id}/custom_roles", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/runners/downloads", "GET /orgs/{org}/actions/runners/{runner_id}/labels", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/blocks", "GET /orgs/{org}/code-scanning/alerts", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/dependabot/secrets", "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories", "GET /orgs/{org}/events", "GET /orgs/{org}/external-groups", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/external-groups", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/team-sync/group-mappings", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runners/downloads", "GET /repos/{owner}/{repo}/actions/runners/{runner_id}/labels", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/autolinks", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/codespaces", "GET /repos/{owner}/{repo}/codespaces/devcontainers", "GET /repos/{owner}/{repo}/codespaces/secrets", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/dependabot/secrets", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/releases/{release_id}/reactions", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/tags/protection", "GET /repos/{owner}/{repo}/teams", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /scim/v2/enterprises/{enterprise}/Groups", "GET /scim/v2/enterprises/{enterprise}/Users", "GET /scim/v2/organizations/{org}/Users", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/team-sync/group-mappings", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/codespaces", "GET /user/codespaces/secrets", "GET /user/codespaces/secrets/{secret_name}/repositories", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
+const paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/audit-log", "GET /enterprises/{enterprise}/secret-scanning/alerts", "GET /enterprises/{enterprise}/settings/billing/advanced-security", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /licenses", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org_id}/codespaces", "GET /orgs/{org}/actions/cache/usage-by-repository", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/audit-log", "GET /orgs/{org}/blocks", "GET /orgs/{org}/code-scanning/alerts", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/dependabot/secrets", "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories", "GET /orgs/{org}/events", "GET /orgs/{org}/external-groups", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/packages/{package_type}/{package_name}/versions", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/settings/billing/advanced-security", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/caches", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/codespaces", "GET /repos/{owner}/{repo}/codespaces/devcontainers", "GET /repos/{owner}/{repo}/codespaces/secrets", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/status", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/dependabot/secrets", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/environments", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/releases/{release_id}/reactions", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repos/{owner}/{repo}/topics", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/codespaces", "GET /user/codespaces/secrets", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/packages/{package_type}/{package_name}/versions", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
 
 function isPaginatingEndpoint(arg) {
   if (typeof arg === "string") {
@@ -5371,6 +5765,8 @@ const Endpoints = {
     createRemoveTokenForOrg: ["POST /orgs/{org}/actions/runners/remove-token"],
     createRemoveTokenForRepo: ["POST /repos/{owner}/{repo}/actions/runners/remove-token"],
     createWorkflowDispatch: ["POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"],
+    deleteActionsCacheById: ["DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}"],
+    deleteActionsCacheByKey: ["DELETE /repos/{owner}/{repo}/actions/caches{?key,ref}"],
     deleteArtifact: ["DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
     deleteEnvironmentSecret: ["DELETE /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"],
     deleteOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}"],
@@ -5387,6 +5783,7 @@ const Endpoints = {
     downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
     enableSelectedRepositoryGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
     enableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"],
+    getActionsCacheList: ["GET /repos/{owner}/{repo}/actions/caches"],
     getActionsCacheUsage: ["GET /repos/{owner}/{repo}/actions/cache/usage"],
     getActionsCacheUsageByRepoForOrg: ["GET /orgs/{org}/actions/cache/usage-by-repository"],
     getActionsCacheUsageForEnterprise: ["GET /enterprises/{enterprise}/actions/cache/usage"],
@@ -5446,6 +5843,7 @@ const Endpoints = {
     removeCustomLabelFromSelfHostedRunnerForRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}"],
     removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
     reviewPendingDeploymentsForRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"],
+    setActionsOidcCustomIssuerPolicyForEnterprise: ["PUT /enterprises/{enterprise}/actions/oidc/customization/issuer"],
     setAllowedActionsOrganization: ["PUT /orgs/{org}/actions/permissions/selected-actions"],
     setAllowedActionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"],
     setCustomLabelsForSelfHostedRunnerForOrg: ["PUT /orgs/{org}/actions/runners/{runner_id}/labels"],
@@ -5592,6 +5990,7 @@ const Endpoints = {
     createWithPrForAuthenticatedUser: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces"],
     createWithRepoForAuthenticatedUser: ["POST /repos/{owner}/{repo}/codespaces"],
     deleteForAuthenticatedUser: ["DELETE /user/codespaces/{codespace_name}"],
+    deleteFromOrganization: ["DELETE /orgs/{org}/members/{username}/codespaces/{codespace_name}"],
     deleteRepoSecret: ["DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"],
     deleteSecretForAuthenticatedUser: ["DELETE /user/codespaces/secrets/{secret_name}"],
     exportForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/exports"],
@@ -5603,6 +6002,7 @@ const Endpoints = {
     getSecretForAuthenticatedUser: ["GET /user/codespaces/secrets/{secret_name}"],
     listDevcontainersInRepositoryForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces/devcontainers"],
     listForAuthenticatedUser: ["GET /user/codespaces"],
+    listInOrganization: ["GET /orgs/{org_id}/codespaces"],
     listInRepositoryForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces"],
     listRepoSecrets: ["GET /repos/{owner}/{repo}/codespaces/secrets"],
     listRepositoriesForSecretForAuthenticatedUser: ["GET /user/codespaces/secrets/{secret_name}/repositories"],
@@ -5612,6 +6012,7 @@ const Endpoints = {
     setRepositoriesForSecretForAuthenticatedUser: ["PUT /user/codespaces/secrets/{secret_name}/repositories"],
     startForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/start"],
     stopForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/stop"],
+    stopInOrganization: ["POST /orgs/{org}/members/{username}/codespaces/{codespace_name}/stop"],
     updateForAuthenticatedUser: ["PATCH /user/codespaces/{codespace_name}"]
   },
   dependabot: {
@@ -5631,6 +6032,7 @@ const Endpoints = {
     setSelectedReposForOrgSecret: ["PUT /orgs/{org}/dependabot/secrets/{secret_name}/repositories"]
   },
   dependencyGraph: {
+    createRepositorySnapshot: ["POST /repos/{owner}/{repo}/dependency-graph/snapshots"],
     diffRange: ["GET /repos/{owner}/{repo}/dependency-graph/compare/{basehead}"]
   },
   emojis: {
@@ -6294,7 +6696,7 @@ const Endpoints = {
   }
 };
 
-const VERSION = "5.15.0";
+const VERSION = "5.16.0";
 
 function endpointsToMethods(octokit, endpointsMap) {
   const newMethods = {};

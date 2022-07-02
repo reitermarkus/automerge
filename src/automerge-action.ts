@@ -162,7 +162,7 @@ export class AutomergeAction {
 
         const mergeMethod = await this.determineMergeMethod()
 
-        const {title: commitTitle, message: commitMessage} = squashCommit(
+        const { title: commitTitle, message: commitMessage } = squashCommit(
           mergeMethod === 'squash',
           this.input.squashCommitTitle,
           this.input.squashCommitMessage,

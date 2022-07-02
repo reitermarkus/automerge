@@ -132,15 +132,19 @@ export function squashCommit(
   isSquashCommit: boolean,
   squashCommitTitle: string | undefined,
   squashCommitMessage: string | undefined,
-  pullRequest: PullRequest,
-): {title: string | undefined, message: string | undefined} {
+  pullRequest: PullRequest
+): { title: string | undefined; message: string | undefined } {
   if (!isSquashCommit) {
-    return {title: undefined, message: undefined}
+    return { title: undefined, message: undefined }
   }
 
-  const title = squashCommitTitle ? substitutePullRequestParams(squashCommitTitle, pullRequest, true) : undefined
-  const message = squashCommitMessage ? substitutePullRequestParams(squashCommitMessage, pullRequest, false) : undefined
-  return {title: title, message: message}
+  const title = squashCommitTitle
+    ? substitutePullRequestParams(squashCommitTitle, pullRequest, true)
+    : undefined
+  const message = squashCommitMessage
+    ? substitutePullRequestParams(squashCommitMessage, pullRequest, false)
+    : undefined
+  return { title: title, message: message }
 }
 
 function substitutePullRequestParams(input: string, pullRequest: PullRequest, isTitle: boolean): string {
