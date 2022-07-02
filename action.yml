@@ -21,7 +21,7 @@ inputs:
   squash-title:
     required: false
     description: >
-      Use the pull request title as the commit message when squashing.
+      (deprecated) Use the pull request title as the commit message when squashing. Prefer setting squash-commit-title and squash-commit-message.
     default: false
   squash-commit-title:
     required: false
