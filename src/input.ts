@@ -53,7 +53,7 @@ export class Input {
     }
 
     if (core.getInput('squash-title') === 'true') {
-      this.squashCommitTitle = "${pullRequest.title} (#${pullRequest.number})"
+      this.squashCommitTitle = "${pull_request.title} (#${pull_request.number})"
       this.squashCommitMessage = "\n"
     } else{
       this.squashCommitTitle = core.getInput('squash-commit-title') || undefined
