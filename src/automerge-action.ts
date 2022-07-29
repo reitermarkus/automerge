@@ -153,6 +153,7 @@ export class AutomergeAction {
         break
       }
       case 'dirty':
+      case 'behind':
       case 'blocked':
       case 'clean':
       case 'has_hooks':
