@@ -46,19 +46,6 @@ export class AutomergeAction {
     }
   }
 
-  async disableAutoMerge(pullRequest: PullRequest): Promise<DisableAutoMergeMutation> {
-    core.info(`Disabling auto-merge for pull request ${pullRequest.number}.`)
-
-    // We need to get the source code of the query since the `@octokit/graphql`
-    // API doesn't (yet) support passing a `DocumentNode` object.
-    const query = DisableAutoMerge.loc!.source!.body
-
-    return await this.octokit.graphql({
-      query,
-      pullRequestId: pullRequest.node_id,
-    })
-  }
-
   async enableAutoMerge(
     pullRequest: PullRequest,
     commitTitle: string | undefined,
@@ -69,13 +56,44 @@ export class AutomergeAction {
     // API doesn't (yet) support passing a `DocumentNode` object.
     const query = EnableAutoMerge.loc!.source!.body
 
-    return await this.octokit.graphql({
-      query,
-      pullRequestId: pullRequest.node_id,
-      commitHeadline: commitTitle,
-      commitBody: commitMessage,
-      mergeMethod: mergeMethod?.toUpperCase(),
-    })
+    try {
+      return await this.octokit.graphql({
+        query,
+        pullRequestId: pullRequest.node_id,
+        commitHeadline: commitTitle,
+        commitBody: commitMessage,
+        mergeMethod: mergeMethod?.toUpperCase(),
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        const message = `Failed to enable auto-merge for pull request ${pullRequest.number}: ${error.message}`
+        throw new Error(message)
+      }
+
+      throw error
+    }
+  }
+
+  async disableAutoMerge(pullRequest: PullRequest): Promise<DisableAutoMergeMutation> {
+    try {
+      core.info(`Disabling auto-merge for pull request ${pullRequest.number}.`)
+
+      // We need to get the source code of the query since the `@octokit/graphql`
+      // API doesn't (yet) support passing a `DocumentNode` object.
+      const query = DisableAutoMerge.loc!.source!.body
+
+      return await this.octokit.graphql({
+        query,
+        pullRequestId: pullRequest.node_id,
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        const message = `Failed to disable auto-merge for pull request ${pullRequest.number}: ${error.message}`
+        throw new Error(message)
+      }
+
+      throw error
+    }
   }
 
   async autoMergePullRequest(number: number): Promise<void> {
@@ -97,7 +115,13 @@ export class AutomergeAction {
 
     if (pullRequest.state === 'closed') {
       core.info(`Pull request ${number} is closed.`)
-      await this.disableAutoMerge(pullRequest)
+      return
+    }
+
+    // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
+    const mergeableState = pullRequest.mergeable_state
+    if (pullRequest.draft || mergeableState === 'draft') {
+      core.info(`Pull request ${number} is not mergeable because it is a draft.`)
       return
     }
 
@@ -142,16 +166,7 @@ export class AutomergeAction {
       }
     }
 
-    // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
-    const mergeableState = pullRequest.mergeable_state
     switch (mergeableState) {
-      case 'draft': {
-        core.info(`Pull request ${number} is not mergeable because it is a draft.`)
-        await this.disableAutoMerge(pullRequest)
-        return
-
-        break
-      }
       case 'dirty':
       case 'behind':
       case 'blocked':
@@ -177,40 +192,31 @@ export class AutomergeAction {
           return
         }
 
-        try {
-          // If auto-merge is already enabled with the same merge method, disable it
-          // in order to update the commit title and message.
-          const { auto_merge: autoMerge } = pullRequest
-          if (autoMerge && commitTitle && commitMessage && autoMerge.merge_method == mergeMethod) {
-            if (autoMerge.commit_title != commitTitle || autoMerge.commit_message != commitMessage) {
-              await this.disableAutoMerge(pullRequest)
-            }
+        // If auto-merge is already enabled with the same merge method, disable it
+        // in order to update the commit title and message.
+        const { auto_merge: autoMerge } = pullRequest
+        if (autoMerge && commitTitle && commitMessage && autoMerge.merge_method == mergeMethod) {
+          if (autoMerge.commit_title != commitTitle || autoMerge.commit_message != commitMessage) {
+            core.info(
+              `Auto-merge is already enabled for pull request ${number} but commit title/message does not match.`
+            )
+            await this.disableAutoMerge(pullRequest)
           }
+        }
 
-          core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`)
-          const result = await this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod)
+        core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`)
+        const result = await this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod)
 
-          if (result.enablePullRequestAutoMerge?.pullRequest?.autoMergeRequest?.enabledAt) {
-            core.info(`Successfully enabled auto-merge for pull request ${number}.`)
-          } else {
-            core.setFailed(`Enabling auto-merge for pull request ${number} failed.`)
-          }
-          return
-        } catch (error) {
-          if (error instanceof Error) {
-            const message = `Failed to enable auto-merge for pull request ${number}: ${error.message}`
-            core.setFailed(message)
-            return
-          }
-
-          throw error
+        if (result.enablePullRequestAutoMerge?.pullRequest?.autoMergeRequest?.enabledAt) {
+          core.info(`Successfully enabled auto-merge for pull request ${number}.`)
+        } else {
+          throw new Error(`Failed to enable auto-merge for pull request ${number}.`)
         }
 
         break
       }
       default: {
-        core.setFailed(`Unknown state for pull request ${number}: '${mergeableState}'`)
-        return
+        throw new Error(`Unsupported state for pull request ${number}: '${mergeableState}'`)
 
         break
       }

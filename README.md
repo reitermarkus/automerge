@@ -8,7 +8,7 @@ This action automatically enables “auto-merge” for pull requests under the f
 
 - The pull request is not a draft.
 - The associated branch has at least one required status check.
-- All required labels are applied.
+- All required labels (if any) are applied.
 - No “do not merge” labels are applied.
 
 Ensure the following is set up in your repository settings before enabling this action:
@@ -31,7 +31,7 @@ Ensure the following is set up in your repository settings before enabling this 
 | `squash-title`                     | no       | (deprecated) Use the pull request title as the commit message when squashing. Prefer setting `sqaush-commit-title` and `squash-commit-message`. |
 | `squash-commit-title`              | no       | Set the squash commit title to the supplied string. Available template variables include `${pull_request.title}` and `${pull_request.number}`.  |
 | `squash-commit-message`            | no       | Set the squash commit body to the supplied string. Available template variables include `${pull_request.body}`.                                 |
-| `do-not-merge-labels`              | no       | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically.                          |
+| `do-not-merge-labels`              | no       | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically. Additionally, any labels matching the text `do not merge` or `don't merge` in any form (i.e. matching `/dono?tmerge/` with whitespace and special characters removed) are always treated this way. |
 | `required-labels`                  | no       | Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically.                             |
 | `pull-request`                     | no       | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event.                      |
 | `pull-request-author-associations` | no       | Comma-separated list of required author associations for the pull request author. (By default, pull requests by any author are allowed.)        |

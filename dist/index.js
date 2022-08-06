@@ -70,30 +70,48 @@ class AutomergeAction {
             }
         });
     }
-    disableAutoMerge(pullRequest) {
-        return __awaiter(this, void 0, void 0, function* () {
-            core.info(`Disabling auto-merge for pull request ${pullRequest.number}.`);
-            // We need to get the source code of the query since the `@octokit/graphql`
-            // API doesn't (yet) support passing a `DocumentNode` object.
-            const query = graphql_1.DisableAutoMerge.loc.source.body;
-            return yield this.octokit.graphql({
-                query,
-                pullRequestId: pullRequest.node_id,
-            });
-        });
-    }
     enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod) {
         return __awaiter(this, void 0, void 0, function* () {
             // We need to get the source code of the query since the `@octokit/graphql`
             // API doesn't (yet) support passing a `DocumentNode` object.
             const query = graphql_1.EnableAutoMerge.loc.source.body;
-            return yield this.octokit.graphql({
-                query,
-                pullRequestId: pullRequest.node_id,
-                commitHeadline: commitTitle,
-                commitBody: commitMessage,
-                mergeMethod: mergeMethod === null || mergeMethod === void 0 ? void 0 : mergeMethod.toUpperCase(),
-            });
+            try {
+                return yield this.octokit.graphql({
+                    query,
+                    pullRequestId: pullRequest.node_id,
+                    commitHeadline: commitTitle,
+                    commitBody: commitMessage,
+                    mergeMethod: mergeMethod === null || mergeMethod === void 0 ? void 0 : mergeMethod.toUpperCase(),
+                });
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    const message = `Failed to enable auto-merge for pull request ${pullRequest.number}: ${error.message}`;
+                    throw new Error(message);
+                }
+                throw error;
+            }
+        });
+    }
+    disableAutoMerge(pullRequest) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                core.info(`Disabling auto-merge for pull request ${pullRequest.number}.`);
+                // We need to get the source code of the query since the `@octokit/graphql`
+                // API doesn't (yet) support passing a `DocumentNode` object.
+                const query = graphql_1.DisableAutoMerge.loc.source.body;
+                return yield this.octokit.graphql({
+                    query,
+                    pullRequestId: pullRequest.node_id,
+                });
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    const message = `Failed to disable auto-merge for pull request ${pullRequest.number}: ${error.message}`;
+                    throw new Error(message);
+                }
+                throw error;
+            }
         });
     }
     autoMergePullRequest(number) {
@@ -108,7 +126,12 @@ class AutomergeAction {
             }
             if (pullRequest.state === 'closed') {
                 core.info(`Pull request ${number} is closed.`);
-                yield this.disableAutoMerge(pullRequest);
+                return;
+            }
+            // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
+            const mergeableState = pullRequest.mergeable_state;
+            if (pullRequest.draft || mergeableState === 'draft') {
+                core.info(`Pull request ${number} is not mergeable because it is a draft.`);
                 return;
             }
             const authorAssociations = this.input.pullRequestAuthorAssociations;
@@ -141,15 +164,7 @@ class AutomergeAction {
                     return;
                 }
             }
-            // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
-            const mergeableState = pullRequest.mergeable_state;
             switch (mergeableState) {
-                case 'draft': {
-                    core.info(`Pull request ${number} is not mergeable because it is a draft.`);
-                    yield this.disableAutoMerge(pullRequest);
-                    return;
-                    break;
-                }
                 case 'dirty':
                 case 'behind':
                 case 'blocked':
@@ -165,38 +180,27 @@ class AutomergeAction {
                         core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage}.`);
                         return;
                     }
-                    try {
-                        // If auto-merge is already enabled with the same merge method, disable it
-                        // in order to update the commit title and message.
-                        const { auto_merge: autoMerge } = pullRequest;
-                        if (autoMerge && commitTitle && commitMessage && autoMerge.merge_method == mergeMethod) {
-                            if (autoMerge.commit_title != commitTitle || autoMerge.commit_message != commitMessage) {
-                                yield this.disableAutoMerge(pullRequest);
-                            }
+                    // If auto-merge is already enabled with the same merge method, disable it
+                    // in order to update the commit title and message.
+                    const { auto_merge: autoMerge } = pullRequest;
+                    if (autoMerge && commitTitle && commitMessage && autoMerge.merge_method == mergeMethod) {
+                        if (autoMerge.commit_title != commitTitle || autoMerge.commit_message != commitMessage) {
+                            core.info(`Auto-merge is already enabled for pull request ${number} but commit title/message does not match.`);
+                            yield this.disableAutoMerge(pullRequest);
                         }
-                        core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
-                        const result = yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
-                        if ((_c = (_b = (_a = result.enablePullRequestAutoMerge) === null || _a === void 0 ? void 0 : _a.pullRequest) === null || _b === void 0 ? void 0 : _b.autoMergeRequest) === null || _c === void 0 ? void 0 : _c.enabledAt) {
-                            core.info(`Successfully enabled auto-merge for pull request ${number}.`);
-                        }
-                        else {
-                            core.setFailed(`Enabling auto-merge for pull request ${number} failed.`);
-                        }
-                        return;
                     }
-                    catch (error) {
-                        if (error instanceof Error) {
-                            const message = `Failed to enable auto-merge for pull request ${number}: ${error.message}`;
-                            core.setFailed(message);
-                            return;
-                        }
-                        throw error;
+                    core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
+                    const result = yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
+                    if ((_c = (_b = (_a = result.enablePullRequestAutoMerge) === null || _a === void 0 ? void 0 : _a.pullRequest) === null || _b === void 0 ? void 0 : _b.autoMergeRequest) === null || _c === void 0 ? void 0 : _c.enabledAt) {
+                        core.info(`Successfully enabled auto-merge for pull request ${number}.`);
+                    }
+                    else {
+                        throw new Error(`Failed to enable auto-merge for pull request ${number}.`);
                     }
                     break;
                 }
                 default: {
-                    core.setFailed(`Unknown state for pull request ${number}: '${mergeableState}'`);
-                    return;
+                    throw new Error(`Unsupported state for pull request ${number}: '${mergeableState}'`);
                     break;
                 }
             }
