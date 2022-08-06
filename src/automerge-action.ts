@@ -115,7 +115,13 @@ export class AutomergeAction {
 
     if (pullRequest.state === 'closed') {
       core.info(`Pull request ${number} is closed.`)
-      await this.disableAutoMerge(pullRequest)
+      return
+    }
+
+    // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
+    const mergeableState = pullRequest.mergeable_state
+    if (pullRequest.draft || mergeableState === 'draft') {
+      core.info(`Pull request ${number} is not mergeable because it is a draft.`)
       return
     }
 
@@ -160,16 +166,7 @@ export class AutomergeAction {
       }
     }
 
-    // https://docs.github.com/en/graphql/reference/enums#mergestatestatus
-    const mergeableState = pullRequest.mergeable_state
     switch (mergeableState) {
-      case 'draft': {
-        core.info(`Pull request ${number} is not mergeable because it is a draft.`)
-        await this.disableAutoMerge(pullRequest)
-        return
-
-        break
-      }
       case 'dirty':
       case 'behind':
       case 'blocked':
