@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.9.1",
-    "@actions/github": "^5.1.0",
+    "@actions/github": "^5.1.1",
     "ts-is-present": "^1.2.2"
   },
   "devDependencies": {
