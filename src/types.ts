@@ -3,6 +3,7 @@ import { components as OCTOKIT_OPENAPI_TYPES } from '@octokit/openapi-types'
 
 export type Octokit = ReturnType<typeof github.getOctokit>
 
+export type AuthorAssociation = OCTOKIT_OPENAPI_TYPES['schemas']['author-association']
 export type CheckRun = OCTOKIT_OPENAPI_TYPES['schemas']['check-run']
 export type CheckSuite = OCTOKIT_OPENAPI_TYPES['schemas']['check-suite']
 export type PullRequest = OCTOKIT_OPENAPI_TYPES['schemas']['pull-request']

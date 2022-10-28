@@ -1,7 +1,17 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import { CheckRun, CheckSuite, CommitStatus, Octokit, PullRequest, Repo, Review, WorkflowRun } from './types'
+import {
+  AuthorAssociation,
+  CheckRun,
+  CheckSuite,
+  CommitStatus,
+  Octokit,
+  PullRequest,
+  Repo,
+  Review,
+  WorkflowRun,
+} from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
@@ -28,7 +38,7 @@ export function isAuthorAllowed(
   return authorAssociations.includes(pullRequestOrReview.author_association)
 }
 
-export function isReviewAuthorAllowed(review: Review, authorAssociations: string[]): boolean {
+export function isReviewAuthorAllowed(review: Review, authorAssociations: AuthorAssociation[]): boolean {
   if (!isAuthorAllowed(review, authorAssociations)) {
     core.debug(
       `Author @${review.user?.login} of review ${review.id} ` +
@@ -42,7 +52,7 @@ export function isReviewAuthorAllowed(review: Review, authorAssociations: string
   return true
 }
 
-export function isApprovedByAllowedAuthor(review: Review, authorAssociations: string[]): boolean {
+export function isApprovedByAllowedAuthor(review: Review, authorAssociations: AuthorAssociation[]): boolean {
   if (!isApproved(review)) {
     core.debug(`Review ${review.id} is not an approval.`)
     return false
