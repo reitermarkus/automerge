@@ -34,7 +34,7 @@ Ensure the following is set up in your repository settings before enabling this 
 | `do-not-merge-labels`              | no       | When any of the labels in this comma-separated list is applied to a pull request, it will not be merged automatically. Additionally, any labels matching the text `do not merge` or `don't merge` in any form (i.e. matching `/dono?tmerge/` with whitespace and special characters removed) are always treated this way. |
 | `required-labels`                  | no       | Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically.                             |
 | `pull-request`                     | no       | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event.                      |
-| `pull-request-author-associations` | no       | Comma-separated list of required author associations for the pull request author. (By default, pull requests by any author are allowed.)        |
+| `pull-request-author-associations` | no       | Comma-separated list of required [author associations](https://docs.github.com/en/graphql/reference/enums#commentauthorassociation) for the pull request author. (By default, pull requests by any author are allowed.)        |
 | `dry-run`                          | no       | If set to `true`, will not actually merge pull requests but still perform all other checks.                                                     |
 
 ## Example Workflow
