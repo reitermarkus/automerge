@@ -8,6 +8,6 @@ jobs:
   actions-tagger:
     runs-on: ubuntu-latest
     steps:
-      - uses: Actions-R-Us/actions-tagger@f411bd910a5ad370d4511517e3eac7ff887c90ea # tag=v2
+      - uses: Actions-R-Us/actions-tagger@330ddfac760021349fef7ff62b372f2f691c20fb # v2
         with:
           prefer_branch_releases: true
