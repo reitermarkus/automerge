@@ -11,15 +11,47 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
-      - run: |
-          npm install
-      - run: |
-          npm run all
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+      - run: npm ci
+      - run: npm run all
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - uses: actions/upload-artifact@v3
+        with:
+          name: action.yml
+          path: action.yml
   test:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - uses: actions/download-artifact@v3
+        with:
+          name: action.yml
+          path: .
       - uses: ./
         with:
           dry-run: true
+  package:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Update distribution.
+          title: Update distribution.
+          body: |
+            Update the distribution with changes in `main` branch.
+          branch: update-distribution
