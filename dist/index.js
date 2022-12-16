@@ -245,9 +245,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IssueClosedStateReason = exports.IpAllowListForInstalledAppsEnabledSettingValue = exports.IpAllowListEntryOrderField = exports.IpAllowListEnabledSettingValue = exports.IdentityProviderConfigurationState = exports.GitSignatureState = exports.GistPrivacy = exports.GistOrderField = exports.FundingPlatform = exports.FileViewedState = exports.EnterpriseUserDeployment = exports.EnterpriseUserAccountMembershipRole = exports.EnterpriseServerUserAccountsUploadSyncState = exports.EnterpriseServerUserAccountsUploadOrderField = exports.EnterpriseServerUserAccountOrderField = exports.EnterpriseServerUserAccountEmailOrderField = exports.EnterpriseServerInstallationOrderField = exports.EnterpriseMembersCanMakePurchasesSettingValue = exports.EnterpriseMembersCanCreateRepositoriesSettingValue = exports.EnterpriseMemberOrderField = exports.EnterpriseEnabledSettingValue = exports.EnterpriseEnabledDisabledSettingValue = exports.EnterpriseDefaultRepositoryPermissionSettingValue = exports.EnterpriseAllowPrivateRepositoryForkingPolicyValue = exports.EnterpriseAdministratorRole = exports.EnterpriseAdministratorInvitationOrderField = exports.DismissReason = exports.DiscussionPollOptionOrderField = exports.DiscussionOrderField = exports.DiffSide = exports.DeploymentStatusState = exports.DeploymentState = exports.DeploymentReviewState = exports.DeploymentProtectionRuleType = exports.DeploymentOrderField = exports.DependencyGraphEcosystem = exports.DefaultRepositoryPermissionField = exports.ContributionLevel = exports.ComparisonStatus = exports.CommitContributionOrderField = exports.CommentCannotUpdateReason = exports.CommentAuthorAssociation = exports.CollaboratorAffiliation = exports.CheckStatusState = exports.CheckRunType = exports.CheckRunState = exports.CheckConclusionState = exports.CheckAnnotationLevel = exports.AuditLogOrderField = exports.ActorType = void 0;
-exports.ProjectNextOrderField = exports.ProjectNextFieldType = exports.ProjectItemType = exports.ProjectColumnPurpose = exports.ProjectCardState = exports.ProjectCardArchivedState = exports.PinnedDiscussionPattern = exports.PinnedDiscussionGradient = exports.PinnableItemType = exports.PatchStatus = exports.PackageVersionOrderField = exports.PackageType = exports.PackageOrderField = exports.PackageFileOrderField = exports.OrganizationOrderField = exports.OrganizationMembersCanCreateRepositoriesSettingValue = exports.OrganizationMemberRole = exports.OrganizationInvitationType = exports.OrganizationInvitationRole = exports.OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility = exports.OrgUpdateMemberAuditEntryPermission = exports.OrgUpdateDefaultRepositoryPermissionAuditEntryPermission = exports.OrgRemoveOutsideCollaboratorAuditEntryReason = exports.OrgRemoveOutsideCollaboratorAuditEntryMembershipType = exports.OrgRemoveMemberAuditEntryReason = exports.OrgRemoveMemberAuditEntryMembershipType = exports.OrgRemoveBillingManagerAuditEntryReason = exports.OrgEnterpriseOwnerOrderField = exports.OrgCreateAuditEntryBillingPlan = exports.OrgAddMemberAuditEntryPermission = exports.OrderDirection = exports.OperationType = exports.OauthApplicationCreateAuditEntryState = exports.OidcProviderType = exports.NotificationRestrictionSettingValue = exports.MilestoneState = exports.MilestoneOrderField = exports.MigrationState = exports.MigrationSourceType = exports.MergeableState = exports.MergeCommitTitle = exports.MergeCommitMessage = exports.LockReason = exports.LanguageOrderField = exports.LabelOrderField = exports.IssueTimelineItemsItemType = exports.IssueStateReason = exports.IssueState = exports.IssueOrderField = exports.IssueCommentOrderField = void 0;
-exports.RequestableCheckStatusState = exports.RepositoryVulnerabilityAlertState = exports.RepositoryVulnerabilityAlertDependencyScope = exports.RepositoryVisibility = exports.RepositoryPrivacy = exports.RepositoryPermission = exports.RepositoryOrderField = exports.RepositoryMigrationOrderField = exports.RepositoryMigrationOrderDirection = exports.RepositoryLockReason = exports.RepositoryInvitationOrderField = exports.RepositoryInteractionLimitOrigin = exports.RepositoryInteractionLimitExpiry = exports.RepositoryInteractionLimit = exports.RepositoryContributionType = exports.RepositoryAffiliation = exports.ReportedContentClassifiers = exports.RepoRemoveMemberAuditEntryVisibility = exports.RepoDestroyAuditEntryVisibility = exports.RepoCreateAuditEntryVisibility = exports.RepoChangeMergeSettingAuditEntryMergeType = exports.RepoArchivedAuditEntryVisibility = exports.RepoAddMemberAuditEntryVisibility = exports.RepoAccessAuditEntryVisibility = exports.ReleaseOrderField = exports.RefOrderField = exports.ReactionOrderField = exports.ReactionContent = exports.PullRequestUpdateState = exports.PullRequestTimelineItemsItemType = exports.PullRequestState = exports.PullRequestReviewState = exports.PullRequestReviewEvent = exports.PullRequestReviewDecision = exports.PullRequestReviewCommentState = exports.PullRequestOrderField = exports.PullRequestMergeMethod = exports.ProjectViewLayout = exports.ProjectV2ViewOrderField = exports.ProjectV2ViewLayout = exports.ProjectV2State = exports.ProjectV2OrderField = exports.ProjectV2ItemType = exports.ProjectV2ItemOrderField = exports.ProjectV2ItemFieldValueOrderField = exports.ProjectV2FieldType = exports.ProjectV2FieldOrderField = exports.ProjectTemplate = exports.ProjectState = exports.ProjectOrderField = void 0;
-exports.EnableAutoMerge = exports.DisableAutoMerge = exports.WorkflowRunOrderField = exports.VerifiableDomainOrderField = exports.UserStatusOrderField = exports.UserBlockDuration = exports.TrackedIssueStates = exports.TopicSuggestionDeclineReason = exports.TeamRole = exports.TeamRepositoryOrderField = exports.TeamPrivacy = exports.TeamOrderField = exports.TeamMembershipType = exports.TeamMemberRole = exports.TeamMemberOrderField = exports.TeamDiscussionOrderField = exports.TeamDiscussionCommentOrderField = exports.SubscriptionState = exports.StatusState = exports.StarOrderField = exports.SquashMergeCommitTitle = exports.SquashMergeCommitMessage = exports.SponsorshipPrivacy = exports.SponsorshipOrderField = exports.SponsorshipNewsletterOrderField = exports.SponsorsTierOrderField = exports.SponsorsListingFeaturedItemFeatureableType = exports.SponsorsGoalKind = exports.SponsorsActivityPeriod = exports.SponsorsActivityOrderField = exports.SponsorsActivityAction = exports.SponsorableOrderField = exports.SponsorOrderField = exports.SecurityVulnerabilityOrderField = exports.SecurityAdvisorySeverity = exports.SecurityAdvisoryOrderField = exports.SecurityAdvisoryIdentifierType = exports.SecurityAdvisoryEcosystem = exports.SecurityAdvisoryClassification = exports.SearchType = exports.SavedReplyOrderField = exports.SamlSignatureAlgorithm = exports.SamlDigestAlgorithm = exports.RoleInOrganization = void 0;
+exports.ProjectNextFieldType = exports.ProjectItemType = exports.ProjectColumnPurpose = exports.ProjectCardState = exports.ProjectCardArchivedState = exports.PinnedDiscussionPattern = exports.PinnedDiscussionGradient = exports.PinnableItemType = exports.PatchStatus = exports.PackageVersionOrderField = exports.PackageType = exports.PackageOrderField = exports.PackageFileOrderField = exports.OrganizationOrderField = exports.OrganizationMembersCanCreateRepositoriesSettingValue = exports.OrganizationMemberRole = exports.OrganizationInvitationType = exports.OrganizationInvitationRole = exports.OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility = exports.OrgUpdateMemberAuditEntryPermission = exports.OrgUpdateDefaultRepositoryPermissionAuditEntryPermission = exports.OrgRemoveOutsideCollaboratorAuditEntryReason = exports.OrgRemoveOutsideCollaboratorAuditEntryMembershipType = exports.OrgRemoveMemberAuditEntryReason = exports.OrgRemoveMemberAuditEntryMembershipType = exports.OrgRemoveBillingManagerAuditEntryReason = exports.OrgEnterpriseOwnerOrderField = exports.OrgCreateAuditEntryBillingPlan = exports.OrgAddMemberAuditEntryPermission = exports.OrderDirection = exports.OperationType = exports.OauthApplicationCreateAuditEntryState = exports.OidcProviderType = exports.NotificationRestrictionSettingValue = exports.MilestoneState = exports.MilestoneOrderField = exports.MigrationState = exports.MigrationSourceType = exports.MergeableState = exports.MergeCommitTitle = exports.MergeCommitMessage = exports.MannequinOrderField = exports.LockReason = exports.LanguageOrderField = exports.LabelOrderField = exports.IssueTimelineItemsItemType = exports.IssueStateReason = exports.IssueState = exports.IssueOrderField = exports.IssueCommentOrderField = void 0;
+exports.RepositoryVulnerabilityAlertState = exports.RepositoryVulnerabilityAlertDependencyScope = exports.RepositoryVisibility = exports.RepositoryPrivacy = exports.RepositoryPermission = exports.RepositoryOrderField = exports.RepositoryMigrationOrderField = exports.RepositoryMigrationOrderDirection = exports.RepositoryLockReason = exports.RepositoryInvitationOrderField = exports.RepositoryInteractionLimitOrigin = exports.RepositoryInteractionLimitExpiry = exports.RepositoryInteractionLimit = exports.RepositoryContributionType = exports.RepositoryAffiliation = exports.ReportedContentClassifiers = exports.RepoRemoveMemberAuditEntryVisibility = exports.RepoDestroyAuditEntryVisibility = exports.RepoCreateAuditEntryVisibility = exports.RepoChangeMergeSettingAuditEntryMergeType = exports.RepoArchivedAuditEntryVisibility = exports.RepoAddMemberAuditEntryVisibility = exports.RepoAccessAuditEntryVisibility = exports.ReleaseOrderField = exports.RefOrderField = exports.ReactionOrderField = exports.ReactionContent = exports.PullRequestUpdateState = exports.PullRequestTimelineItemsItemType = exports.PullRequestState = exports.PullRequestReviewState = exports.PullRequestReviewEvent = exports.PullRequestReviewDecision = exports.PullRequestReviewCommentState = exports.PullRequestOrderField = exports.PullRequestMergeMethod = exports.ProjectViewLayout = exports.ProjectV2ViewOrderField = exports.ProjectV2ViewLayout = exports.ProjectV2State = exports.ProjectV2OrderField = exports.ProjectV2ItemType = exports.ProjectV2ItemOrderField = exports.ProjectV2ItemFieldValueOrderField = exports.ProjectV2FieldType = exports.ProjectV2FieldOrderField = exports.ProjectTemplate = exports.ProjectState = exports.ProjectOrderField = exports.ProjectNextOrderField = void 0;
+exports.EnableAutoMerge = exports.DisableAutoMerge = exports.WorkflowRunOrderField = exports.VerifiableDomainOrderField = exports.UserStatusOrderField = exports.UserBlockDuration = exports.TrackedIssueStates = exports.TopicSuggestionDeclineReason = exports.TeamRole = exports.TeamRepositoryOrderField = exports.TeamPrivacy = exports.TeamOrderField = exports.TeamMembershipType = exports.TeamMemberRole = exports.TeamMemberOrderField = exports.TeamDiscussionOrderField = exports.TeamDiscussionCommentOrderField = exports.SubscriptionState = exports.StatusState = exports.StarOrderField = exports.SquashMergeCommitTitle = exports.SquashMergeCommitMessage = exports.SponsorshipPrivacy = exports.SponsorshipOrderField = exports.SponsorshipNewsletterOrderField = exports.SponsorsTierOrderField = exports.SponsorsListingFeaturedItemFeatureableType = exports.SponsorsGoalKind = exports.SponsorsCountryOrRegionCode = exports.SponsorsActivityPeriod = exports.SponsorsActivityOrderField = exports.SponsorsActivityAction = exports.SponsorableOrderField = exports.SponsorOrderField = exports.SecurityVulnerabilityOrderField = exports.SecurityAdvisorySeverity = exports.SecurityAdvisoryOrderField = exports.SecurityAdvisoryIdentifierType = exports.SecurityAdvisoryEcosystem = exports.SecurityAdvisoryClassification = exports.SearchType = exports.SavedReplyOrderField = exports.SamlSignatureAlgorithm = exports.SamlDigestAlgorithm = exports.RoleInOrganization = exports.RequestableCheckStatusState = void 0;
 const graphql_tag_1 = __importDefault(__nccwpck_require__(8435));
 /** The actor's type. */
 var ActorType;
@@ -985,6 +985,14 @@ var LockReason;
     /** The issue or pull request was locked because the conversation was too heated. */
     LockReason["TooHeated"] = "TOO_HEATED";
 })(LockReason = exports.LockReason || (exports.LockReason = {}));
+/** Properties by which mannequins can be ordered. */
+var MannequinOrderField;
+(function (MannequinOrderField) {
+    /** Order mannequins why when they were created. */
+    MannequinOrderField["CreatedAt"] = "CREATED_AT";
+    /** Order mannequins alphabetically by their source login. */
+    MannequinOrderField["Login"] = "LOGIN";
+})(MannequinOrderField = exports.MannequinOrderField || (exports.MannequinOrderField = {}));
 /** The possible default commit messages for merges. */
 var MergeCommitMessage;
 (function (MergeCommitMessage) {
@@ -1013,7 +1021,7 @@ var MergeableState;
     /** The mergeability of the pull request is still being calculated. */
     MergeableState["Unknown"] = "UNKNOWN";
 })(MergeableState = exports.MergeableState || (exports.MergeableState = {}));
-/** Represents the different Octoshift migration sources. */
+/** Represents the different GitHub Enterprise Importer (GEI) migration sources. */
 var MigrationSourceType;
 (function (MigrationSourceType) {
     /** An Azure DevOps migration source. */
@@ -1023,22 +1031,22 @@ var MigrationSourceType;
     /** A GitHub Migration API source. */
     MigrationSourceType["GithubArchive"] = "GITHUB_ARCHIVE";
 })(MigrationSourceType = exports.MigrationSourceType || (exports.MigrationSourceType = {}));
-/** The Octoshift migration state. */
+/** The GitHub Enterprise Importer (GEI) migration state. */
 var MigrationState;
 (function (MigrationState) {
-    /** The Octoshift migration has failed. */
+    /** The migration has failed. */
     MigrationState["Failed"] = "FAILED";
-    /** The Octoshift migration has invalid credentials. */
+    /** The migration has invalid credentials. */
     MigrationState["FailedValidation"] = "FAILED_VALIDATION";
-    /** The Octoshift migration is in progress. */
+    /** The migration is in progress. */
     MigrationState["InProgress"] = "IN_PROGRESS";
-    /** The Octoshift migration has not started. */
+    /** The migration has not started. */
     MigrationState["NotStarted"] = "NOT_STARTED";
-    /** The Octoshift migration needs to have its credentials validated. */
+    /** The migration needs to have its credentials validated. */
     MigrationState["PendingValidation"] = "PENDING_VALIDATION";
-    /** The Octoshift migration has been queued. */
+    /** The migration has been queued. */
     MigrationState["Queued"] = "QUEUED";
-    /** The Octoshift migration has succeeded. */
+    /** The migration has succeeded. */
     MigrationState["Succeeded"] = "SUCCEEDED";
 })(MigrationState = exports.MigrationState || (exports.MigrationState = {}));
 /** Properties by which milestone connections can be ordered. */
@@ -1309,9 +1317,15 @@ var PackageType;
     PackageType["Docker"] = "DOCKER";
     /** A maven package. */
     PackageType["Maven"] = "MAVEN";
-    /** An npm package. */
+    /**
+     * An npm package.
+     * @deprecated NPM will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2022-11-21 UTC.
+     */
     PackageType["Npm"] = "NPM";
-    /** A nuget package. */
+    /**
+     * A nuget package.
+     * @deprecated NUGET will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2022-11-21 UTC.
+     */
     PackageType["Nuget"] = "NUGET";
     /** A python package. */
     PackageType["Pypi"] = "PYPI";
@@ -2338,6 +2352,502 @@ var SponsorsActivityPeriod;
     /** The previous seven days. */
     SponsorsActivityPeriod["Week"] = "WEEK";
 })(SponsorsActivityPeriod = exports.SponsorsActivityPeriod || (exports.SponsorsActivityPeriod = {}));
+/** Represents countries or regions for billing and residence for a GitHub Sponsors profile. */
+var SponsorsCountryOrRegionCode;
+(function (SponsorsCountryOrRegionCode) {
+    /** Andorra */
+    SponsorsCountryOrRegionCode["Ad"] = "AD";
+    /** United Arab Emirates */
+    SponsorsCountryOrRegionCode["Ae"] = "AE";
+    /** Afghanistan */
+    SponsorsCountryOrRegionCode["Af"] = "AF";
+    /** Antigua and Barbuda */
+    SponsorsCountryOrRegionCode["Ag"] = "AG";
+    /** Anguilla */
+    SponsorsCountryOrRegionCode["Ai"] = "AI";
+    /** Albania */
+    SponsorsCountryOrRegionCode["Al"] = "AL";
+    /** Armenia */
+    SponsorsCountryOrRegionCode["Am"] = "AM";
+    /** Angola */
+    SponsorsCountryOrRegionCode["Ao"] = "AO";
+    /** Antarctica */
+    SponsorsCountryOrRegionCode["Aq"] = "AQ";
+    /** Argentina */
+    SponsorsCountryOrRegionCode["Ar"] = "AR";
+    /** American Samoa */
+    SponsorsCountryOrRegionCode["As"] = "AS";
+    /** Austria */
+    SponsorsCountryOrRegionCode["At"] = "AT";
+    /** Australia */
+    SponsorsCountryOrRegionCode["Au"] = "AU";
+    /** Aruba */
+    SponsorsCountryOrRegionCode["Aw"] = "AW";
+    /** Åland */
+    SponsorsCountryOrRegionCode["Ax"] = "AX";
+    /** Azerbaijan */
+    SponsorsCountryOrRegionCode["Az"] = "AZ";
+    /** Bosnia and Herzegovina */
+    SponsorsCountryOrRegionCode["Ba"] = "BA";
+    /** Barbados */
+    SponsorsCountryOrRegionCode["Bb"] = "BB";
+    /** Bangladesh */
+    SponsorsCountryOrRegionCode["Bd"] = "BD";
+    /** Belgium */
+    SponsorsCountryOrRegionCode["Be"] = "BE";
+    /** Burkina Faso */
+    SponsorsCountryOrRegionCode["Bf"] = "BF";
+    /** Bulgaria */
+    SponsorsCountryOrRegionCode["Bg"] = "BG";
+    /** Bahrain */
+    SponsorsCountryOrRegionCode["Bh"] = "BH";
+    /** Burundi */
+    SponsorsCountryOrRegionCode["Bi"] = "BI";
+    /** Benin */
+    SponsorsCountryOrRegionCode["Bj"] = "BJ";
+    /** Saint Barthélemy */
+    SponsorsCountryOrRegionCode["Bl"] = "BL";
+    /** Bermuda */
+    SponsorsCountryOrRegionCode["Bm"] = "BM";
+    /** Brunei Darussalam */
+    SponsorsCountryOrRegionCode["Bn"] = "BN";
+    /** Bolivia */
+    SponsorsCountryOrRegionCode["Bo"] = "BO";
+    /** Bonaire, Sint Eustatius and Saba */
+    SponsorsCountryOrRegionCode["Bq"] = "BQ";
+    /** Brazil */
+    SponsorsCountryOrRegionCode["Br"] = "BR";
+    /** Bahamas */
+    SponsorsCountryOrRegionCode["Bs"] = "BS";
+    /** Bhutan */
+    SponsorsCountryOrRegionCode["Bt"] = "BT";
+    /** Bouvet Island */
+    SponsorsCountryOrRegionCode["Bv"] = "BV";
+    /** Botswana */
+    SponsorsCountryOrRegionCode["Bw"] = "BW";
+    /** Belarus */
+    SponsorsCountryOrRegionCode["By"] = "BY";
+    /** Belize */
+    SponsorsCountryOrRegionCode["Bz"] = "BZ";
+    /** Canada */
+    SponsorsCountryOrRegionCode["Ca"] = "CA";
+    /** Cocos (Keeling) Islands */
+    SponsorsCountryOrRegionCode["Cc"] = "CC";
+    /** Congo (Kinshasa) */
+    SponsorsCountryOrRegionCode["Cd"] = "CD";
+    /** Central African Republic */
+    SponsorsCountryOrRegionCode["Cf"] = "CF";
+    /** Congo (Brazzaville) */
+    SponsorsCountryOrRegionCode["Cg"] = "CG";
+    /** Switzerland */
+    SponsorsCountryOrRegionCode["Ch"] = "CH";
+    /** Côte d'Ivoire */
+    SponsorsCountryOrRegionCode["Ci"] = "CI";
+    /** Cook Islands */
+    SponsorsCountryOrRegionCode["Ck"] = "CK";
+    /** Chile */
+    SponsorsCountryOrRegionCode["Cl"] = "CL";
+    /** Cameroon */
+    SponsorsCountryOrRegionCode["Cm"] = "CM";
+    /** China */
+    SponsorsCountryOrRegionCode["Cn"] = "CN";
+    /** Colombia */
+    SponsorsCountryOrRegionCode["Co"] = "CO";
+    /** Costa Rica */
+    SponsorsCountryOrRegionCode["Cr"] = "CR";
+    /** Cape Verde */
+    SponsorsCountryOrRegionCode["Cv"] = "CV";
+    /** Curaçao */
+    SponsorsCountryOrRegionCode["Cw"] = "CW";
+    /** Christmas Island */
+    SponsorsCountryOrRegionCode["Cx"] = "CX";
+    /** Cyprus */
+    SponsorsCountryOrRegionCode["Cy"] = "CY";
+    /** Czech Republic */
+    SponsorsCountryOrRegionCode["Cz"] = "CZ";
+    /** Germany */
+    SponsorsCountryOrRegionCode["De"] = "DE";
+    /** Djibouti */
+    SponsorsCountryOrRegionCode["Dj"] = "DJ";
+    /** Denmark */
+    SponsorsCountryOrRegionCode["Dk"] = "DK";
+    /** Dominica */
+    SponsorsCountryOrRegionCode["Dm"] = "DM";
+    /** Dominican Republic */
+    SponsorsCountryOrRegionCode["Do"] = "DO";
+    /** Algeria */
+    SponsorsCountryOrRegionCode["Dz"] = "DZ";
+    /** Ecuador */
+    SponsorsCountryOrRegionCode["Ec"] = "EC";
+    /** Estonia */
+    SponsorsCountryOrRegionCode["Ee"] = "EE";
+    /** Egypt */
+    SponsorsCountryOrRegionCode["Eg"] = "EG";
+    /** Western Sahara */
+    SponsorsCountryOrRegionCode["Eh"] = "EH";
+    /** Eritrea */
+    SponsorsCountryOrRegionCode["Er"] = "ER";
+    /** Spain */
+    SponsorsCountryOrRegionCode["Es"] = "ES";
+    /** Ethiopia */
+    SponsorsCountryOrRegionCode["Et"] = "ET";
+    /** Finland */
+    SponsorsCountryOrRegionCode["Fi"] = "FI";
+    /** Fiji */
+    SponsorsCountryOrRegionCode["Fj"] = "FJ";
+    /** Falkland Islands */
+    SponsorsCountryOrRegionCode["Fk"] = "FK";
+    /** Micronesia */
+    SponsorsCountryOrRegionCode["Fm"] = "FM";
+    /** Faroe Islands */
+    SponsorsCountryOrRegionCode["Fo"] = "FO";
+    /** France */
+    SponsorsCountryOrRegionCode["Fr"] = "FR";
+    /** Gabon */
+    SponsorsCountryOrRegionCode["Ga"] = "GA";
+    /** United Kingdom */
+    SponsorsCountryOrRegionCode["Gb"] = "GB";
+    /** Grenada */
+    SponsorsCountryOrRegionCode["Gd"] = "GD";
+    /** Georgia */
+    SponsorsCountryOrRegionCode["Ge"] = "GE";
+    /** French Guiana */
+    SponsorsCountryOrRegionCode["Gf"] = "GF";
+    /** Guernsey */
+    SponsorsCountryOrRegionCode["Gg"] = "GG";
+    /** Ghana */
+    SponsorsCountryOrRegionCode["Gh"] = "GH";
+    /** Gibraltar */
+    SponsorsCountryOrRegionCode["Gi"] = "GI";
+    /** Greenland */
+    SponsorsCountryOrRegionCode["Gl"] = "GL";
+    /** Gambia */
+    SponsorsCountryOrRegionCode["Gm"] = "GM";
+    /** Guinea */
+    SponsorsCountryOrRegionCode["Gn"] = "GN";
+    /** Guadeloupe */
+    SponsorsCountryOrRegionCode["Gp"] = "GP";
+    /** Equatorial Guinea */
+    SponsorsCountryOrRegionCode["Gq"] = "GQ";
+    /** Greece */
+    SponsorsCountryOrRegionCode["Gr"] = "GR";
+    /** South Georgia and South Sandwich Islands */
+    SponsorsCountryOrRegionCode["Gs"] = "GS";
+    /** Guatemala */
+    SponsorsCountryOrRegionCode["Gt"] = "GT";
+    /** Guam */
+    SponsorsCountryOrRegionCode["Gu"] = "GU";
+    /** Guinea-Bissau */
+    SponsorsCountryOrRegionCode["Gw"] = "GW";
+    /** Guyana */
+    SponsorsCountryOrRegionCode["Gy"] = "GY";
+    /** Hong Kong */
+    SponsorsCountryOrRegionCode["Hk"] = "HK";
+    /** Heard and McDonald Islands */
+    SponsorsCountryOrRegionCode["Hm"] = "HM";
+    /** Honduras */
+    SponsorsCountryOrRegionCode["Hn"] = "HN";
+    /** Croatia */
+    SponsorsCountryOrRegionCode["Hr"] = "HR";
+    /** Haiti */
+    SponsorsCountryOrRegionCode["Ht"] = "HT";
+    /** Hungary */
+    SponsorsCountryOrRegionCode["Hu"] = "HU";
+    /** Indonesia */
+    SponsorsCountryOrRegionCode["Id"] = "ID";
+    /** Ireland */
+    SponsorsCountryOrRegionCode["Ie"] = "IE";
+    /** Israel */
+    SponsorsCountryOrRegionCode["Il"] = "IL";
+    /** Isle of Man */
+    SponsorsCountryOrRegionCode["Im"] = "IM";
+    /** India */
+    SponsorsCountryOrRegionCode["In"] = "IN";
+    /** British Indian Ocean Territory */
+    SponsorsCountryOrRegionCode["Io"] = "IO";
+    /** Iraq */
+    SponsorsCountryOrRegionCode["Iq"] = "IQ";
+    /** Iran */
+    SponsorsCountryOrRegionCode["Ir"] = "IR";
+    /** Iceland */
+    SponsorsCountryOrRegionCode["Is"] = "IS";
+    /** Italy */
+    SponsorsCountryOrRegionCode["It"] = "IT";
+    /** Jersey */
+    SponsorsCountryOrRegionCode["Je"] = "JE";
+    /** Jamaica */
+    SponsorsCountryOrRegionCode["Jm"] = "JM";
+    /** Jordan */
+    SponsorsCountryOrRegionCode["Jo"] = "JO";
+    /** Japan */
+    SponsorsCountryOrRegionCode["Jp"] = "JP";
+    /** Kenya */
+    SponsorsCountryOrRegionCode["Ke"] = "KE";
+    /** Kyrgyzstan */
+    SponsorsCountryOrRegionCode["Kg"] = "KG";
+    /** Cambodia */
+    SponsorsCountryOrRegionCode["Kh"] = "KH";
+    /** Kiribati */
+    SponsorsCountryOrRegionCode["Ki"] = "KI";
+    /** Comoros */
+    SponsorsCountryOrRegionCode["Km"] = "KM";
+    /** Saint Kitts and Nevis */
+    SponsorsCountryOrRegionCode["Kn"] = "KN";
+    /** Korea, South */
+    SponsorsCountryOrRegionCode["Kr"] = "KR";
+    /** Kuwait */
+    SponsorsCountryOrRegionCode["Kw"] = "KW";
+    /** Cayman Islands */
+    SponsorsCountryOrRegionCode["Ky"] = "KY";
+    /** Kazakhstan */
+    SponsorsCountryOrRegionCode["Kz"] = "KZ";
+    /** Laos */
+    SponsorsCountryOrRegionCode["La"] = "LA";
+    /** Lebanon */
+    SponsorsCountryOrRegionCode["Lb"] = "LB";
+    /** Saint Lucia */
+    SponsorsCountryOrRegionCode["Lc"] = "LC";
+    /** Liechtenstein */
+    SponsorsCountryOrRegionCode["Li"] = "LI";
+    /** Sri Lanka */
+    SponsorsCountryOrRegionCode["Lk"] = "LK";
+    /** Liberia */
+    SponsorsCountryOrRegionCode["Lr"] = "LR";
+    /** Lesotho */
+    SponsorsCountryOrRegionCode["Ls"] = "LS";
+    /** Lithuania */
+    SponsorsCountryOrRegionCode["Lt"] = "LT";
+    /** Luxembourg */
+    SponsorsCountryOrRegionCode["Lu"] = "LU";
+    /** Latvia */
+    SponsorsCountryOrRegionCode["Lv"] = "LV";
+    /** Libya */
+    SponsorsCountryOrRegionCode["Ly"] = "LY";
+    /** Morocco */
+    SponsorsCountryOrRegionCode["Ma"] = "MA";
+    /** Monaco */
+    SponsorsCountryOrRegionCode["Mc"] = "MC";
+    /** Moldova */
+    SponsorsCountryOrRegionCode["Md"] = "MD";
+    /** Montenegro */
+    SponsorsCountryOrRegionCode["Me"] = "ME";
+    /** Saint Martin (French part) */
+    SponsorsCountryOrRegionCode["Mf"] = "MF";
+    /** Madagascar */
+    SponsorsCountryOrRegionCode["Mg"] = "MG";
+    /** Marshall Islands */
+    SponsorsCountryOrRegionCode["Mh"] = "MH";
+    /** Macedonia */
+    SponsorsCountryOrRegionCode["Mk"] = "MK";
+    /** Mali */
+    SponsorsCountryOrRegionCode["Ml"] = "ML";
+    /** Myanmar */
+    SponsorsCountryOrRegionCode["Mm"] = "MM";
+    /** Mongolia */
+    SponsorsCountryOrRegionCode["Mn"] = "MN";
+    /** Macau */
+    SponsorsCountryOrRegionCode["Mo"] = "MO";
+    /** Northern Mariana Islands */
+    SponsorsCountryOrRegionCode["Mp"] = "MP";
+    /** Martinique */
+    SponsorsCountryOrRegionCode["Mq"] = "MQ";
+    /** Mauritania */
+    SponsorsCountryOrRegionCode["Mr"] = "MR";
+    /** Montserrat */
+    SponsorsCountryOrRegionCode["Ms"] = "MS";
+    /** Malta */
+    SponsorsCountryOrRegionCode["Mt"] = "MT";
+    /** Mauritius */
+    SponsorsCountryOrRegionCode["Mu"] = "MU";
+    /** Maldives */
+    SponsorsCountryOrRegionCode["Mv"] = "MV";
+    /** Malawi */
+    SponsorsCountryOrRegionCode["Mw"] = "MW";
+    /** Mexico */
+    SponsorsCountryOrRegionCode["Mx"] = "MX";
+    /** Malaysia */
+    SponsorsCountryOrRegionCode["My"] = "MY";
+    /** Mozambique */
+    SponsorsCountryOrRegionCode["Mz"] = "MZ";
+    /** Namibia */
+    SponsorsCountryOrRegionCode["Na"] = "NA";
+    /** New Caledonia */
+    SponsorsCountryOrRegionCode["Nc"] = "NC";
+    /** Niger */
+    SponsorsCountryOrRegionCode["Ne"] = "NE";
+    /** Norfolk Island */
+    SponsorsCountryOrRegionCode["Nf"] = "NF";
+    /** Nigeria */
+    SponsorsCountryOrRegionCode["Ng"] = "NG";
+    /** Nicaragua */
+    SponsorsCountryOrRegionCode["Ni"] = "NI";
+    /** Netherlands */
+    SponsorsCountryOrRegionCode["Nl"] = "NL";
+    /** Norway */
+    SponsorsCountryOrRegionCode["No"] = "NO";
+    /** Nepal */
+    SponsorsCountryOrRegionCode["Np"] = "NP";
+    /** Nauru */
+    SponsorsCountryOrRegionCode["Nr"] = "NR";
+    /** Niue */
+    SponsorsCountryOrRegionCode["Nu"] = "NU";
+    /** New Zealand */
+    SponsorsCountryOrRegionCode["Nz"] = "NZ";
+    /** Oman */
+    SponsorsCountryOrRegionCode["Om"] = "OM";
+    /** Panama */
+    SponsorsCountryOrRegionCode["Pa"] = "PA";
+    /** Peru */
+    SponsorsCountryOrRegionCode["Pe"] = "PE";
+    /** French Polynesia */
+    SponsorsCountryOrRegionCode["Pf"] = "PF";
+    /** Papua New Guinea */
+    SponsorsCountryOrRegionCode["Pg"] = "PG";
+    /** Philippines */
+    SponsorsCountryOrRegionCode["Ph"] = "PH";
+    /** Pakistan */
+    SponsorsCountryOrRegionCode["Pk"] = "PK";
+    /** Poland */
+    SponsorsCountryOrRegionCode["Pl"] = "PL";
+    /** Saint Pierre and Miquelon */
+    SponsorsCountryOrRegionCode["Pm"] = "PM";
+    /** Pitcairn */
+    SponsorsCountryOrRegionCode["Pn"] = "PN";
+    /** Puerto Rico */
+    SponsorsCountryOrRegionCode["Pr"] = "PR";
+    /** Palestine */
+    SponsorsCountryOrRegionCode["Ps"] = "PS";
+    /** Portugal */
+    SponsorsCountryOrRegionCode["Pt"] = "PT";
+    /** Palau */
+    SponsorsCountryOrRegionCode["Pw"] = "PW";
+    /** Paraguay */
+    SponsorsCountryOrRegionCode["Py"] = "PY";
+    /** Qatar */
+    SponsorsCountryOrRegionCode["Qa"] = "QA";
+    /** Reunion */
+    SponsorsCountryOrRegionCode["Re"] = "RE";
+    /** Romania */
+    SponsorsCountryOrRegionCode["Ro"] = "RO";
+    /** Serbia */
+    SponsorsCountryOrRegionCode["Rs"] = "RS";
+    /** Russian Federation */
+    SponsorsCountryOrRegionCode["Ru"] = "RU";
+    /** Rwanda */
+    SponsorsCountryOrRegionCode["Rw"] = "RW";
+    /** Saudi Arabia */
+    SponsorsCountryOrRegionCode["Sa"] = "SA";
+    /** Solomon Islands */
+    SponsorsCountryOrRegionCode["Sb"] = "SB";
+    /** Seychelles */
+    SponsorsCountryOrRegionCode["Sc"] = "SC";
+    /** Sudan */
+    SponsorsCountryOrRegionCode["Sd"] = "SD";
+    /** Sweden */
+    SponsorsCountryOrRegionCode["Se"] = "SE";
+    /** Singapore */
+    SponsorsCountryOrRegionCode["Sg"] = "SG";
+    /** Saint Helena */
+    SponsorsCountryOrRegionCode["Sh"] = "SH";
+    /** Slovenia */
+    SponsorsCountryOrRegionCode["Si"] = "SI";
+    /** Svalbard and Jan Mayen Islands */
+    SponsorsCountryOrRegionCode["Sj"] = "SJ";
+    /** Slovakia */
+    SponsorsCountryOrRegionCode["Sk"] = "SK";
+    /** Sierra Leone */
+    SponsorsCountryOrRegionCode["Sl"] = "SL";
+    /** San Marino */
+    SponsorsCountryOrRegionCode["Sm"] = "SM";
+    /** Senegal */
+    SponsorsCountryOrRegionCode["Sn"] = "SN";
+    /** Somalia */
+    SponsorsCountryOrRegionCode["So"] = "SO";
+    /** Suriname */
+    SponsorsCountryOrRegionCode["Sr"] = "SR";
+    /** South Sudan */
+    SponsorsCountryOrRegionCode["Ss"] = "SS";
+    /** Sao Tome and Principe */
+    SponsorsCountryOrRegionCode["St"] = "ST";
+    /** El Salvador */
+    SponsorsCountryOrRegionCode["Sv"] = "SV";
+    /** Sint Maarten (Dutch part) */
+    SponsorsCountryOrRegionCode["Sx"] = "SX";
+    /** Swaziland */
+    SponsorsCountryOrRegionCode["Sz"] = "SZ";
+    /** Turks and Caicos Islands */
+    SponsorsCountryOrRegionCode["Tc"] = "TC";
+    /** Chad */
+    SponsorsCountryOrRegionCode["Td"] = "TD";
+    /** French Southern Lands */
+    SponsorsCountryOrRegionCode["Tf"] = "TF";
+    /** Togo */
+    SponsorsCountryOrRegionCode["Tg"] = "TG";
+    /** Thailand */
+    SponsorsCountryOrRegionCode["Th"] = "TH";
+    /** Tajikistan */
+    SponsorsCountryOrRegionCode["Tj"] = "TJ";
+    /** Tokelau */
+    SponsorsCountryOrRegionCode["Tk"] = "TK";
+    /** Timor-Leste */
+    SponsorsCountryOrRegionCode["Tl"] = "TL";
+    /** Turkmenistan */
+    SponsorsCountryOrRegionCode["Tm"] = "TM";
+    /** Tunisia */
+    SponsorsCountryOrRegionCode["Tn"] = "TN";
+    /** Tonga */
+    SponsorsCountryOrRegionCode["To"] = "TO";
+    /** Turkey */
+    SponsorsCountryOrRegionCode["Tr"] = "TR";
+    /** Trinidad and Tobago */
+    SponsorsCountryOrRegionCode["Tt"] = "TT";
+    /** Tuvalu */
+    SponsorsCountryOrRegionCode["Tv"] = "TV";
+    /** Taiwan */
+    SponsorsCountryOrRegionCode["Tw"] = "TW";
+    /** Tanzania */
+    SponsorsCountryOrRegionCode["Tz"] = "TZ";
+    /** Ukraine */
+    SponsorsCountryOrRegionCode["Ua"] = "UA";
+    /** Uganda */
+    SponsorsCountryOrRegionCode["Ug"] = "UG";
+    /** United States Minor Outlying Islands */
+    SponsorsCountryOrRegionCode["Um"] = "UM";
+    /** United States of America */
+    SponsorsCountryOrRegionCode["Us"] = "US";
+    /** Uruguay */
+    SponsorsCountryOrRegionCode["Uy"] = "UY";
+    /** Uzbekistan */
+    SponsorsCountryOrRegionCode["Uz"] = "UZ";
+    /** Vatican City */
+    SponsorsCountryOrRegionCode["Va"] = "VA";
+    /** Saint Vincent and the Grenadines */
+    SponsorsCountryOrRegionCode["Vc"] = "VC";
+    /** Venezuela */
+    SponsorsCountryOrRegionCode["Ve"] = "VE";
+    /** Virgin Islands, British */
+    SponsorsCountryOrRegionCode["Vg"] = "VG";
+    /** Virgin Islands, U.S. */
+    SponsorsCountryOrRegionCode["Vi"] = "VI";
+    /** Vietnam */
+    SponsorsCountryOrRegionCode["Vn"] = "VN";
+    /** Vanuatu */
+    SponsorsCountryOrRegionCode["Vu"] = "VU";
+    /** Wallis and Futuna Islands */
+    SponsorsCountryOrRegionCode["Wf"] = "WF";
+    /** Samoa */
+    SponsorsCountryOrRegionCode["Ws"] = "WS";
+    /** Yemen */
+    SponsorsCountryOrRegionCode["Ye"] = "YE";
+    /** Mayotte */
+    SponsorsCountryOrRegionCode["Yt"] = "YT";
+    /** South Africa */
+    SponsorsCountryOrRegionCode["Za"] = "ZA";
+    /** Zambia */
+    SponsorsCountryOrRegionCode["Zm"] = "ZM";
+    /** Zimbabwe */
+    SponsorsCountryOrRegionCode["Zw"] = "ZW";
+})(SponsorsCountryOrRegionCode = exports.SponsorsCountryOrRegionCode || (exports.SponsorsCountryOrRegionCode = {}));
 /** The different kinds of goals a GitHub Sponsors member can have. */
 var SponsorsGoalKind;
 (function (SponsorsGoalKind) {
