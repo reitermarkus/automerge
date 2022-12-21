@@ -1315,7 +1315,10 @@ var PackageType;
      * @deprecated DOCKER will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2021-06-21 UTC.
      */
     PackageType["Docker"] = "DOCKER";
-    /** A maven package. */
+    /**
+     * A maven package.
+     * @deprecated MAVEN will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2023-02-10 UTC.
+     */
     PackageType["Maven"] = "MAVEN";
     /**
      * An npm package.
@@ -1329,7 +1332,10 @@ var PackageType;
     PackageType["Nuget"] = "NUGET";
     /** A python package. */
     PackageType["Pypi"] = "PYPI";
-    /** A rubygems package. */
+    /**
+     * A rubygems package.
+     * @deprecated RUBYGEMS will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2022-12-28 UTC.
+     */
     PackageType["Rubygems"] = "RUBYGEMS";
 })(PackageType = exports.PackageType || (exports.PackageType = {}));
 /** Properties by which package version connections can be ordered. */
