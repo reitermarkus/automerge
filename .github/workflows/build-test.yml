@@ -14,11 +14,11 @@ jobs:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
       - run: npm ci
       - run: npm run all
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
           name: dist
           path: dist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
           name: action.yml
           path: action.yml
@@ -26,12 +26,12 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
         with:
           name: dist
           path: dist
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
         with:
           name: action.yml
           path: .
@@ -43,12 +43,12 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
         with:
           name: dist
           path: dist
-      - uses: peter-evans/create-pull-request@v4
+      - uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04 # v4
         with:
           commit-message: Update distribution.
           title: Update distribution.
