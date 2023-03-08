@@ -87,3 +87,5 @@ jobs:
 ## Known Issues
 
 If the action is triggered via a label on a pull request that is already ready to merge, the GitHub auto-merge feature cannot be enabled on that pull request anymore. A workaround is to add the workflow containing this actions as a required status check. This way the pull request will become unmergable while the action is running, allowing auto-merge to be enabled.
+
+4216
