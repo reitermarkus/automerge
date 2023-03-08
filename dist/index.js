@@ -95,12 +95,16 @@ class AutomergeAction {
     }
     disableAutoMerge(pullRequest) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.input.dryRun) {
+                core.info(`Would try disabling auto-merge for pull request ${pullRequest.number}.`);
+                return;
+            }
             try {
                 core.info(`Disabling auto-merge for pull request ${pullRequest.number}.`);
                 // We need to get the source code of the query since the `@octokit/graphql`
                 // API doesn't (yet) support passing a `DocumentNode` object.
                 const query = graphql_1.DisableAutoMerge.loc.source.body;
-                return yield this.octokit.graphql({
+                yield this.octokit.graphql({
                     query,
                     pullRequestId: pullRequest.node_id,
                 });
