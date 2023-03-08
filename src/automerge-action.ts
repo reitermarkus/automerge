@@ -74,7 +74,12 @@ export class AutomergeAction {
     }
   }
 
-  async disableAutoMerge(pullRequest: PullRequest): Promise<DisableAutoMergeMutation> {
+  async disableAutoMerge(pullRequest: PullRequest): Promise<void> {
+    if (this.input.dryRun) {
+      core.info(`Would try disabling auto-merge for pull request ${pullRequest.number}.`)
+      return
+    }
+
     try {
       core.info(`Disabling auto-merge for pull request ${pullRequest.number}.`)
 
@@ -82,7 +87,7 @@ export class AutomergeAction {
       // API doesn't (yet) support passing a `DocumentNode` object.
       const query = DisableAutoMerge.loc!.source!.body
 
-      return await this.octokit.graphql({
+      await this.octokit.graphql({
         query,
         pullRequestId: pullRequest.node_id,
       })
