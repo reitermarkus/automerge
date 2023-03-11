@@ -260,9 +260,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IssueClosedStateReason = exports.IpAllowListForInstalledAppsEnabledSettingValue = exports.IpAllowListEntryOrderField = exports.IpAllowListEnabledSettingValue = exports.IdentityProviderConfigurationState = exports.GitSignatureState = exports.GistPrivacy = exports.GistOrderField = exports.FundingPlatform = exports.FileViewedState = exports.EnterpriseUserDeployment = exports.EnterpriseUserAccountMembershipRole = exports.EnterpriseServerUserAccountsUploadSyncState = exports.EnterpriseServerUserAccountsUploadOrderField = exports.EnterpriseServerUserAccountOrderField = exports.EnterpriseServerUserAccountEmailOrderField = exports.EnterpriseServerInstallationOrderField = exports.EnterpriseMembersCanMakePurchasesSettingValue = exports.EnterpriseMembersCanCreateRepositoriesSettingValue = exports.EnterpriseMemberOrderField = exports.EnterpriseEnabledSettingValue = exports.EnterpriseEnabledDisabledSettingValue = exports.EnterpriseDefaultRepositoryPermissionSettingValue = exports.EnterpriseAllowPrivateRepositoryForkingPolicyValue = exports.EnterpriseAdministratorRole = exports.EnterpriseAdministratorInvitationOrderField = exports.DismissReason = exports.DiscussionPollOptionOrderField = exports.DiscussionOrderField = exports.DiffSide = exports.DeploymentStatusState = exports.DeploymentState = exports.DeploymentReviewState = exports.DeploymentProtectionRuleType = exports.DeploymentOrderField = exports.DependencyGraphEcosystem = exports.DefaultRepositoryPermissionField = exports.ContributionLevel = exports.ComparisonStatus = exports.CommitContributionOrderField = exports.CommentCannotUpdateReason = exports.CommentAuthorAssociation = exports.CollaboratorAffiliation = exports.CheckStatusState = exports.CheckRunType = exports.CheckRunState = exports.CheckConclusionState = exports.CheckAnnotationLevel = exports.AuditLogOrderField = exports.ActorType = void 0;
-exports.ProjectNextOrderField = exports.ProjectNextFieldType = exports.ProjectItemType = exports.ProjectColumnPurpose = exports.ProjectCardState = exports.ProjectCardArchivedState = exports.PinnedDiscussionPattern = exports.PinnedDiscussionGradient = exports.PinnableItemType = exports.PatchStatus = exports.PackageVersionOrderField = exports.PackageType = exports.PackageOrderField = exports.PackageFileOrderField = exports.OrganizationOrderField = exports.OrganizationMembersCanCreateRepositoriesSettingValue = exports.OrganizationMemberRole = exports.OrganizationInvitationType = exports.OrganizationInvitationRole = exports.OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility = exports.OrgUpdateMemberAuditEntryPermission = exports.OrgUpdateDefaultRepositoryPermissionAuditEntryPermission = exports.OrgRemoveOutsideCollaboratorAuditEntryReason = exports.OrgRemoveOutsideCollaboratorAuditEntryMembershipType = exports.OrgRemoveMemberAuditEntryReason = exports.OrgRemoveMemberAuditEntryMembershipType = exports.OrgRemoveBillingManagerAuditEntryReason = exports.OrgEnterpriseOwnerOrderField = exports.OrgCreateAuditEntryBillingPlan = exports.OrgAddMemberAuditEntryPermission = exports.OrderDirection = exports.OperationType = exports.OauthApplicationCreateAuditEntryState = exports.OidcProviderType = exports.NotificationRestrictionSettingValue = exports.MilestoneState = exports.MilestoneOrderField = exports.MigrationState = exports.MigrationSourceType = exports.MergeableState = exports.MergeCommitTitle = exports.MergeCommitMessage = exports.LockReason = exports.LanguageOrderField = exports.LabelOrderField = exports.IssueTimelineItemsItemType = exports.IssueStateReason = exports.IssueState = exports.IssueOrderField = exports.IssueCommentOrderField = void 0;
-exports.RoleInOrganization = exports.RequestableCheckStatusState = exports.RepositoryVulnerabilityAlertState = exports.RepositoryVulnerabilityAlertDependencyScope = exports.RepositoryVisibility = exports.RepositoryPrivacy = exports.RepositoryPermission = exports.RepositoryOrderField = exports.RepositoryMigrationOrderField = exports.RepositoryMigrationOrderDirection = exports.RepositoryLockReason = exports.RepositoryInvitationOrderField = exports.RepositoryInteractionLimitOrigin = exports.RepositoryInteractionLimitExpiry = exports.RepositoryInteractionLimit = exports.RepositoryContributionType = exports.RepositoryAffiliation = exports.ReportedContentClassifiers = exports.RepoRemoveMemberAuditEntryVisibility = exports.RepoDestroyAuditEntryVisibility = exports.RepoCreateAuditEntryVisibility = exports.RepoChangeMergeSettingAuditEntryMergeType = exports.RepoArchivedAuditEntryVisibility = exports.RepoAddMemberAuditEntryVisibility = exports.RepoAccessAuditEntryVisibility = exports.ReleaseOrderField = exports.RefOrderField = exports.ReactionOrderField = exports.ReactionContent = exports.PullRequestUpdateState = exports.PullRequestTimelineItemsItemType = exports.PullRequestState = exports.PullRequestReviewState = exports.PullRequestReviewEvent = exports.PullRequestReviewDecision = exports.PullRequestReviewCommentState = exports.PullRequestOrderField = exports.PullRequestMergeMethod = exports.ProjectViewLayout = exports.ProjectV2ViewOrderField = exports.ProjectV2ViewLayout = exports.ProjectV2OrderField = exports.ProjectV2ItemType = exports.ProjectV2ItemOrderField = exports.ProjectV2ItemFieldValueOrderField = exports.ProjectV2FieldType = exports.ProjectV2FieldOrderField = exports.ProjectTemplate = exports.ProjectState = exports.ProjectOrderField = void 0;
-exports.EnableAutoMerge = exports.DisableAutoMerge = exports.WorkflowRunOrderField = exports.VerifiableDomainOrderField = exports.UserStatusOrderField = exports.UserBlockDuration = exports.TrackedIssueStates = exports.TopicSuggestionDeclineReason = exports.TeamRole = exports.TeamRepositoryOrderField = exports.TeamPrivacy = exports.TeamOrderField = exports.TeamMembershipType = exports.TeamMemberRole = exports.TeamMemberOrderField = exports.TeamDiscussionOrderField = exports.TeamDiscussionCommentOrderField = exports.SubscriptionState = exports.StatusState = exports.StarOrderField = exports.SquashMergeCommitTitle = exports.SquashMergeCommitMessage = exports.SponsorshipPrivacy = exports.SponsorshipOrderField = exports.SponsorshipNewsletterOrderField = exports.SponsorsTierOrderField = exports.SponsorsGoalKind = exports.SponsorsActivityPeriod = exports.SponsorsActivityOrderField = exports.SponsorsActivityAction = exports.SponsorableOrderField = exports.SponsorOrderField = exports.SecurityVulnerabilityOrderField = exports.SecurityAdvisorySeverity = exports.SecurityAdvisoryOrderField = exports.SecurityAdvisoryIdentifierType = exports.SecurityAdvisoryEcosystem = exports.SecurityAdvisoryClassification = exports.SearchType = exports.SavedReplyOrderField = exports.SamlSignatureAlgorithm = exports.SamlDigestAlgorithm = void 0;
+exports.ProjectColumnPurpose = exports.ProjectCardState = exports.ProjectCardArchivedState = exports.PinnedDiscussionPattern = exports.PinnedDiscussionGradient = exports.PinnableItemType = exports.PatchStatus = exports.PackageVersionOrderField = exports.PackageType = exports.PackageOrderField = exports.PackageFileOrderField = exports.OrganizationOrderField = exports.OrganizationMigrationState = exports.OrganizationMembersCanCreateRepositoriesSettingValue = exports.OrganizationMemberRole = exports.OrganizationInvitationType = exports.OrganizationInvitationSource = exports.OrganizationInvitationRole = exports.OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility = exports.OrgUpdateMemberAuditEntryPermission = exports.OrgUpdateDefaultRepositoryPermissionAuditEntryPermission = exports.OrgRemoveOutsideCollaboratorAuditEntryReason = exports.OrgRemoveOutsideCollaboratorAuditEntryMembershipType = exports.OrgRemoveMemberAuditEntryReason = exports.OrgRemoveMemberAuditEntryMembershipType = exports.OrgRemoveBillingManagerAuditEntryReason = exports.OrgEnterpriseOwnerOrderField = exports.OrgCreateAuditEntryBillingPlan = exports.OrgAddMemberAuditEntryPermission = exports.OrderDirection = exports.OperationType = exports.OauthApplicationCreateAuditEntryState = exports.OidcProviderType = exports.NotificationRestrictionSettingValue = exports.MilestoneState = exports.MilestoneOrderField = exports.MigrationState = exports.MigrationSourceType = exports.MergeableState = exports.MergeCommitTitle = exports.MergeCommitMessage = exports.MannequinOrderField = exports.LockReason = exports.LanguageOrderField = exports.LabelOrderField = exports.IssueTimelineItemsItemType = exports.IssueStateReason = exports.IssueState = exports.IssueOrderField = exports.IssueCommentOrderField = void 0;
+exports.RepositoryVulnerabilityAlertDependencyScope = exports.RepositoryVisibility = exports.RepositoryPrivacy = exports.RepositoryPermission = exports.RepositoryOrderField = exports.RepositoryMigrationOrderField = exports.RepositoryMigrationOrderDirection = exports.RepositoryLockReason = exports.RepositoryInvitationOrderField = exports.RepositoryInteractionLimitOrigin = exports.RepositoryInteractionLimitExpiry = exports.RepositoryInteractionLimit = exports.RepositoryContributionType = exports.RepositoryAffiliation = exports.ReportedContentClassifiers = exports.RepoRemoveMemberAuditEntryVisibility = exports.RepoDestroyAuditEntryVisibility = exports.RepoCreateAuditEntryVisibility = exports.RepoChangeMergeSettingAuditEntryMergeType = exports.RepoArchivedAuditEntryVisibility = exports.RepoAddMemberAuditEntryVisibility = exports.RepoAccessAuditEntryVisibility = exports.ReleaseOrderField = exports.RefOrderField = exports.ReactionOrderField = exports.ReactionContent = exports.PullRequestUpdateState = exports.PullRequestTimelineItemsItemType = exports.PullRequestState = exports.PullRequestReviewState = exports.PullRequestReviewEvent = exports.PullRequestReviewDecision = exports.PullRequestReviewCommentState = exports.PullRequestOrderField = exports.PullRequestMergeMethod = exports.ProjectV2WorkflowsOrderField = exports.ProjectV2ViewOrderField = exports.ProjectV2ViewLayout = exports.ProjectV2State = exports.ProjectV2SingleSelectFieldOptionColor = exports.ProjectV2OrderField = exports.ProjectV2ItemType = exports.ProjectV2ItemOrderField = exports.ProjectV2ItemFieldValueOrderField = exports.ProjectV2FieldType = exports.ProjectV2FieldOrderField = exports.ProjectV2CustomFieldType = exports.ProjectTemplate = exports.ProjectState = exports.ProjectOrderField = void 0;
+exports.EnableAutoMerge = exports.DisableAutoMerge = exports.WorkflowRunOrderField = exports.VerifiableDomainOrderField = exports.UserStatusOrderField = exports.UserBlockDuration = exports.TrackedIssueStates = exports.TopicSuggestionDeclineReason = exports.TeamRole = exports.TeamRepositoryOrderField = exports.TeamPrivacy = exports.TeamOrderField = exports.TeamMembershipType = exports.TeamMemberRole = exports.TeamMemberOrderField = exports.TeamDiscussionOrderField = exports.TeamDiscussionCommentOrderField = exports.SubscriptionState = exports.StatusState = exports.StarOrderField = exports.SquashMergeCommitTitle = exports.SquashMergeCommitMessage = exports.SponsorshipPrivacy = exports.SponsorshipOrderField = exports.SponsorshipNewsletterOrderField = exports.SponsorsTierOrderField = exports.SponsorsListingFeaturedItemFeatureableType = exports.SponsorsGoalKind = exports.SponsorsCountryOrRegionCode = exports.SponsorsActivityPeriod = exports.SponsorsActivityOrderField = exports.SponsorsActivityAction = exports.SponsorableOrderField = exports.SponsorOrderField = exports.SecurityVulnerabilityOrderField = exports.SecurityAdvisorySeverity = exports.SecurityAdvisoryOrderField = exports.SecurityAdvisoryIdentifierType = exports.SecurityAdvisoryEcosystem = exports.SecurityAdvisoryClassification = exports.SearchType = exports.SavedReplyOrderField = exports.SamlSignatureAlgorithm = exports.SamlDigestAlgorithm = exports.RoleInOrganization = exports.RequestableCheckStatusState = exports.RepositoryVulnerabilityAlertState = void 0;
 const graphql_tag_1 = __importDefault(__nccwpck_require__(8435));
 /** The actor's type. */
 var ActorType;
@@ -1000,6 +1000,14 @@ var LockReason;
     /** The issue or pull request was locked because the conversation was too heated. */
     LockReason["TooHeated"] = "TOO_HEATED";
 })(LockReason = exports.LockReason || (exports.LockReason = {}));
+/** Properties by which mannequins can be ordered. */
+var MannequinOrderField;
+(function (MannequinOrderField) {
+    /** Order mannequins why when they were created. */
+    MannequinOrderField["CreatedAt"] = "CREATED_AT";
+    /** Order mannequins alphabetically by their source login. */
+    MannequinOrderField["Login"] = "LOGIN";
+})(MannequinOrderField = exports.MannequinOrderField || (exports.MannequinOrderField = {}));
 /** The possible default commit messages for merges. */
 var MergeCommitMessage;
 (function (MergeCommitMessage) {
@@ -1028,7 +1036,7 @@ var MergeableState;
     /** The mergeability of the pull request is still being calculated. */
     MergeableState["Unknown"] = "UNKNOWN";
 })(MergeableState = exports.MergeableState || (exports.MergeableState = {}));
-/** Represents the different Octoshift migration sources. */
+/** Represents the different GitHub Enterprise Importer (GEI) migration sources. */
 var MigrationSourceType;
 (function (MigrationSourceType) {
     /** An Azure DevOps migration source. */
@@ -1038,22 +1046,22 @@ var MigrationSourceType;
     /** A GitHub Migration API source. */
     MigrationSourceType["GithubArchive"] = "GITHUB_ARCHIVE";
 })(MigrationSourceType = exports.MigrationSourceType || (exports.MigrationSourceType = {}));
-/** The Octoshift migration state. */
+/** The GitHub Enterprise Importer (GEI) migration state. */
 var MigrationState;
 (function (MigrationState) {
-    /** The Octoshift migration has failed. */
+    /** The migration has failed. */
     MigrationState["Failed"] = "FAILED";
-    /** The Octoshift migration has invalid credentials. */
+    /** The migration has invalid credentials. */
     MigrationState["FailedValidation"] = "FAILED_VALIDATION";
-    /** The Octoshift migration is in progress. */
+    /** The migration is in progress. */
     MigrationState["InProgress"] = "IN_PROGRESS";
-    /** The Octoshift migration has not started. */
+    /** The migration has not started. */
     MigrationState["NotStarted"] = "NOT_STARTED";
-    /** The Octoshift migration needs to have its credentials validated. */
+    /** The migration needs to have its credentials validated. */
     MigrationState["PendingValidation"] = "PENDING_VALIDATION";
-    /** The Octoshift migration has been queued. */
+    /** The migration has been queued. */
     MigrationState["Queued"] = "QUEUED";
-    /** The Octoshift migration has succeeded. */
+    /** The migration has succeeded. */
     MigrationState["Succeeded"] = "SUCCEEDED";
 })(MigrationState = exports.MigrationState || (exports.MigrationState = {}));
 /** Properties by which milestone connections can be ordered. */
@@ -1264,6 +1272,16 @@ var OrganizationInvitationRole;
     /** The user's previous role will be reinstated. */
     OrganizationInvitationRole["Reinstate"] = "REINSTATE";
 })(OrganizationInvitationRole = exports.OrganizationInvitationRole || (exports.OrganizationInvitationRole = {}));
+/** The possible organization invitation sources. */
+var OrganizationInvitationSource;
+(function (OrganizationInvitationSource) {
+    /** The invitation was created from the web interface or from API */
+    OrganizationInvitationSource["Member"] = "MEMBER";
+    /** The invitation was created from SCIM */
+    OrganizationInvitationSource["Scim"] = "SCIM";
+    /** The invitation was sent before this feature was added */
+    OrganizationInvitationSource["Unknown"] = "UNKNOWN";
+})(OrganizationInvitationSource = exports.OrganizationInvitationSource || (exports.OrganizationInvitationSource = {}));
 /** The possible organization invitation types. */
 var OrganizationInvitationType;
 (function (OrganizationInvitationType) {
@@ -1292,6 +1310,26 @@ var OrganizationMembersCanCreateRepositoriesSettingValue;
     /** Members will be able to create only private repositories. */
     OrganizationMembersCanCreateRepositoriesSettingValue["Private"] = "PRIVATE";
 })(OrganizationMembersCanCreateRepositoriesSettingValue = exports.OrganizationMembersCanCreateRepositoriesSettingValue || (exports.OrganizationMembersCanCreateRepositoriesSettingValue = {}));
+/** The Octoshift Organization migration state. */
+var OrganizationMigrationState;
+(function (OrganizationMigrationState) {
+    /** The Octoshift migration has failed. */
+    OrganizationMigrationState["Failed"] = "FAILED";
+    /** The Octoshift migration is in progress. */
+    OrganizationMigrationState["InProgress"] = "IN_PROGRESS";
+    /** The Octoshift migration has not started. */
+    OrganizationMigrationState["NotStarted"] = "NOT_STARTED";
+    /** The Octoshift migration is performing post repository migrations. */
+    OrganizationMigrationState["PostRepoMigration"] = "POST_REPO_MIGRATION";
+    /** The Octoshift migration is performing pre repository migrations. */
+    OrganizationMigrationState["PreRepoMigration"] = "PRE_REPO_MIGRATION";
+    /** The Octoshift migration has been queued. */
+    OrganizationMigrationState["Queued"] = "QUEUED";
+    /** The Octoshift org migration is performing repository migrations. */
+    OrganizationMigrationState["RepoMigration"] = "REPO_MIGRATION";
+    /** The Octoshift migration has succeeded. */
+    OrganizationMigrationState["Succeeded"] = "SUCCEEDED";
+})(OrganizationMigrationState = exports.OrganizationMigrationState || (exports.OrganizationMigrationState = {}));
 /** Properties by which organization connections can be ordered. */
 var OrganizationOrderField;
 (function (OrganizationOrderField) {
@@ -1322,15 +1360,27 @@ var PackageType;
      * @deprecated DOCKER will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2021-06-21 UTC.
      */
     PackageType["Docker"] = "DOCKER";
-    /** A maven package. */
+    /**
+     * A maven package.
+     * @deprecated MAVEN will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2023-02-10 UTC.
+     */
     PackageType["Maven"] = "MAVEN";
-    /** An npm package. */
+    /**
+     * An npm package.
+     * @deprecated NPM will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2022-11-21 UTC.
+     */
     PackageType["Npm"] = "NPM";
-    /** A nuget package. */
+    /**
+     * A nuget package.
+     * @deprecated NUGET will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2022-11-21 UTC.
+     */
     PackageType["Nuget"] = "NUGET";
     /** A python package. */
     PackageType["Pypi"] = "PYPI";
-    /** A rubygems package. */
+    /**
+     * A rubygems package.
+     * @deprecated RUBYGEMS will be removed from this enum as this type will be migrated to only be used by the Packages REST API. Removal on 2022-12-28 UTC.
+     */
     PackageType["Rubygems"] = "RUBYGEMS";
 })(PackageType = exports.PackageType || (exports.PackageType = {}));
 /** Properties by which package version connections can be ordered. */
@@ -1433,116 +1483,6 @@ var ProjectColumnPurpose;
     /** The column contains cards still to be worked on */
     ProjectColumnPurpose["Todo"] = "TODO";
 })(ProjectColumnPurpose = exports.ProjectColumnPurpose || (exports.ProjectColumnPurpose = {}));
-/** The type of a project item. */
-var ProjectItemType;
-(function (ProjectItemType) {
-    /** Draft Issue */
-    ProjectItemType["DraftIssue"] = "DRAFT_ISSUE";
-    /** Issue */
-    ProjectItemType["Issue"] = "ISSUE";
-    /** Pull Request */
-    ProjectItemType["PullRequest"] = "PULL_REQUEST";
-    /** Redacted Item */
-    ProjectItemType["Redacted"] = "REDACTED";
-})(ProjectItemType = exports.ProjectItemType || (exports.ProjectItemType = {}));
-/** The type of a project next field. */
-var ProjectNextFieldType;
-(function (ProjectNextFieldType) {
-    /**
-     * Assignees
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Assignees"] = "ASSIGNEES";
-    /**
-     * Date
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Date"] = "DATE";
-    /**
-     * Iteration
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Iteration"] = "ITERATION";
-    /**
-     * Labels
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Labels"] = "LABELS";
-    /**
-     * Linked Pull Requests
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["LinkedPullRequests"] = "LINKED_PULL_REQUESTS";
-    /**
-     * Milestone
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Milestone"] = "MILESTONE";
-    /**
-     * Number
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Number"] = "NUMBER";
-    /**
-     * Repository
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Repository"] = "REPOSITORY";
-    /**
-     * Reviewers
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Reviewers"] = "REVIEWERS";
-    /**
-     * Single Select
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["SingleSelect"] = "SINGLE_SELECT";
-    /**
-     * Text
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Text"] = "TEXT";
-    /**
-     * Title
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Title"] = "TITLE";
-    /**
-     * Tracked by
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["TrackedBy"] = "TRACKED_BY";
-    /**
-     * Tracks
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextFieldType["Tracks"] = "TRACKS";
-})(ProjectNextFieldType = exports.ProjectNextFieldType || (exports.ProjectNextFieldType = {}));
-/** Properties by which the return project can be ordered. */
-var ProjectNextOrderField;
-(function (ProjectNextOrderField) {
-    /**
-     * The project's date and time of creation
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextOrderField["CreatedAt"] = "CREATED_AT";
-    /**
-     * The project's number
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextOrderField["Number"] = "NUMBER";
-    /**
-     * The project's title
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextOrderField["Title"] = "TITLE";
-    /**
-     * The project's date and time of update
-     * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
-     */
-    ProjectNextOrderField["UpdatedAt"] = "UPDATED_AT";
-})(ProjectNextOrderField = exports.ProjectNextOrderField || (exports.ProjectNextOrderField = {}));
 /** Properties by which project connections can be ordered. */
 var ProjectOrderField;
 (function (ProjectOrderField) {
@@ -1573,6 +1513,18 @@ var ProjectTemplate;
     /** Create a board to triage and prioritize bugs with To do, priority, and Done columns. */
     ProjectTemplate["BugTriage"] = "BUG_TRIAGE";
 })(ProjectTemplate = exports.ProjectTemplate || (exports.ProjectTemplate = {}));
+/** The type of a project field. */
+var ProjectV2CustomFieldType;
+(function (ProjectV2CustomFieldType) {
+    /** Date */
+    ProjectV2CustomFieldType["Date"] = "DATE";
+    /** Number */
+    ProjectV2CustomFieldType["Number"] = "NUMBER";
+    /** Single Select */
+    ProjectV2CustomFieldType["SingleSelect"] = "SINGLE_SELECT";
+    /** Text */
+    ProjectV2CustomFieldType["Text"] = "TEXT";
+})(ProjectV2CustomFieldType = exports.ProjectV2CustomFieldType || (exports.ProjectV2CustomFieldType = {}));
 /** Properties by which project v2 field connections can be ordered. */
 var ProjectV2FieldOrderField;
 (function (ProjectV2FieldOrderField) {
@@ -1651,11 +1603,41 @@ var ProjectV2OrderField;
     /** The project's date and time of update */
     ProjectV2OrderField["UpdatedAt"] = "UPDATED_AT";
 })(ProjectV2OrderField = exports.ProjectV2OrderField || (exports.ProjectV2OrderField = {}));
+/** The display color of a single-select field option. */
+var ProjectV2SingleSelectFieldOptionColor;
+(function (ProjectV2SingleSelectFieldOptionColor) {
+    /** BLUE */
+    ProjectV2SingleSelectFieldOptionColor["Blue"] = "BLUE";
+    /** GRAY */
+    ProjectV2SingleSelectFieldOptionColor["Gray"] = "GRAY";
+    /** GREEN */
+    ProjectV2SingleSelectFieldOptionColor["Green"] = "GREEN";
+    /** ORANGE */
+    ProjectV2SingleSelectFieldOptionColor["Orange"] = "ORANGE";
+    /** PINK */
+    ProjectV2SingleSelectFieldOptionColor["Pink"] = "PINK";
+    /** PURPLE */
+    ProjectV2SingleSelectFieldOptionColor["Purple"] = "PURPLE";
+    /** RED */
+    ProjectV2SingleSelectFieldOptionColor["Red"] = "RED";
+    /** YELLOW */
+    ProjectV2SingleSelectFieldOptionColor["Yellow"] = "YELLOW";
+})(ProjectV2SingleSelectFieldOptionColor = exports.ProjectV2SingleSelectFieldOptionColor || (exports.ProjectV2SingleSelectFieldOptionColor = {}));
+/** The possible states of a project v2. */
+var ProjectV2State;
+(function (ProjectV2State) {
+    /** A project v2 that has been closed */
+    ProjectV2State["Closed"] = "CLOSED";
+    /** A project v2 that is still open */
+    ProjectV2State["Open"] = "OPEN";
+})(ProjectV2State = exports.ProjectV2State || (exports.ProjectV2State = {}));
 /** The layout of a project v2 view. */
 var ProjectV2ViewLayout;
 (function (ProjectV2ViewLayout) {
     /** Board layout */
     ProjectV2ViewLayout["BoardLayout"] = "BOARD_LAYOUT";
+    /** Roadmap layout */
+    ProjectV2ViewLayout["RoadmapLayout"] = "ROADMAP_LAYOUT";
     /** Table layout */
     ProjectV2ViewLayout["TableLayout"] = "TABLE_LAYOUT";
 })(ProjectV2ViewLayout = exports.ProjectV2ViewLayout || (exports.ProjectV2ViewLayout = {}));
@@ -1669,14 +1651,18 @@ var ProjectV2ViewOrderField;
     /** Order project v2 views by position */
     ProjectV2ViewOrderField["Position"] = "POSITION";
 })(ProjectV2ViewOrderField = exports.ProjectV2ViewOrderField || (exports.ProjectV2ViewOrderField = {}));
-/** The layout of a project view. */
-var ProjectViewLayout;
-(function (ProjectViewLayout) {
-    /** Board layout */
-    ProjectViewLayout["BoardLayout"] = "BOARD_LAYOUT";
-    /** Table layout */
-    ProjectViewLayout["TableLayout"] = "TABLE_LAYOUT";
-})(ProjectViewLayout = exports.ProjectViewLayout || (exports.ProjectViewLayout = {}));
+/** Properties by which project workflows can be ordered. */
+var ProjectV2WorkflowsOrderField;
+(function (ProjectV2WorkflowsOrderField) {
+    /** The workflows' date and time of creation */
+    ProjectV2WorkflowsOrderField["CreatedAt"] = "CREATED_AT";
+    /** The workflows' name */
+    ProjectV2WorkflowsOrderField["Name"] = "NAME";
+    /** The workflows' number */
+    ProjectV2WorkflowsOrderField["Number"] = "NUMBER";
+    /** The workflows' date and time of update */
+    ProjectV2WorkflowsOrderField["UpdatedAt"] = "UPDATED_AT";
+})(ProjectV2WorkflowsOrderField = exports.ProjectV2WorkflowsOrderField || (exports.ProjectV2WorkflowsOrderField = {}));
 /** Represents available types of methods to use when merging a pull request. */
 var PullRequestMergeMethod;
 (function (PullRequestMergeMethod) {
@@ -2082,6 +2068,8 @@ var RepositoryLockReason;
     RepositoryLockReason["Moving"] = "MOVING";
     /** The repository is locked due to a rename. */
     RepositoryLockReason["Rename"] = "RENAME";
+    /** The repository is locked due to a trade controls related reason. */
+    RepositoryLockReason["TradeRestriction"] = "TRADE_RESTRICTION";
 })(RepositoryLockReason = exports.RepositoryLockReason || (exports.RepositoryLockReason = {}));
 /** Possible directions in which to order a list of repository migrations when provided an `orderBy` argument. */
 var RepositoryMigrationOrderDirection;
@@ -2343,6 +2331,502 @@ var SponsorsActivityPeriod;
     /** The previous seven days. */
     SponsorsActivityPeriod["Week"] = "WEEK";
 })(SponsorsActivityPeriod = exports.SponsorsActivityPeriod || (exports.SponsorsActivityPeriod = {}));
+/** Represents countries or regions for billing and residence for a GitHub Sponsors profile. */
+var SponsorsCountryOrRegionCode;
+(function (SponsorsCountryOrRegionCode) {
+    /** Andorra */
+    SponsorsCountryOrRegionCode["Ad"] = "AD";
+    /** United Arab Emirates */
+    SponsorsCountryOrRegionCode["Ae"] = "AE";
+    /** Afghanistan */
+    SponsorsCountryOrRegionCode["Af"] = "AF";
+    /** Antigua and Barbuda */
+    SponsorsCountryOrRegionCode["Ag"] = "AG";
+    /** Anguilla */
+    SponsorsCountryOrRegionCode["Ai"] = "AI";
+    /** Albania */
+    SponsorsCountryOrRegionCode["Al"] = "AL";
+    /** Armenia */
+    SponsorsCountryOrRegionCode["Am"] = "AM";
+    /** Angola */
+    SponsorsCountryOrRegionCode["Ao"] = "AO";
+    /** Antarctica */
+    SponsorsCountryOrRegionCode["Aq"] = "AQ";
+    /** Argentina */
+    SponsorsCountryOrRegionCode["Ar"] = "AR";
+    /** American Samoa */
+    SponsorsCountryOrRegionCode["As"] = "AS";
+    /** Austria */
+    SponsorsCountryOrRegionCode["At"] = "AT";
+    /** Australia */
+    SponsorsCountryOrRegionCode["Au"] = "AU";
+    /** Aruba */
+    SponsorsCountryOrRegionCode["Aw"] = "AW";
+    /** Åland */
+    SponsorsCountryOrRegionCode["Ax"] = "AX";
+    /** Azerbaijan */
+    SponsorsCountryOrRegionCode["Az"] = "AZ";
+    /** Bosnia and Herzegovina */
+    SponsorsCountryOrRegionCode["Ba"] = "BA";
+    /** Barbados */
+    SponsorsCountryOrRegionCode["Bb"] = "BB";
+    /** Bangladesh */
+    SponsorsCountryOrRegionCode["Bd"] = "BD";
+    /** Belgium */
+    SponsorsCountryOrRegionCode["Be"] = "BE";
+    /** Burkina Faso */
+    SponsorsCountryOrRegionCode["Bf"] = "BF";
+    /** Bulgaria */
+    SponsorsCountryOrRegionCode["Bg"] = "BG";
+    /** Bahrain */
+    SponsorsCountryOrRegionCode["Bh"] = "BH";
+    /** Burundi */
+    SponsorsCountryOrRegionCode["Bi"] = "BI";
+    /** Benin */
+    SponsorsCountryOrRegionCode["Bj"] = "BJ";
+    /** Saint Barthélemy */
+    SponsorsCountryOrRegionCode["Bl"] = "BL";
+    /** Bermuda */
+    SponsorsCountryOrRegionCode["Bm"] = "BM";
+    /** Brunei Darussalam */
+    SponsorsCountryOrRegionCode["Bn"] = "BN";
+    /** Bolivia */
+    SponsorsCountryOrRegionCode["Bo"] = "BO";
+    /** Bonaire, Sint Eustatius and Saba */
+    SponsorsCountryOrRegionCode["Bq"] = "BQ";
+    /** Brazil */
+    SponsorsCountryOrRegionCode["Br"] = "BR";
+    /** Bahamas */
+    SponsorsCountryOrRegionCode["Bs"] = "BS";
+    /** Bhutan */
+    SponsorsCountryOrRegionCode["Bt"] = "BT";
+    /** Bouvet Island */
+    SponsorsCountryOrRegionCode["Bv"] = "BV";
+    /** Botswana */
+    SponsorsCountryOrRegionCode["Bw"] = "BW";
+    /** Belarus */
+    SponsorsCountryOrRegionCode["By"] = "BY";
+    /** Belize */
+    SponsorsCountryOrRegionCode["Bz"] = "BZ";
+    /** Canada */
+    SponsorsCountryOrRegionCode["Ca"] = "CA";
+    /** Cocos (Keeling) Islands */
+    SponsorsCountryOrRegionCode["Cc"] = "CC";
+    /** Congo (Kinshasa) */
+    SponsorsCountryOrRegionCode["Cd"] = "CD";
+    /** Central African Republic */
+    SponsorsCountryOrRegionCode["Cf"] = "CF";
+    /** Congo (Brazzaville) */
+    SponsorsCountryOrRegionCode["Cg"] = "CG";
+    /** Switzerland */
+    SponsorsCountryOrRegionCode["Ch"] = "CH";
+    /** Côte d'Ivoire */
+    SponsorsCountryOrRegionCode["Ci"] = "CI";
+    /** Cook Islands */
+    SponsorsCountryOrRegionCode["Ck"] = "CK";
+    /** Chile */
+    SponsorsCountryOrRegionCode["Cl"] = "CL";
+    /** Cameroon */
+    SponsorsCountryOrRegionCode["Cm"] = "CM";
+    /** China */
+    SponsorsCountryOrRegionCode["Cn"] = "CN";
+    /** Colombia */
+    SponsorsCountryOrRegionCode["Co"] = "CO";
+    /** Costa Rica */
+    SponsorsCountryOrRegionCode["Cr"] = "CR";
+    /** Cape Verde */
+    SponsorsCountryOrRegionCode["Cv"] = "CV";
+    /** Curaçao */
+    SponsorsCountryOrRegionCode["Cw"] = "CW";
+    /** Christmas Island */
+    SponsorsCountryOrRegionCode["Cx"] = "CX";
+    /** Cyprus */
+    SponsorsCountryOrRegionCode["Cy"] = "CY";
+    /** Czech Republic */
+    SponsorsCountryOrRegionCode["Cz"] = "CZ";
+    /** Germany */
+    SponsorsCountryOrRegionCode["De"] = "DE";
+    /** Djibouti */
+    SponsorsCountryOrRegionCode["Dj"] = "DJ";
+    /** Denmark */
+    SponsorsCountryOrRegionCode["Dk"] = "DK";
+    /** Dominica */
+    SponsorsCountryOrRegionCode["Dm"] = "DM";
+    /** Dominican Republic */
+    SponsorsCountryOrRegionCode["Do"] = "DO";
+    /** Algeria */
+    SponsorsCountryOrRegionCode["Dz"] = "DZ";
+    /** Ecuador */
+    SponsorsCountryOrRegionCode["Ec"] = "EC";
+    /** Estonia */
+    SponsorsCountryOrRegionCode["Ee"] = "EE";
+    /** Egypt */
+    SponsorsCountryOrRegionCode["Eg"] = "EG";
+    /** Western Sahara */
+    SponsorsCountryOrRegionCode["Eh"] = "EH";
+    /** Eritrea */
+    SponsorsCountryOrRegionCode["Er"] = "ER";
+    /** Spain */
+    SponsorsCountryOrRegionCode["Es"] = "ES";
+    /** Ethiopia */
+    SponsorsCountryOrRegionCode["Et"] = "ET";
+    /** Finland */
+    SponsorsCountryOrRegionCode["Fi"] = "FI";
+    /** Fiji */
+    SponsorsCountryOrRegionCode["Fj"] = "FJ";
+    /** Falkland Islands */
+    SponsorsCountryOrRegionCode["Fk"] = "FK";
+    /** Micronesia */
+    SponsorsCountryOrRegionCode["Fm"] = "FM";
+    /** Faroe Islands */
+    SponsorsCountryOrRegionCode["Fo"] = "FO";
+    /** France */
+    SponsorsCountryOrRegionCode["Fr"] = "FR";
+    /** Gabon */
+    SponsorsCountryOrRegionCode["Ga"] = "GA";
+    /** United Kingdom */
+    SponsorsCountryOrRegionCode["Gb"] = "GB";
+    /** Grenada */
+    SponsorsCountryOrRegionCode["Gd"] = "GD";
+    /** Georgia */
+    SponsorsCountryOrRegionCode["Ge"] = "GE";
+    /** French Guiana */
+    SponsorsCountryOrRegionCode["Gf"] = "GF";
+    /** Guernsey */
+    SponsorsCountryOrRegionCode["Gg"] = "GG";
+    /** Ghana */
+    SponsorsCountryOrRegionCode["Gh"] = "GH";
+    /** Gibraltar */
+    SponsorsCountryOrRegionCode["Gi"] = "GI";
+    /** Greenland */
+    SponsorsCountryOrRegionCode["Gl"] = "GL";
+    /** Gambia */
+    SponsorsCountryOrRegionCode["Gm"] = "GM";
+    /** Guinea */
+    SponsorsCountryOrRegionCode["Gn"] = "GN";
+    /** Guadeloupe */
+    SponsorsCountryOrRegionCode["Gp"] = "GP";
+    /** Equatorial Guinea */
+    SponsorsCountryOrRegionCode["Gq"] = "GQ";
+    /** Greece */
+    SponsorsCountryOrRegionCode["Gr"] = "GR";
+    /** South Georgia and South Sandwich Islands */
+    SponsorsCountryOrRegionCode["Gs"] = "GS";
+    /** Guatemala */
+    SponsorsCountryOrRegionCode["Gt"] = "GT";
+    /** Guam */
+    SponsorsCountryOrRegionCode["Gu"] = "GU";
+    /** Guinea-Bissau */
+    SponsorsCountryOrRegionCode["Gw"] = "GW";
+    /** Guyana */
+    SponsorsCountryOrRegionCode["Gy"] = "GY";
+    /** Hong Kong */
+    SponsorsCountryOrRegionCode["Hk"] = "HK";
+    /** Heard and McDonald Islands */
+    SponsorsCountryOrRegionCode["Hm"] = "HM";
+    /** Honduras */
+    SponsorsCountryOrRegionCode["Hn"] = "HN";
+    /** Croatia */
+    SponsorsCountryOrRegionCode["Hr"] = "HR";
+    /** Haiti */
+    SponsorsCountryOrRegionCode["Ht"] = "HT";
+    /** Hungary */
+    SponsorsCountryOrRegionCode["Hu"] = "HU";
+    /** Indonesia */
+    SponsorsCountryOrRegionCode["Id"] = "ID";
+    /** Ireland */
+    SponsorsCountryOrRegionCode["Ie"] = "IE";
+    /** Israel */
+    SponsorsCountryOrRegionCode["Il"] = "IL";
+    /** Isle of Man */
+    SponsorsCountryOrRegionCode["Im"] = "IM";
+    /** India */
+    SponsorsCountryOrRegionCode["In"] = "IN";
+    /** British Indian Ocean Territory */
+    SponsorsCountryOrRegionCode["Io"] = "IO";
+    /** Iraq */
+    SponsorsCountryOrRegionCode["Iq"] = "IQ";
+    /** Iran */
+    SponsorsCountryOrRegionCode["Ir"] = "IR";
+    /** Iceland */
+    SponsorsCountryOrRegionCode["Is"] = "IS";
+    /** Italy */
+    SponsorsCountryOrRegionCode["It"] = "IT";
+    /** Jersey */
+    SponsorsCountryOrRegionCode["Je"] = "JE";
+    /** Jamaica */
+    SponsorsCountryOrRegionCode["Jm"] = "JM";
+    /** Jordan */
+    SponsorsCountryOrRegionCode["Jo"] = "JO";
+    /** Japan */
+    SponsorsCountryOrRegionCode["Jp"] = "JP";
+    /** Kenya */
+    SponsorsCountryOrRegionCode["Ke"] = "KE";
+    /** Kyrgyzstan */
+    SponsorsCountryOrRegionCode["Kg"] = "KG";
+    /** Cambodia */
+    SponsorsCountryOrRegionCode["Kh"] = "KH";
+    /** Kiribati */
+    SponsorsCountryOrRegionCode["Ki"] = "KI";
+    /** Comoros */
+    SponsorsCountryOrRegionCode["Km"] = "KM";
+    /** Saint Kitts and Nevis */
+    SponsorsCountryOrRegionCode["Kn"] = "KN";
+    /** Korea, South */
+    SponsorsCountryOrRegionCode["Kr"] = "KR";
+    /** Kuwait */
+    SponsorsCountryOrRegionCode["Kw"] = "KW";
+    /** Cayman Islands */
+    SponsorsCountryOrRegionCode["Ky"] = "KY";
+    /** Kazakhstan */
+    SponsorsCountryOrRegionCode["Kz"] = "KZ";
+    /** Laos */
+    SponsorsCountryOrRegionCode["La"] = "LA";
+    /** Lebanon */
+    SponsorsCountryOrRegionCode["Lb"] = "LB";
+    /** Saint Lucia */
+    SponsorsCountryOrRegionCode["Lc"] = "LC";
+    /** Liechtenstein */
+    SponsorsCountryOrRegionCode["Li"] = "LI";
+    /** Sri Lanka */
+    SponsorsCountryOrRegionCode["Lk"] = "LK";
+    /** Liberia */
+    SponsorsCountryOrRegionCode["Lr"] = "LR";
+    /** Lesotho */
+    SponsorsCountryOrRegionCode["Ls"] = "LS";
+    /** Lithuania */
+    SponsorsCountryOrRegionCode["Lt"] = "LT";
+    /** Luxembourg */
+    SponsorsCountryOrRegionCode["Lu"] = "LU";
+    /** Latvia */
+    SponsorsCountryOrRegionCode["Lv"] = "LV";
+    /** Libya */
+    SponsorsCountryOrRegionCode["Ly"] = "LY";
+    /** Morocco */
+    SponsorsCountryOrRegionCode["Ma"] = "MA";
+    /** Monaco */
+    SponsorsCountryOrRegionCode["Mc"] = "MC";
+    /** Moldova */
+    SponsorsCountryOrRegionCode["Md"] = "MD";
+    /** Montenegro */
+    SponsorsCountryOrRegionCode["Me"] = "ME";
+    /** Saint Martin (French part) */
+    SponsorsCountryOrRegionCode["Mf"] = "MF";
+    /** Madagascar */
+    SponsorsCountryOrRegionCode["Mg"] = "MG";
+    /** Marshall Islands */
+    SponsorsCountryOrRegionCode["Mh"] = "MH";
+    /** Macedonia */
+    SponsorsCountryOrRegionCode["Mk"] = "MK";
+    /** Mali */
+    SponsorsCountryOrRegionCode["Ml"] = "ML";
+    /** Myanmar */
+    SponsorsCountryOrRegionCode["Mm"] = "MM";
+    /** Mongolia */
+    SponsorsCountryOrRegionCode["Mn"] = "MN";
+    /** Macau */
+    SponsorsCountryOrRegionCode["Mo"] = "MO";
+    /** Northern Mariana Islands */
+    SponsorsCountryOrRegionCode["Mp"] = "MP";
+    /** Martinique */
+    SponsorsCountryOrRegionCode["Mq"] = "MQ";
+    /** Mauritania */
+    SponsorsCountryOrRegionCode["Mr"] = "MR";
+    /** Montserrat */
+    SponsorsCountryOrRegionCode["Ms"] = "MS";
+    /** Malta */
+    SponsorsCountryOrRegionCode["Mt"] = "MT";
+    /** Mauritius */
+    SponsorsCountryOrRegionCode["Mu"] = "MU";
+    /** Maldives */
+    SponsorsCountryOrRegionCode["Mv"] = "MV";
+    /** Malawi */
+    SponsorsCountryOrRegionCode["Mw"] = "MW";
+    /** Mexico */
+    SponsorsCountryOrRegionCode["Mx"] = "MX";
+    /** Malaysia */
+    SponsorsCountryOrRegionCode["My"] = "MY";
+    /** Mozambique */
+    SponsorsCountryOrRegionCode["Mz"] = "MZ";
+    /** Namibia */
+    SponsorsCountryOrRegionCode["Na"] = "NA";
+    /** New Caledonia */
+    SponsorsCountryOrRegionCode["Nc"] = "NC";
+    /** Niger */
+    SponsorsCountryOrRegionCode["Ne"] = "NE";
+    /** Norfolk Island */
+    SponsorsCountryOrRegionCode["Nf"] = "NF";
+    /** Nigeria */
+    SponsorsCountryOrRegionCode["Ng"] = "NG";
+    /** Nicaragua */
+    SponsorsCountryOrRegionCode["Ni"] = "NI";
+    /** Netherlands */
+    SponsorsCountryOrRegionCode["Nl"] = "NL";
+    /** Norway */
+    SponsorsCountryOrRegionCode["No"] = "NO";
+    /** Nepal */
+    SponsorsCountryOrRegionCode["Np"] = "NP";
+    /** Nauru */
+    SponsorsCountryOrRegionCode["Nr"] = "NR";
+    /** Niue */
+    SponsorsCountryOrRegionCode["Nu"] = "NU";
+    /** New Zealand */
+    SponsorsCountryOrRegionCode["Nz"] = "NZ";
+    /** Oman */
+    SponsorsCountryOrRegionCode["Om"] = "OM";
+    /** Panama */
+    SponsorsCountryOrRegionCode["Pa"] = "PA";
+    /** Peru */
+    SponsorsCountryOrRegionCode["Pe"] = "PE";
+    /** French Polynesia */
+    SponsorsCountryOrRegionCode["Pf"] = "PF";
+    /** Papua New Guinea */
+    SponsorsCountryOrRegionCode["Pg"] = "PG";
+    /** Philippines */
+    SponsorsCountryOrRegionCode["Ph"] = "PH";
+    /** Pakistan */
+    SponsorsCountryOrRegionCode["Pk"] = "PK";
+    /** Poland */
+    SponsorsCountryOrRegionCode["Pl"] = "PL";
+    /** Saint Pierre and Miquelon */
+    SponsorsCountryOrRegionCode["Pm"] = "PM";
+    /** Pitcairn */
+    SponsorsCountryOrRegionCode["Pn"] = "PN";
+    /** Puerto Rico */
+    SponsorsCountryOrRegionCode["Pr"] = "PR";
+    /** Palestine */
+    SponsorsCountryOrRegionCode["Ps"] = "PS";
+    /** Portugal */
+    SponsorsCountryOrRegionCode["Pt"] = "PT";
+    /** Palau */
+    SponsorsCountryOrRegionCode["Pw"] = "PW";
+    /** Paraguay */
+    SponsorsCountryOrRegionCode["Py"] = "PY";
+    /** Qatar */
+    SponsorsCountryOrRegionCode["Qa"] = "QA";
+    /** Reunion */
+    SponsorsCountryOrRegionCode["Re"] = "RE";
+    /** Romania */
+    SponsorsCountryOrRegionCode["Ro"] = "RO";
+    /** Serbia */
+    SponsorsCountryOrRegionCode["Rs"] = "RS";
+    /** Russian Federation */
+    SponsorsCountryOrRegionCode["Ru"] = "RU";
+    /** Rwanda */
+    SponsorsCountryOrRegionCode["Rw"] = "RW";
+    /** Saudi Arabia */
+    SponsorsCountryOrRegionCode["Sa"] = "SA";
+    /** Solomon Islands */
+    SponsorsCountryOrRegionCode["Sb"] = "SB";
+    /** Seychelles */
+    SponsorsCountryOrRegionCode["Sc"] = "SC";
+    /** Sudan */
+    SponsorsCountryOrRegionCode["Sd"] = "SD";
+    /** Sweden */
+    SponsorsCountryOrRegionCode["Se"] = "SE";
+    /** Singapore */
+    SponsorsCountryOrRegionCode["Sg"] = "SG";
+    /** Saint Helena */
+    SponsorsCountryOrRegionCode["Sh"] = "SH";
+    /** Slovenia */
+    SponsorsCountryOrRegionCode["Si"] = "SI";
+    /** Svalbard and Jan Mayen Islands */
+    SponsorsCountryOrRegionCode["Sj"] = "SJ";
+    /** Slovakia */
+    SponsorsCountryOrRegionCode["Sk"] = "SK";
+    /** Sierra Leone */
+    SponsorsCountryOrRegionCode["Sl"] = "SL";
+    /** San Marino */
+    SponsorsCountryOrRegionCode["Sm"] = "SM";
+    /** Senegal */
+    SponsorsCountryOrRegionCode["Sn"] = "SN";
+    /** Somalia */
+    SponsorsCountryOrRegionCode["So"] = "SO";
+    /** Suriname */
+    SponsorsCountryOrRegionCode["Sr"] = "SR";
+    /** South Sudan */
+    SponsorsCountryOrRegionCode["Ss"] = "SS";
+    /** Sao Tome and Principe */
+    SponsorsCountryOrRegionCode["St"] = "ST";
+    /** El Salvador */
+    SponsorsCountryOrRegionCode["Sv"] = "SV";
+    /** Sint Maarten (Dutch part) */
+    SponsorsCountryOrRegionCode["Sx"] = "SX";
+    /** Swaziland */
+    SponsorsCountryOrRegionCode["Sz"] = "SZ";
+    /** Turks and Caicos Islands */
+    SponsorsCountryOrRegionCode["Tc"] = "TC";
+    /** Chad */
+    SponsorsCountryOrRegionCode["Td"] = "TD";
+    /** French Southern Lands */
+    SponsorsCountryOrRegionCode["Tf"] = "TF";
+    /** Togo */
+    SponsorsCountryOrRegionCode["Tg"] = "TG";
+    /** Thailand */
+    SponsorsCountryOrRegionCode["Th"] = "TH";
+    /** Tajikistan */
+    SponsorsCountryOrRegionCode["Tj"] = "TJ";
+    /** Tokelau */
+    SponsorsCountryOrRegionCode["Tk"] = "TK";
+    /** Timor-Leste */
+    SponsorsCountryOrRegionCode["Tl"] = "TL";
+    /** Turkmenistan */
+    SponsorsCountryOrRegionCode["Tm"] = "TM";
+    /** Tunisia */
+    SponsorsCountryOrRegionCode["Tn"] = "TN";
+    /** Tonga */
+    SponsorsCountryOrRegionCode["To"] = "TO";
+    /** Turkey */
+    SponsorsCountryOrRegionCode["Tr"] = "TR";
+    /** Trinidad and Tobago */
+    SponsorsCountryOrRegionCode["Tt"] = "TT";
+    /** Tuvalu */
+    SponsorsCountryOrRegionCode["Tv"] = "TV";
+    /** Taiwan */
+    SponsorsCountryOrRegionCode["Tw"] = "TW";
+    /** Tanzania */
+    SponsorsCountryOrRegionCode["Tz"] = "TZ";
+    /** Ukraine */
+    SponsorsCountryOrRegionCode["Ua"] = "UA";
+    /** Uganda */
+    SponsorsCountryOrRegionCode["Ug"] = "UG";
+    /** United States Minor Outlying Islands */
+    SponsorsCountryOrRegionCode["Um"] = "UM";
+    /** United States of America */
+    SponsorsCountryOrRegionCode["Us"] = "US";
+    /** Uruguay */
+    SponsorsCountryOrRegionCode["Uy"] = "UY";
+    /** Uzbekistan */
+    SponsorsCountryOrRegionCode["Uz"] = "UZ";
+    /** Vatican City */
+    SponsorsCountryOrRegionCode["Va"] = "VA";
+    /** Saint Vincent and the Grenadines */
+    SponsorsCountryOrRegionCode["Vc"] = "VC";
+    /** Venezuela */
+    SponsorsCountryOrRegionCode["Ve"] = "VE";
+    /** Virgin Islands, British */
+    SponsorsCountryOrRegionCode["Vg"] = "VG";
+    /** Virgin Islands, U.S. */
+    SponsorsCountryOrRegionCode["Vi"] = "VI";
+    /** Vietnam */
+    SponsorsCountryOrRegionCode["Vn"] = "VN";
+    /** Vanuatu */
+    SponsorsCountryOrRegionCode["Vu"] = "VU";
+    /** Wallis and Futuna Islands */
+    SponsorsCountryOrRegionCode["Wf"] = "WF";
+    /** Samoa */
+    SponsorsCountryOrRegionCode["Ws"] = "WS";
+    /** Yemen */
+    SponsorsCountryOrRegionCode["Ye"] = "YE";
+    /** Mayotte */
+    SponsorsCountryOrRegionCode["Yt"] = "YT";
+    /** South Africa */
+    SponsorsCountryOrRegionCode["Za"] = "ZA";
+    /** Zambia */
+    SponsorsCountryOrRegionCode["Zm"] = "ZM";
+    /** Zimbabwe */
+    SponsorsCountryOrRegionCode["Zw"] = "ZW";
+})(SponsorsCountryOrRegionCode = exports.SponsorsCountryOrRegionCode || (exports.SponsorsCountryOrRegionCode = {}));
 /** The different kinds of goals a GitHub Sponsors member can have. */
 var SponsorsGoalKind;
 (function (SponsorsGoalKind) {
@@ -2351,6 +2835,14 @@ var SponsorsGoalKind;
     /** The goal is about reaching a certain number of sponsors. */
     SponsorsGoalKind["TotalSponsorsCount"] = "TOTAL_SPONSORS_COUNT";
 })(SponsorsGoalKind = exports.SponsorsGoalKind || (exports.SponsorsGoalKind = {}));
+/** The different kinds of records that can be featured on a GitHub Sponsors profile page. */
+var SponsorsListingFeaturedItemFeatureableType;
+(function (SponsorsListingFeaturedItemFeatureableType) {
+    /** A repository owned by the user or organization with the GitHub Sponsors profile. */
+    SponsorsListingFeaturedItemFeatureableType["Repository"] = "REPOSITORY";
+    /** A user who belongs to the organization with the GitHub Sponsors profile. */
+    SponsorsListingFeaturedItemFeatureableType["User"] = "USER";
+})(SponsorsListingFeaturedItemFeatureableType = exports.SponsorsListingFeaturedItemFeatureableType || (exports.SponsorsListingFeaturedItemFeatureableType = {}));
 /** Properties by which Sponsors tiers connections can be ordered. */
 var SponsorsTierOrderField;
 (function (SponsorsTierOrderField) {
@@ -33099,6 +33591,10 @@ var __assign;
 var __rest;
 var __decorate;
 var __param;
+var __esDecorate;
+var __runInitializers;
+var __propKey;
+var __setFunctionName;
 var __metadata;
 var __awaiter;
 var __generator;
@@ -33186,6 +33682,51 @@ var __createBinding;
         return function (target, key) { decorator(target, key, paramIndex); }
     };
 
+    __esDecorate = function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+        function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+        var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+        var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+        var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+        var _, done = false;
+        for (var i = decorators.length - 1; i >= 0; i--) {
+            var context = {};
+            for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+            for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+            context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+            var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+            if (kind === "accessor") {
+                if (result === void 0) continue;
+                if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+                if (_ = accept(result.get)) descriptor.get = _;
+                if (_ = accept(result.set)) descriptor.set = _;
+                if (_ = accept(result.init)) initializers.push(_);
+            }
+            else if (_ = accept(result)) {
+                if (kind === "field") initializers.push(_);
+                else descriptor[key] = _;
+            }
+        }
+        if (target) Object.defineProperty(target, contextIn.name, descriptor);
+        done = true;
+    };
+
+    __runInitializers = function (thisArg, initializers, value) {
+        var useValue = arguments.length > 2;
+        for (var i = 0; i < initializers.length; i++) {
+            value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+        }
+        return useValue ? value : void 0;
+    };
+
+    __propKey = function (x) {
+        return typeof x === "symbol" ? x : "".concat(x);
+    };
+
+    __setFunctionName = function (f, name, prefix) {
+        if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+        return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+    };
+
     __metadata = function (metadataKey, metadataValue) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
     };
@@ -33206,7 +33747,7 @@ var __createBinding;
         function verb(n) { return function (v) { return step([n, v]); }; }
         function step(op) {
             if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
+            while (g && (g = 0, op[0] && (_ = 0)), _) try {
                 if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
                 if (y = 0, t) op = [op[0] & 2, t.value];
                 switch (op[0]) {
@@ -33318,7 +33859,7 @@ var __createBinding;
     __asyncDelegator = function (o) {
         var i, p;
         return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v; } : f; }
     };
 
     __asyncValues = function (o) {
@@ -33375,6 +33916,10 @@ var __createBinding;
     exporter("__rest", __rest);
     exporter("__decorate", __decorate);
     exporter("__param", __param);
+    exporter("__esDecorate", __esDecorate);
+    exporter("__runInitializers", __runInitializers);
+    exporter("__propKey", __propKey);
+    exporter("__setFunctionName", __setFunctionName);
     exporter("__metadata", __metadata);
     exporter("__awaiter", __awaiter);
     exporter("__generator", __generator);
