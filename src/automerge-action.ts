@@ -74,7 +74,22 @@ export class AutomergeAction {
     }
   }
 
-  async disableAutoMerge(pullRequest: PullRequest): Promise<void> {
+  async disableAutoMerge(pullRequest: PullRequest, force?: boolean): Promise<void> {
+    const { auto_merge: autoMerge } = pullRequest
+
+    // If `force` is `false` and auto-merge was enabled by another user, leave it enabled.
+    if (!force) {
+      const autoMergeUser = pullRequest?.auto_merge?.enabled_by
+      const authenticatedUser = (await this.octokit.rest.users.getAuthenticated()).data
+
+      if (autoMergeUser && autoMergeUser.id != authenticatedUser.id) {
+        core.info(
+          `Not disabling auto-merge for pull request ${pullRequest.number}; it was enabled manually by @${autoMergeUser.login}.`
+        )
+        return
+      }
+    }
+
     if (this.input.dryRun) {
       core.info(`Would try disabling auto-merge for pull request ${pullRequest.number}.`)
       return
@@ -205,7 +220,7 @@ export class AutomergeAction {
             core.info(
               `Auto-merge is already enabled for pull request ${number} but commit title/message does not match.`
             )
-            await this.disableAutoMerge(pullRequest)
+            await this.disableAutoMerge(pullRequest, true)
           }
         }
 
