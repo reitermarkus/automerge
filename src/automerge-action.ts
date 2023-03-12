@@ -208,7 +208,7 @@ export class AutomergeAction {
         const titleMessage = commitTitle ? ` with title '${commitTitle}'` : undefined
 
         if (this.input.dryRun) {
-          core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage}.`)
+          core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage || ''}.`)
           return
         }
 
@@ -224,7 +224,7 @@ export class AutomergeAction {
           }
         }
 
-        core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`)
+        core.info(`Enabling auto-merge for pull request ${number}${titleMessage || ''}:`)
         const result = await this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod)
 
         if (result.enablePullRequestAutoMerge?.pullRequest?.autoMergeRequest?.enabledAt) {

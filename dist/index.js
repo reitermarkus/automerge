@@ -192,7 +192,7 @@ class AutomergeAction {
                     const { title: commitTitle, message: commitMessage } = (0, helpers_1.squashCommit)(mergeMethod === 'squash', this.input.squashCommitTitle, this.input.squashCommitMessage, pullRequest);
                     const titleMessage = commitTitle ? ` with title '${commitTitle}'` : undefined;
                     if (this.input.dryRun) {
-                        core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage}.`);
+                        core.info(`Would try enabling auto-merge for pull request ${number}${titleMessage || ''}.`);
                         return;
                     }
                     // If auto-merge is already enabled with the same merge method, disable it
@@ -204,7 +204,7 @@ class AutomergeAction {
                             yield this.disableAutoMerge(pullRequest, true);
                         }
                     }
-                    core.info(`Enabling auto-merge for pull request ${number}${titleMessage}:`);
+                    core.info(`Enabling auto-merge for pull request ${number}${titleMessage || ''}:`);
                     const result = yield this.enableAutoMerge(pullRequest, commitTitle, commitMessage, mergeMethod);
                     if ((_c = (_b = (_a = result.enablePullRequestAutoMerge) === null || _a === void 0 ? void 0 : _a.pullRequest) === null || _b === void 0 ? void 0 : _b.autoMergeRequest) === null || _c === void 0 ? void 0 : _c.enabledAt) {
                         core.info(`Successfully enabled auto-merge for pull request ${number}.`);
