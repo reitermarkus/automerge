@@ -56,7 +56,7 @@ on:
   pull_request_target:
     types:
       - opened
-      - synchronized
+      - synchronize
       - reopened
       - edited
       - labeled
