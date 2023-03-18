@@ -81,6 +81,7 @@ class AutomergeAction {
                     pullRequestId: pullRequest.node_id,
                     commitHeadline: commitTitle,
                     commitBody: commitMessage,
+                    expectedHeadOid: pullRequest.head.sha,
                     mergeMethod: mergeMethod === null || mergeMethod === void 0 ? void 0 : mergeMethod.toUpperCase(),
                 });
             }
@@ -3088,9 +3089,9 @@ exports.DisableAutoMerge = (0, graphql_tag_1.default) `
 }
     `;
 exports.EnableAutoMerge = (0, graphql_tag_1.default) `
-    mutation EnableAutoMerge($pullRequestId: ID!, $commitHeadline: String, $commitBody: String, $mergeMethod: PullRequestMergeMethod!) {
+    mutation EnableAutoMerge($pullRequestId: ID!, $commitHeadline: String, $commitBody: String, $expectedHeadOid: GitObjectID, $mergeMethod: PullRequestMergeMethod!) {
   enablePullRequestAutoMerge(
-    input: {pullRequestId: $pullRequestId, commitHeadline: $commitHeadline, commitBody: $commitBody, mergeMethod: $mergeMethod}
+    input: {pullRequestId: $pullRequestId, commitHeadline: $commitHeadline, commitBody: $commitBody, expectedHeadOid: $expectedHeadOid, mergeMethod: $mergeMethod}
   ) {
     pullRequest {
       autoMergeRequest {

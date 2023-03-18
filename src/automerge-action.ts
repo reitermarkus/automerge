@@ -62,6 +62,7 @@ export class AutomergeAction {
         pullRequestId: pullRequest.node_id,
         commitHeadline: commitTitle,
         commitBody: commitMessage,
+        expectedHeadOid: pullRequest.head.sha,
         mergeMethod: mergeMethod?.toUpperCase(),
       })
     } catch (error) {
