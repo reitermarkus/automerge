@@ -130,7 +130,7 @@ class AutomergeAction {
             }
         });
     }
-    autoMergePullRequest(number) {
+    autoMergePullRequest(number, review) {
         var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             core.info(`Evaluating mergeability for pull request ${number}:`);
@@ -150,12 +150,30 @@ class AutomergeAction {
                 core.info(`Pull request ${number} is not mergeable because it is a draft.`);
                 return;
             }
-            const authorAssociations = this.input.pullRequestAuthorAssociations;
-            if (authorAssociations.length > 0 && !(0, helpers_1.isAuthorAllowed)(pullRequest, authorAssociations)) {
-                core.info(`Author of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
-                    `${authorAssociations.join(', ')}`);
-                yield this.disableAutoMerge(pullRequest);
-                return;
+            if (review) {
+                const authorAssociations = this.input.reviewAuthorAssociations;
+                if (authorAssociations.length > 0 && !(0, helpers_1.isAuthorAllowed)(review, authorAssociations)) {
+                    core.info(`Reviewer of pull request ${number} is ${review.author_association} but must be one of the following: ` +
+                        `${authorAssociations.join(', ')}`);
+                    return;
+                }
+                if (review.state !== 'approved') {
+                    core.info(`Pull request ${number} is not mergable because the review is not an approval.`);
+                    return;
+                }
+                if (pullRequest.head.sha !== review.commit_id) {
+                    core.info(`Pull request ${number} is not mergable because current commit ${pullRequest.head.sha} does not match reviewed commit ${review.commit_id}.`);
+                    return;
+                }
+            }
+            else {
+                const authorAssociations = this.input.pullRequestAuthorAssociations;
+                if (authorAssociations.length > 0 && !(0, helpers_1.isAuthorAllowed)(pullRequest, authorAssociations)) {
+                    core.info(`Author of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
+                        `${authorAssociations.join(', ')}`);
+                    yield this.disableAutoMerge(pullRequest);
+                    return;
+                }
             }
             const baseBranch = pullRequest.base.ref;
             const requiredStatusChecks = yield (0, helpers_1.requiredStatusChecksForBranch)(this.octokit, baseBranch);
@@ -225,11 +243,25 @@ class AutomergeAction {
     handlePullRequestTarget() {
         return __awaiter(this, void 0, void 0, function* () {
             core.debug('handlePullRequestTarget()');
-            const { action, label, pull_request: pullRequest } = github.context.payload;
+            const { action, pull_request: pullRequest } = github.context.payload;
             if (!action || !pullRequest) {
                 return;
             }
             yield this.autoMergePullRequest(pullRequest.number);
+        });
+    }
+    handlePullRequestReview() {
+        return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handlePullRequestReview()');
+            const { action, pull_request: pullRequest, review } = github.context.payload;
+            if (!action || !pullRequest || !review) {
+                return;
+            }
+            if (action !== 'submitted') {
+                core.warning(`This action does not support the '${action}' action for the '${github.context.eventName}' event.`);
+                return;
+            }
+            yield this.autoMergePullRequest(pullRequest.number, review);
         });
     }
     handleSchedule() {
@@ -3346,6 +3378,7 @@ class Input {
         }
         this.pullRequest = getNumber('pull-request');
         this.pullRequestAuthorAssociations = getArray('pull-request-author-associations');
+        this.reviewAuthorAssociations = getArray('review-author-associations');
         this.dryRun = core.getInput('dry-run') === 'true';
     }
     isDoNotMergeLabel(label) {
@@ -3411,6 +3444,10 @@ function run() {
             }
             const eventName = github.context.eventName;
             switch (eventName) {
+                case 'pull_request_review': {
+                    yield action.handlePullRequestReview();
+                    break;
+                }
                 case 'pull_request_target': {
                     yield action.handlePullRequestTarget();
                     break;

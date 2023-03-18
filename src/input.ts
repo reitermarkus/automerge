@@ -33,6 +33,7 @@ export class Input {
   requiredLabels: string[]
   pullRequest: number | null
   pullRequestAuthorAssociations: string[]
+  reviewAuthorAssociations: string[]
   dryRun: boolean
 
   constructor() {
@@ -71,6 +72,8 @@ export class Input {
 
     this.pullRequest = getNumber('pull-request')
     this.pullRequestAuthorAssociations = getArray('pull-request-author-associations')
+
+    this.reviewAuthorAssociations = getArray('review-author-associations')
 
     this.dryRun = core.getInput('dry-run') === 'true'
   }
