@@ -48,6 +48,12 @@ inputs:
     description: >
       Comma-separated list of required author associations for the pull request author.
       (By default, pull requests by any author are allowed.)
+  review-author-associations:
+    required: false
+    default: OWNER,MEMBER,COLLABORATOR
+    description: >
+      Comma-separated list of required author associations for the review author.
+      (By default, pull requests reviewed by `OWNER`s, `MEMBER`s and `COLLABORATOR`s are allowed.)
   dry-run:
     required: true
     description: >

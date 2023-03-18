@@ -17,7 +17,7 @@ import {
   requiredStatusChecksForBranch,
   squashCommit,
 } from './helpers'
-import { MergeMethod, Octokit, PullRequest } from './types'
+import { MergeMethod, Octokit, PullRequest, Review } from './types'
 
 export class AutomergeAction {
   octokit: Octokit
@@ -117,7 +117,7 @@ export class AutomergeAction {
     }
   }
 
-  async autoMergePullRequest(number: number): Promise<void> {
+  async autoMergePullRequest(number: number, review?: Review): Promise<void> {
     core.info(`Evaluating mergeability for pull request ${number}:`)
 
     const pullRequest = (
@@ -146,14 +146,33 @@ export class AutomergeAction {
       return
     }
 
-    const authorAssociations = this.input.pullRequestAuthorAssociations
-    if (authorAssociations.length > 0 && !isAuthorAllowed(pullRequest, authorAssociations)) {
-      core.info(
-        `Author of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
-          `${authorAssociations.join(', ')}`
-      )
-      await this.disableAutoMerge(pullRequest)
-      return
+    if (review) {
+      if (pullRequest.head.sha !== review.commit_id) {
+        core.info(
+          `Pull request ${number} is not mergable because current commit ${pullRequest.head.sha} does not match reviewed commit ${review.commit_id}.`
+        )
+        return
+      }
+
+      const authorAssociations = this.input.reviewAuthorAssociations
+
+      if (authorAssociations.length > 0 && !isAuthorAllowed(review, authorAssociations)) {
+        core.info(
+          `Reviewer of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
+            `${authorAssociations.join(', ')}`
+        )
+        return
+      }
+    } else {
+      const authorAssociations = this.input.pullRequestAuthorAssociations
+      if (authorAssociations.length > 0 && !isAuthorAllowed(pullRequest, authorAssociations)) {
+        core.info(
+          `Author of pull request ${number} is ${pullRequest.author_association} but must be one of the following: ` +
+            `${authorAssociations.join(', ')}`
+        )
+        await this.disableAutoMerge(pullRequest)
+        return
+      }
     }
 
     const baseBranch = pullRequest.base.ref
@@ -247,13 +266,34 @@ export class AutomergeAction {
   async handlePullRequestTarget(): Promise<void> {
     core.debug('handlePullRequestTarget()')
 
-    const { action, label, pull_request: pullRequest } = github.context.payload
+    const { action, pull_request: pullRequest } = github.context.payload
 
     if (!action || !pullRequest) {
       return
     }
 
     await this.autoMergePullRequest(pullRequest.number)
+  }
+
+  async handlePullRequestReview(): Promise<void> {
+    core.debug('handlePullRequestReview()')
+
+    const { action, pull_request: pullRequest, review } = github.context.payload
+
+    if (!action || !pullRequest) {
+      return
+    }
+
+    if (action !== 'submitted') {
+      core.warning(
+        `This action does not support the '${action}' action for the '${github.context.eventName}' event.`
+      )
+      return
+    }
+
+    core.info(`Context: ${JSON.stringify(github.context.payload, null, 2)}`)
+
+    await this.autoMergePullRequest(pullRequest.number, review)
   }
 
   async handleSchedule(): Promise<void> {
