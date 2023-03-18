@@ -50,6 +50,11 @@ on:
   schedule:
     - cron: 0 * * * *
 
+  # Try enabling auto-merge when a pull request is approved.
+  pull_request_review:
+    types:
+      - submitted
+
   # Try enabling auto-merge for a pull request when a draft is marked as “ready for review”, when
   # a required label is applied or when a “do not merge” label is removed, or when a pull request
   # is updated in any way (opened, synchronized, reopened, edited).

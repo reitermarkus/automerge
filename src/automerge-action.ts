@@ -256,6 +256,12 @@ export class AutomergeAction {
     await this.autoMergePullRequest(pullRequest.number)
   }
 
+  async handlePullRequestReview(): Promise<void> {
+    core.debug('handlePullRequestReview()')
+
+    core.info(`Context: ${JSON.stringify(github.context.payload, null, 2)}`)
+  }
+
   async handleSchedule(): Promise<void> {
     core.debug('handleSchedule()')
 

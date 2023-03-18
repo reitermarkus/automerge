@@ -232,6 +232,12 @@ class AutomergeAction {
             yield this.autoMergePullRequest(pullRequest.number);
         });
     }
+    handlePullRequestReview() {
+        return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handlePullRequestReview()');
+            core.info(`Context: ${JSON.stringify(github.context.payload, null, 2)}`);
+        });
+    }
     handleSchedule() {
         return __awaiter(this, void 0, void 0, function* () {
             core.debug('handleSchedule()');
@@ -3411,6 +3417,10 @@ function run() {
             }
             const eventName = github.context.eventName;
             switch (eventName) {
+                case 'pull_request_review': {
+                    yield action.handlePullRequestReview();
+                    break;
+                }
                 case 'pull_request_target': {
                     yield action.handlePullRequestTarget();
                     break;
