@@ -19,6 +19,10 @@ async function run(): Promise<void> {
 
     const eventName = github.context.eventName
     switch (eventName) {
+      case 'pull_request_review': {
+        await action.handlePullRequestReview()
+        break
+      }
       case 'pull_request_target': {
         await action.handlePullRequestTarget()
         break

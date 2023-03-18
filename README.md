@@ -35,6 +35,7 @@ Ensure the following is set up in your repository settings before enabling this 
 | `required-labels`                  | no       | Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically.                             |
 | `pull-request`                     | no       | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event.                      |
 | `pull-request-author-associations` | no       | Comma-separated list of required [author associations](https://docs.github.com/en/graphql/reference/enums#commentauthorassociation) for the pull request author. (By default, pull requests by any author are allowed.)        |
+| `review-author-associations` | no       | Comma-separated list of required [author associations](https://docs.github.com/en/graphql/reference/enums#commentauthorassociation) for the review author. (By default, pull requests reviewd by `OWNER`s, `MEMBER`s and `COLLABORATOR`s are allowed.)        |
 | `dry-run`                          | no       | If set to `true`, will not actually merge pull requests but still perform all other checks.                                                     |
 
 ## Example Workflow
@@ -49,6 +50,12 @@ on:
   # Try enabling auto-merge for all open pull requests.
   schedule:
     - cron: 0 * * * *
+
+  # Try enabling auto-merge when a pull request is approved. Note that this event skips the check
+  # for the pull request author association and instead checks the review author association.
+  pull_request_review:
+    types:
+      - submitted
 
   # Try enabling auto-merge for a pull request when a draft is marked as “ready for review”, when
   # a required label is applied or when a “do not merge” label is removed, or when a pull request
