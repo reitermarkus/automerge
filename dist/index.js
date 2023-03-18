@@ -264,6 +264,27 @@ class AutomergeAction {
             yield this.autoMergePullRequest(pullRequest.number, review);
         });
     }
+    handleWorkflowDispatch() {
+        return __awaiter(this, void 0, void 0, function* () {
+            core.debug('handleWorkflowDispatch()');
+            const pullRequestNumber = this.input.pullRequest;
+            const reviewId = this.input.review;
+            if (reviewId !== undefined) {
+                if (!pullRequestNumber) {
+                    core.setFailed('The `pull-request` input is required for `workflow_dispatch` event when `review` input is specified.');
+                    return;
+                }
+                const review = (yield this.octokit.rest.pulls.getReview(Object.assign(Object.assign({}, github.context.repo), { pull_number: pullRequestNumber, review_id: reviewId }))).data;
+                yield this.autoMergePullRequest(pullRequestNumber, review);
+                return;
+            }
+            if (pullRequestNumber !== undefined) {
+                yield this.autoMergePullRequest(pullRequestNumber);
+                return;
+            }
+            yield this.handleSchedule();
+        });
+    }
     handleSchedule() {
         return __awaiter(this, void 0, void 0, function* () {
             core.debug('handleSchedule()');
@@ -3376,8 +3397,9 @@ class Input {
                 throw new Error(`Cannot set a “do not merge” label as a required label.`);
             }
         }
-        this.pullRequest = getNumber('pull-request');
+        this.pullRequest = getNumber('pull-request') || undefined;
         this.pullRequestAuthorAssociations = getArray('pull-request-author-associations');
+        this.review = getNumber('review') || undefined;
         this.reviewAuthorAssociations = getArray('review-author-associations');
         this.dryRun = core.getInput('dry-run') === 'true';
     }
@@ -3453,9 +3475,12 @@ function run() {
                     break;
                 }
                 case 'push':
-                case 'schedule':
-                case 'workflow_dispatch': {
+                case 'schedule': {
                     yield action.handleSchedule();
+                    break;
+                }
+                case 'workflow_dispatch': {
+                    yield action.handleWorkflowDispatch();
                     break;
                 }
                 default: {

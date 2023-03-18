@@ -48,6 +48,11 @@ inputs:
     description: >
       Comma-separated list of required author associations for the pull request author.
       (By default, pull requests by any author are allowed.)
+  review:
+    required: false
+    description: >
+      Try merging the pull request associated with the specified review ID automatically. For example, you can pass an input from
+      a `workflow_dispatch` event. The `pull-request` input is also required if this is specified.
   review-author-associations:
     required: false
     default: OWNER,MEMBER,COLLABORATOR

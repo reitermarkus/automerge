@@ -299,6 +299,40 @@ export class AutomergeAction {
     await this.autoMergePullRequest(pullRequest.number, review)
   }
 
+  async handleWorkflowDispatch(): Promise<void> {
+    core.debug('handleWorkflowDispatch()')
+
+    const pullRequestNumber = this.input.pullRequest
+    const reviewId = this.input.review
+
+    if (reviewId !== undefined) {
+      if (!pullRequestNumber) {
+        core.setFailed(
+          'The `pull-request` input is required for `workflow_dispatch` event when `review` input is specified.'
+        )
+        return
+      }
+
+      const review = (
+        await this.octokit.rest.pulls.getReview({
+          ...github.context.repo,
+          pull_number: pullRequestNumber,
+          review_id: reviewId,
+        })
+      ).data
+
+      await this.autoMergePullRequest(pullRequestNumber, review)
+      return
+    }
+
+    if (pullRequestNumber !== undefined) {
+      await this.autoMergePullRequest(pullRequestNumber)
+      return
+    }
+
+    await this.handleSchedule()
+  }
+
   async handleSchedule(): Promise<void> {
     core.debug('handleSchedule()')
 

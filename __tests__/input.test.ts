@@ -7,6 +7,8 @@ const testEnvVars = {
   'INPUT_REQUIRED-LABELS': 'automerge',
   'INPUT_PULL-REQUEST': '',
   'INPUT_PULL-REQUEST-AUTHOR-ASSOCIATION': '',
+  INPUT_REVIEW: '',
+  'INPUT_REVIEW-AUTHOR-ASSOCIATION': '',
   'INPUT_DRY-RUN': '',
 }
 
@@ -24,8 +26,10 @@ describe('input', () => {
     expect(input.mergeMethod).toBe(undefined)
     expect(input.doNotMergeLabels).toStrictEqual(['never-merge', 'blocked'])
     expect(input.requiredLabels).toStrictEqual(['automerge'])
-    expect(input.pullRequest).toBe(null)
+    expect(input.pullRequest).toBe(undefined)
     expect(input.pullRequestAuthorAssociations).toStrictEqual([])
+    expect(input.review).toBe(undefined)
+    expect(input.reviewAuthorAssociations).toStrictEqual([])
     expect(input.dryRun).toBe(false)
   })
 
@@ -74,7 +78,7 @@ describe('input', () => {
     expect(input.pullRequest).toBe(1234)
   })
 
-  it('fails if `pull-request` input si not a number', () => {
+  it('fails if `pull-request` input is not a number', () => {
     process.env['INPUT_PULL-REQUEST'] = 'abc'
 
     expect(() => new Input()).toThrow()
@@ -86,6 +90,12 @@ describe('input', () => {
     const input = new Input()
 
     expect(input.pullRequestAuthorAssociations).toStrictEqual(['COLLABORATOR', 'MEMBER', 'OWNER'])
+  })
+
+  it('fails if `review` input is not a number', () => {
+    process.env['INPUT_REVIEW'] = 'abc'
+
+    expect(() => new Input()).toThrow()
   })
 
   it('accepts an optional `dry-run` input', () => {

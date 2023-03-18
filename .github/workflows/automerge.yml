@@ -20,6 +20,9 @@ on:
       pull-request:
         description: Pull Request Number
         required: false
+      review:
+        description: Review ID
+        required: false
 
 jobs:
   automerge:
@@ -43,3 +46,4 @@ jobs:
           do-not-merge-labels: never-merge
           required-labels: automerge
           pull-request: ${{ github.event.inputs.pull-request }}
+          review: ${{ github.event.inputs.review }}

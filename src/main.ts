@@ -28,9 +28,12 @@ async function run(): Promise<void> {
         break
       }
       case 'push':
-      case 'schedule':
-      case 'workflow_dispatch': {
+      case 'schedule': {
         await action.handleSchedule()
+        break
+      }
+      case 'workflow_dispatch': {
+        await action.handleWorkflowDispatch()
         break
       }
       default: {

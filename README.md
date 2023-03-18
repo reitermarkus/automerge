@@ -35,6 +35,7 @@ Ensure the following is set up in your repository settings before enabling this 
 | `required-labels`                  | no       | Comma-separated list of labels that are required to be applied to a pull request for it to be merged automatically.                             |
 | `pull-request`                     | no       | Try merging the specified pull request automatically. For example, you can pass an input from a `workflow_dispatch` event.                      |
 | `pull-request-author-associations` | no       | Comma-separated list of required [author associations](https://docs.github.com/en/graphql/reference/enums#commentauthorassociation) for the pull request author. (By default, pull requests by any author are allowed.)        |
+| `review`                           | no       | Try merging the pull request associated with the specified review ID automatically. For example, you can pass an input from a `workflow_dispatch` event. The `pull-request` input is also required if this is specified. |
 | `review-author-associations` | no       | Comma-separated list of required [author associations](https://docs.github.com/en/graphql/reference/enums#commentauthorassociation) for the review author. (By default, pull requests reviewd by `OWNER`s, `MEMBER`s and `COLLABORATOR`s are allowed.)        |
 | `dry-run`                          | no       | If set to `true`, will not actually merge pull requests but still perform all other checks.                                                     |
 
@@ -70,11 +71,15 @@ on:
       - unlabeled
       - ready_for_review
 
-  # Try enabling auto-merge for the specified pull request or all open pull requests if none is specified.
+  # Try enabling auto-merge for the specified pull request, review or all open pull requests if
+  # none is specified.
   workflow_dispatch:
     inputs:
       pull-request:
         description: Pull Request Number
+        required: false
+      review:
+        description: Review ID
         required: false
 
 jobs:
@@ -88,6 +93,7 @@ jobs:
           do-not-merge-labels: never-merge
           required-labels: automerge
           pull-request: ${{ github.event.inputs.pull-request }}
+          review: ${{ github.event.inputs.review }}
           dry-run: true
 ```
 

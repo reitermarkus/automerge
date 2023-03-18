@@ -31,8 +31,9 @@ export class Input {
   squashCommitMessage: string | undefined
   doNotMergeLabels: string[]
   requiredLabels: string[]
-  pullRequest: number | null
+  pullRequest: number | undefined
   pullRequestAuthorAssociations: string[]
+  review: number | undefined
   reviewAuthorAssociations: string[]
   dryRun: boolean
 
@@ -70,9 +71,10 @@ export class Input {
       }
     }
 
-    this.pullRequest = getNumber('pull-request')
+    this.pullRequest = getNumber('pull-request') || undefined
     this.pullRequestAuthorAssociations = getArray('pull-request-author-associations')
 
+    this.review = getNumber('review') || undefined
     this.reviewAuthorAssociations = getArray('review-author-associations')
 
     this.dryRun = core.getInput('dry-run') === 'true'
