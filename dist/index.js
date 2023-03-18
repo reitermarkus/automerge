@@ -3375,7 +3375,7 @@ class Input {
         }
         this.pullRequest = getNumber('pull-request');
         this.pullRequestAuthorAssociations = getArray('pull-request-author-associations');
-        this.reviewAuthorAssociations = getArray('pull-request-author-associations');
+        this.reviewAuthorAssociations = getArray('review-author-associations');
         this.dryRun = core.getInput('dry-run') === 'true';
     }
     isDoNotMergeLabel(label) {
