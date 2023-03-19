@@ -1,0 +1,23 @@
+name: automerge-run
+
+on:
+  workflow_run:
+    workflows:
+      - automerge
+    types:
+      - completed
+
+jobs:
+  automerge-run:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.event == 'pull_request_review' }}
+    steps:
+      - name: Event
+        run: |
+          echo "${GITHUB_EVENT}"
+
+          echo "${EVENT_NAME}"
+          echo "${EVENT_JSON}"
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_JSON: ${{ toJSON(github.event) }}
