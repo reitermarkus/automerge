@@ -47,3 +47,9 @@ jobs:
           required-labels: automerge
           pull-request: ${{ github.event.inputs.pull-request }}
           review: ${{ github.event.inputs.review }}
+      - name: Upload `event.json`
+        uses: actions/upload-artifact@v2
+        if: ${{ github.event_name == 'pull_request_review' }}
+        with:
+          name: event.json
+          path: ${{ github.event_path }}

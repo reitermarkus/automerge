@@ -1,0 +1,59 @@
+name: automerge-run
+
+on:
+  workflow_run:
+    workflows:
+      - automerge
+    types:
+      - completed
+
+jobs:
+  automerge-run:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request_review' &&
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Event
+        run: |
+          echo "${EVENT_NAME}"
+          echo "${EVENT_JSON}"
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_JSON: ${{ toJSON(github.event) }}
+      - name: Download `event.json`
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               ...context.repo,
+               run_id: ${{ github.event.workflow_run.id }},
+            })
+            const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "event.json"
+            })[0]
+            const download = await github.rest.actions.downloadArtifact({
+               ...context.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            const fs = require('fs')
+            fs.writeFileSync('${{ github.workspace }}/artifact.zip', Buffer.from(download.data))
+      - name: Extract `event.json`
+        id: review_info
+        run: |
+          unzip artifact.zip
+
+          echo "pull_request=$(jq -r .pull_request.number event.json)" >> "${GITHUB_OUTPUT}"
+          echo "review=$(jq -r .review.id event.json)" >> "${GITHUB_OUTPUT}"
+      - uses: benc-uk/workflow-dispatch@798e70c97009500150087d30d9f11c5444830385
+        if: >
+          steps.review_info.outputs.pull_request &&
+          steps.review_info.outputs.review
+        with:
+          workflow: automerge.yml
+          inputs: >
+            {
+              "pull-request": ${{ steps.review_info.outputs.pull_request }},
+              "review": ${{ steps.review_info.outputs.review }}
+            }
