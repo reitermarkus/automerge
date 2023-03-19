@@ -1,0 +1,16 @@
+on:
+  workflow_run:
+    workflows:
+      - automerge.yml
+
+jobs:
+  automerge-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Event
+        run: |
+          echo "${EVENT_NAME}"
+          echo "${EVENT_JSON}"
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_JSON: ${{ toJSON(github.event) }}
