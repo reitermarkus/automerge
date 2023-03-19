@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Event
         run: |
+          echo "${GITHUB_EVENT}"
+
           echo "${EVENT_NAME}"
           echo "${EVENT_JSON}"
         env:
