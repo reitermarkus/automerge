@@ -30,6 +30,9 @@ jobs:
     steps:
       - name: Event
         run: |
+          echo "${GITHUB_EVENT}"
+          echo "${GITHUB_CONTEXT}"
+
           echo "${EVENT_NAME}"
           echo "${EVENT_JSON}"
         env:
@@ -47,3 +50,8 @@ jobs:
           required-labels: automerge
           pull-request: ${{ github.event.inputs.pull-request }}
           review: ${{ github.event.inputs.review }}
+      - uses: actions/upload-artifact@v2
+        if: ${{ github.event_name == 'pull_request_review' }}
+        with:
+          name: pr
+          path: pr/
