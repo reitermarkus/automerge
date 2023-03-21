@@ -23,9 +23,19 @@ on:
       review:
         description: Review ID
         required: false
+  workflow_run:
+    workflows:
+      - automerge
+    types:
+      - completed
 
 jobs:
   automerge:
+    if: >
+      github.event_name != 'workflow_run' || (
+        github.event.workflow_run.event == 'pull_request_review' &&
+        github.event.workflow_run.conclusion == 'success'
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Event
@@ -55,3 +65,45 @@ jobs:
           name: event.json
           path: ${{ github.event_path }}
           if-no-files-found: error
+      - name: Download `event.json`
+        id: download_event_json
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               ...context.repo,
+               run_id: ${{ github.event.workflow_run.id }},
+            })
+            const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "event.json"
+            })[0]
+            const download = await github.rest.actions.downloadArtifact({
+               ...context.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            const fs = require('fs')
+            fs.writeFileSync('${{ github.workspace }}/artifact.zip', Buffer.from(download.data))
+        if: >
+          github.event.workflow_run.event == 'pull_request_review' &&
+          github.event.workflow_run.conclusion == 'success'
+      - name: Extract `event.json`
+        id: review_info
+        run: |
+          unzip artifact.zip
+
+          echo "pull_request=$(jq -r .pull_request.number event.json)" >> "${GITHUB_OUTPUT}"
+          echo "review=$(jq -r .review.id event.json)" >> "${GITHUB_OUTPUT}"
+        if: steps.download_event_json.outcome == 'success'
+      - name: Trigger workflow for review ${{ steps.review_info.outputs.review }} on pull request \#${{ steps.review_info.outputs.pull_request }}
+        uses: benc-uk/workflow-dispatch@798e70c97009500150087d30d9f11c5444830385
+        with:
+          workflow: automerge.yml
+          inputs: >
+            {
+              "pull-request": "${{ steps.review_info.outputs.pull_request }}",
+              "review": "${{ steps.review_info.outputs.review }}"
+            }
+        if: >
+          steps.review_info.outputs.pull_request &&
+          steps.review_info.outputs.review
