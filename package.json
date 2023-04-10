@@ -36,7 +36,7 @@
     "@graphql-codegen/typescript-document-nodes": "^3.0.1",
     "@graphql-codegen/typescript-operations": "^3.0.1",
     "@graphql-codegen/typescript-resolvers": "^3.1.0",
-    "@octokit/graphql-schema": "^13.6.0",
+    "@octokit/graphql-schema": "^13.10.0",
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
