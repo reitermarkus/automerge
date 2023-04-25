@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
-      - uses: peter-evans/find-comment@034abe94d3191f9c89d870519735beae326f2bdb # v2
+      - uses: peter-evans/find-comment@a54c31d7fa095754bfef525c0c8e5e5674c4b4b1 # v2
         id: find-comment
         with:
           token: ${{ secrets.GH_TOKEN }}
