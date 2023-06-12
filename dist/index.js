@@ -1424,10 +1424,14 @@ var OrganizationMigrationState;
 (function (OrganizationMigrationState) {
     /** The Octoshift migration has failed. */
     OrganizationMigrationState["Failed"] = "FAILED";
+    /** The Octoshift migration has invalid credentials. */
+    OrganizationMigrationState["FailedValidation"] = "FAILED_VALIDATION";
     /** The Octoshift migration is in progress. */
     OrganizationMigrationState["InProgress"] = "IN_PROGRESS";
     /** The Octoshift migration has not started. */
     OrganizationMigrationState["NotStarted"] = "NOT_STARTED";
+    /** The Octoshift migration needs to have its credentials validated. */
+    OrganizationMigrationState["PendingValidation"] = "PENDING_VALIDATION";
     /** The Octoshift migration is performing post repository migrations. */
     OrganizationMigrationState["PostRepoMigration"] = "POST_REPO_MIGRATION";
     /** The Octoshift migration is performing pre repository migrations. */
