@@ -38,7 +38,7 @@
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@octokit/graphql-schema": "^14.23.0",
     "@types/jest": "^29.5.3",
-    "@types/node": "^20.4.4",
+    "@types/node": "^20.4.5",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vercel/ncc": "^0.36.1",
