@@ -14,11 +14,11 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - run: npm ci
       - run: npm run all
-      - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
+      - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v3
         with:
           name: dist
           path: dist
-      - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
+      - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v3
         with:
           name: action.yml
           path: action.yml
