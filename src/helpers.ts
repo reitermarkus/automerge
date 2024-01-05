@@ -1,17 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import {
-  AuthorAssociation,
-  CheckRun,
-  CheckSuite,
-  CommitStatus,
-  Octokit,
-  PullRequest,
-  Repo,
-  Review,
-  WorkflowRun,
-} from './types'
+import { ReviewAuthorAssociation, Octokit, PullRequest, Review } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
@@ -38,7 +28,10 @@ export function isAuthorAllowed(
   return authorAssociations.includes(pullRequestOrReview.author_association)
 }
 
-export function isReviewAuthorAllowed(review: Review, authorAssociations: AuthorAssociation[]): boolean {
+export function isReviewAuthorAllowed(
+  review: Review,
+  authorAssociations: ReviewAuthorAssociation[]
+): boolean {
   if (!isAuthorAllowed(review, authorAssociations)) {
     core.debug(
       `Author @${review.user?.login} of review ${review.id} ` +
@@ -52,7 +45,10 @@ export function isReviewAuthorAllowed(review: Review, authorAssociations: Author
   return true
 }
 
-export function isApprovedByAllowedAuthor(review: Review, authorAssociations: AuthorAssociation[]): boolean {
+export function isApprovedByAllowedAuthor(
+  review: Review,
+  authorAssociations: ReviewAuthorAssociation[]
+): boolean {
   if (!isApproved(review)) {
     core.debug(`Review ${review.id} is not an approval.`)
     return false
@@ -80,62 +76,7 @@ export async function requiredStatusChecksForBranch(octokit: Octokit, branchName
 export function isDoNotMergeLabel(string: string): boolean {
   const label = string.toLowerCase().replace(/[^a-z0-9]/g, '')
   const match = label.match(/^dono?tmerge$/)
-  return match != null
-}
-
-async function pullRequestsForCommit(
-  octokit: Octokit,
-  repo: Repo,
-  branch: String | null,
-  sha: String
-): Promise<number[]> {
-  const repoOwner = repo.owner?.login
-
-  if (!repoOwner) return []
-
-  const pullRequests = (
-    await octokit.rest.pulls.list({
-      ...github.context.repo,
-      state: 'open',
-      head: `${repoOwner}:${branch}`,
-      sort: 'updated',
-      direction: 'desc',
-      per_page: 100,
-    })
-  ).data as PullRequest[]
-
-  return pullRequests.filter(pr => pr.head.sha === sha).map(({ number }) => number)
-}
-
-export async function pullRequestsForCheckSuite(octokit: Octokit, checkSuite: CheckSuite): Promise<number[]> {
-  let pullRequests = checkSuite.pull_requests?.map(({ number }) => number) ?? []
-
-  if (pullRequests.length === 0)
-    pullRequests = await pullRequestsForCommit(
-      octokit,
-      checkSuite.repository,
-      checkSuite.head_branch,
-      checkSuite.head_sha
-    )
-
-  return pullRequests
-}
-
-export async function pullRequestsForWorkflowRun(
-  octokit: Octokit,
-  workflowRun: WorkflowRun
-): Promise<number[]> {
-  let pullRequests = workflowRun.pull_requests?.map(({ number }) => number) ?? []
-
-  if (pullRequests.length === 0)
-    pullRequests = await pullRequestsForCommit(
-      octokit,
-      workflowRun.head_repository,
-      workflowRun.head_branch,
-      workflowRun.head_sha
-    )
-
-  return pullRequests
+  return match !== null
 }
 
 export function squashCommit(
@@ -154,7 +95,7 @@ export function squashCommit(
   const message = squashCommitMessage
     ? substitutePullRequestParams(squashCommitMessage, pullRequest, false)
     : undefined
-  return { title: title, message: message }
+  return { title, message }
 }
 
 function substitutePullRequestParams(input: string, pullRequest: PullRequest, isTitle: boolean): string {

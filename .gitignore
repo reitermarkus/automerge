@@ -96,5 +96,11 @@ Thumbs.db
 
 # Ignore built ts files
 __tests__/runner/*
-lib/**/*
-src/generated/graphql.ts
+
+# IDE files
+.idea
+.vscode
+*.code-workspace
+
+# Generated code
+src/codegen/**

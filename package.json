@@ -1,30 +1,72 @@
 {
   "name": "automerge",
-  "version": "0.0.0",
-  "private": true,
   "description": "Automatically merge pull requests once they are approved and required status checks are passing.",
-  "main": "lib/main.js",
-  "scripts": {
-    "build": "npm run codegen && tsc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
-    "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test",
-    "codegen": "graphql-codegen --config codegen.yml"
-  },
+  "version": "0.0.0",
+  "author": "Markus Reiter <me@reitermark.us>",
+  "private": true,
+  "homepage": "https://github.com/reitermarkus/automerge",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reitermarkus/automerge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/reitermarkus/automerge/issues"
   },
   "keywords": [
     "actions",
     "pull request",
     "merge"
   ],
-  "author": "Markus Reiter <me@reitermark.us>",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "bundle": "npm run format:write && npm run package",
+    "codegen": "npx graphql-codegen --config src/codegen.ts",
+    "format:write": "prettier --write **/*.ts",
+    "format:check": "prettier --check **/*.ts",
+    "lint": "npm run codegen && npx eslint . -c .github/linters/.eslintrc.yml",
+    "package": "npm run codegen && ncc build src/index.ts --license licenses.txt",
+    "package:watch": "npm run package -- --watch",
+    "test": "npm run codegen && jest",
+    "all": "npm run format:write && npm run lint && npm run test && npm run package"
+  },
   "license": "MIT",
+  "jest": {
+    "preset": "ts-jest",
+    "verbose": true,
+    "clearMocks": true,
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "testMatch": [
+      "**/*.test.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "coverageReporters": [
+      "json-summary",
+      "text",
+      "lcov"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "./src/**"
+    ],
+    "coveragePathIgnorePatterns": [
+      "./src/codegen/"
+    ]
+  },
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
@@ -37,20 +79,24 @@
     "@graphql-codegen/typescript-operations": "^4.0.1",
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@octokit/graphql-schema": "^14.46.0",
+    "@octokit/types": "^12.1.1",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.6",
-    "@typescript-eslint/eslint-plugin": "^6.16.0",
-    "@typescript-eslint/parser": "^6.16.0",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
     "@vercel/ncc": "^0.38.1",
     "eslint": "^8.56.0",
     "eslint-plugin-github": "^4.10.1",
-    "eslint-plugin-jest": "^27.6.0",
+    "eslint-plugin-jest": "^27.6.1",
+    "eslint-plugin-jsonc": "^2.11.2",
+    "eslint-plugin-prettier": "^5.1.2",
     "graphql": "^16.8.1",
     "jest": "^29.7.0",
-    "jest-circus": "^29.4.1",
+    "jest-circus": "^29.7.0",
     "js-yaml": "^4.1.0",
     "prettier": "3.1.1",
     "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }

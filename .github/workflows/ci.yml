@@ -1,24 +1,26 @@
-name: build-test
+name: CI
 
 on:
   pull_request:
   push:
     branches:
       - main
-      - releases/*
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@v4
       - run: npm ci
       - run: npm run all
-      - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
+      - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
-      - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
+      - uses: actions/upload-artifact@v4
         with:
           name: action.yml
           path: action.yml
@@ -26,12 +28,12 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - uses: actions/download-artifact@f44cd7b40bfd40b6aa1cc1b9b5b7bf03d3c67110 # v4
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
-      - uses: actions/download-artifact@f44cd7b40bfd40b6aa1cc1b9b5b7bf03d3c67110 # v4
+      - uses: actions/download-artifact@v4
         with:
           name: action.yml
           path: .
@@ -43,8 +45,8 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - uses: actions/download-artifact@f44cd7b40bfd40b6aa1cc1b9b5b7bf03d3c67110 # v4
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist

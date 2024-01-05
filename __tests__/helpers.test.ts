@@ -1,6 +1,4 @@
-import { AutomergeAction } from '../src/automerge-action'
 import { isDoNotMergeLabel } from '../src/helpers'
-import { Review } from '../src/types'
 
 describe('isDoNotMergeLabel', () => {
   it('detects a “do not merge” label', () => {

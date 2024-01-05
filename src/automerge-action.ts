@@ -2,21 +2,10 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { isPresent } from 'ts-is-present'
 
-import {
-  EnableAutoMerge,
-  EnableAutoMergeMutation,
-  DisableAutoMerge,
-  DisableAutoMergeMutation,
-} from './generated/graphql'
+import { EnableAutoMerge, EnableAutoMergeMutation, DisableAutoMerge } from './codegen/github-graphql-schema'
 
 import { Input } from './input'
-import {
-  isAuthorAllowed,
-  pullRequestsForWorkflowRun,
-  pullRequestsForCheckSuite,
-  requiredStatusChecksForBranch,
-  squashCommit,
-} from './helpers'
+import { isAuthorAllowed, requiredStatusChecksForBranch, squashCommit } from './helpers'
 import { MergeMethod, Octokit, PullRequest, Review } from './types'
 
 export class AutomergeAction {
@@ -54,7 +43,11 @@ export class AutomergeAction {
   ): Promise<EnableAutoMergeMutation> {
     // We need to get the source code of the query since the `@octokit/graphql`
     // API doesn't (yet) support passing a `DocumentNode` object.
-    const query = EnableAutoMerge.loc!.source!.body
+    const query = EnableAutoMerge.loc?.source?.body
+
+    if (!query) {
+      throw new Error('GraphQL mutation is undefined.')
+    }
 
     try {
       return await this.octokit.graphql({
@@ -76,14 +69,12 @@ export class AutomergeAction {
   }
 
   async disableAutoMerge(pullRequest: PullRequest, force?: boolean): Promise<void> {
-    const { auto_merge: autoMerge } = pullRequest
-
     // If `force` is `false` and auto-merge was enabled by another user, leave it enabled.
     if (!force) {
       const autoMergeUser = pullRequest?.auto_merge?.enabled_by
       const authenticatedUser = (await this.octokit.rest.users.getAuthenticated()).data
 
-      if (autoMergeUser && autoMergeUser.id != authenticatedUser.id) {
+      if (autoMergeUser && autoMergeUser.id !== authenticatedUser.id) {
         core.info(
           `Not disabling auto-merge for pull request ${pullRequest.number}; it was enabled manually by @${autoMergeUser.login}.`
         )
@@ -101,7 +92,11 @@ export class AutomergeAction {
 
       // We need to get the source code of the query since the `@octokit/graphql`
       // API doesn't (yet) support passing a `DocumentNode` object.
-      const query = DisableAutoMerge.loc!.source!.body
+      const query = DisableAutoMerge.loc?.source?.body
+
+      if (!query) {
+        throw new Error('GraphQL mutation is undefined.')
+      }
 
       await this.octokit.graphql({
         query,
@@ -240,8 +235,8 @@ export class AutomergeAction {
         // If auto-merge is already enabled with the same merge method, disable it
         // in order to update the commit title and message.
         const { auto_merge: autoMerge } = pullRequest
-        if (autoMerge && commitTitle && commitMessage && autoMerge.merge_method == mergeMethod) {
-          if (autoMerge.commit_title != commitTitle || autoMerge.commit_message != commitMessage) {
+        if (autoMerge && commitTitle && commitMessage && autoMerge.merge_method === mergeMethod) {
+          if (autoMerge.commit_title !== commitTitle || autoMerge.commit_message !== commitMessage) {
             core.info(
               `Auto-merge is already enabled for pull request ${number} but commit title/message does not match.`
             )
@@ -262,8 +257,6 @@ export class AutomergeAction {
       }
       default: {
         throw new Error(`Unsupported state for pull request ${number}: '${mergeableState}'`)
-
-        break
       }
     }
   }
