@@ -23,11 +23,6 @@ on:
       review:
         description: Review ID
         required: false
-  workflow_run:
-    workflows:
-      - automerge
-    types:
-      - completed
 
 jobs:
   automerge:
