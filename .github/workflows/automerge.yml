@@ -45,7 +45,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           EVENT_JSON: ${{ toJSON(github.event) }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           ref: main
       - uses: ./
@@ -59,7 +59,7 @@ jobs:
           review: ${{ github.event.inputs.review }}
         if: github.event_name != 'pull_request_review'
       - name: Upload `event.json`
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
         if: github.event_name == 'pull_request_review'
         with:
           name: event.json
@@ -67,7 +67,7 @@ jobs:
           if-no-files-found: error
       - name: Download `event.json`
         id: download_event_json
-        uses: actions/github-script@v7
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
