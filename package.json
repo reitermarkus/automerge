@@ -79,7 +79,7 @@
     "@graphql-codegen/typescript-operations": "^4.1.2",
     "@graphql-codegen/typescript-resolvers": "^4.0.4",
     "@octokit/graphql-schema": "^14.56.0",
-    "@octokit/types": "^12.1.1",
+    "@octokit/types": "^12.5.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
