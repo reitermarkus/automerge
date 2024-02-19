@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import { ReviewAuthorAssociation, Octokit, PullRequest, Review } from './types'
+import { ReviewAuthorAssociation, Octokit, PullRequest, Review, RequiredStatusCheck } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
@@ -57,7 +57,10 @@ export function isApprovedByAllowedAuthor(
   return isReviewAuthorAllowed(review, authorAssociations)
 }
 
-export async function requiredStatusChecksForBranch(octokit: Octokit, branchName: string): Promise<string[]> {
+export async function requiredStatusChecksForBranch(
+  octokit: Octokit,
+  branchName: string
+): Promise<RequiredStatusCheck[]> {
   const branch = (
     await octokit.rest.repos.getBranch({
       ...github.context.repo,
@@ -66,7 +69,7 @@ export async function requiredStatusChecksForBranch(octokit: Octokit, branchName
   ).data
 
   if (branch.protected === true && branch.protection.enabled === true) {
-    return branch.protection.required_status_checks?.contexts ?? []
+    return branch.protection.required_status_checks?.checks ?? []
   }
 
   return []
