@@ -45,22 +45,25 @@ Ensure the following is set up in your repository settings before enabling this 
 name: Automerge
 
 on:
-  # Try enabling auto-merge for all open pull requests. (Only recommended for testing.)
+  # Try enabling auto-merge for all open pull requests.
+  # (Only recommended for testing.)
   push:
 
   # Try enabling auto-merge for all open pull requests.
   schedule:
     - cron: 0 * * * *
 
-  # Try enabling auto-merge when a pull request is approved. Note that this event skips the check
-  # for the pull request author association and instead checks the review author association.
+  # Try enabling auto-merge when a pull request is approved. Note that this
+  # event skips the check for the pull request author association and instead
+  # checks the review author association.
   pull_request_review:
     types:
       - submitted
 
-  # Try enabling auto-merge for a pull request when a draft is marked as “ready for review”, when
-  # a required label is applied or when a “do not merge” label is removed, or when a pull request
-  # is updated in any way (opened, synchronized, reopened, edited).
+  # Try enabling auto-merge for a pull request when a draft is marked as
+  # “ready for review”, when a required label is applied or when a
+  # “do not merge” label is removed, or when a pull request is updated in
+  # any way (opened, synchronized, reopened, edited).
   pull_request_target:
     types:
       - opened
@@ -71,8 +74,8 @@ on:
       - unlabeled
       - ready_for_review
 
-  # Try enabling auto-merge for the specified pull request, review or all open pull requests if
-  # none is specified.
+  # Try enabling auto-merge for the specified pull request,
+  # review or all open pull requests if none is specified.
   workflow_dispatch:
     inputs:
       pull-request:
