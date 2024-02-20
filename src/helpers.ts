@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
-import { ReviewAuthorAssociation, Octokit, PullRequest, Review, RequiredStatusCheck } from './types'
+import { ReviewAuthorAssociation, Octokit, PullRequest, Review } from './types'
 
 export const UNMERGEABLE_STATES = ['blocked']
 
@@ -57,10 +57,7 @@ export function isApprovedByAllowedAuthor(
   return isReviewAuthorAllowed(review, authorAssociations)
 }
 
-export async function requiredStatusChecksForBranch(
-  octokit: Octokit,
-  branchName: string
-): Promise<RequiredStatusCheck[]> {
+export async function branchHasRequiredStatusChecks(octokit: Octokit, branchName: string): Promise<boolean> {
   const branch = (
     await octokit.rest.repos.getBranch({
       ...github.context.repo,
@@ -68,11 +65,30 @@ export async function requiredStatusChecksForBranch(
     })
   ).data
 
-  if (branch.protected === true && branch.protection.enabled === true) {
-    return branch.protection.required_status_checks?.checks ?? []
+  if (branch.protected === true) {
+    if (branch.protection.enabled === true) {
+      if (branch.protection.required_status_checks?.checks?.length ?? 0 > 0) {
+        return true
+      }
+    }
+
+    const branchRules = (
+      await octokit.rest.repos.getBranchRules({
+        ...github.context.repo,
+        branch: branchName,
+      })
+    ).data
+
+    for (const branchRule of branchRules) {
+      if (branchRule.type === 'required_status_checks') {
+        if ((branchRule.parameters?.required_status_checks?.length ?? 0) > 0) {
+          return true
+        }
+      }
+    }
   }
 
-  return []
+  return false
 }
 
 // Loosely match a “do not merge” label's name.
