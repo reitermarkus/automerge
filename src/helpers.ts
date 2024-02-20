@@ -68,11 +68,22 @@ export async function requiredStatusChecksForBranch(
     })
   ).data
 
+  var checksFromBranchProtection = []
+
+  const rules = (
+    await octokit.rest.repos.getBranchRules({
+      ...github.context.repo,
+      branch: branchName,
+    })
+  ).data
+
+  const checksFromRules = rules.filter(rule => rule?.parameters?.required_status_checks)
+
   if (branch.protected === true && branch.protection.enabled === true) {
-    return branch.protection.required_status_checks?.checks ?? []
+    checksFromBranchProtection = branch.protection.required_status_checks?.checks
   }
 
-  return []
+  return checksFromRules ?? checksFromBranchProtection ?? []
 }
 
 // Loosely match a “do not merge” label's name.
