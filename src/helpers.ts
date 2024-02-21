@@ -77,7 +77,7 @@ export async function requiredStatusChecksForBranch(
     })
   ).data
 
-  const checksFromRules = rules.filter(rule => rule?.parameters?.required_status_checks)
+  const checksFromRules = rules.reduce((acc, rule) => acc.concat(rule?.parameters?.required_status_checks?? []), [])
 
   if (branch.protected === true && branch.protection.enabled === true) {
     checksFromBranchProtection = branch.protection.required_status_checks?.checks
