@@ -69,6 +69,7 @@ export async function requiredStatusChecksForBranch(
   ).data
 
   var checksFromBranchProtection = []
+  var checksFromRules = []
 
   const rules = (
     await octokit.rest.repos.getBranchRules({
@@ -77,10 +78,12 @@ export async function requiredStatusChecksForBranch(
     })
   ).data
 
-  const checksFromRules = rules.reduce((acc, rule) => acc.concat(rule?.parameters?.required_status_checks?? []), [])
+  if (branch.protected === true) {
+    checksFromRules = rules.reduce((acc, rule) => acc.concat(rule?.parameters?.required_status_checks?? []), [])
 
-  if (branch.protected === true && branch.protection.enabled === true) {
-    checksFromBranchProtection = branch.protection.required_status_checks?.checks
+    if (branch.protection.enabled === true) {
+      checksFromBranchProtection = branch.protection.required_status_checks?.checks
+    }
   }
 
   return checksFromRules ?? checksFromBranchProtection ?? []
