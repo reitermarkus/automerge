@@ -53202,7 +53202,7 @@ class AutomergeAction {
         const baseBranch = pullRequest.base.ref;
         const hasRequiredStatusChecks = await (0, helpers_1.branchHasRequiredStatusChecks)(this.octokit, baseBranch);
         // Only auto-merge if there is at least one required status check.
-        if (hasRequiredStatusChecks) {
+        if (!hasRequiredStatusChecks) {
             core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`);
             await this.disableAutoMerge(pullRequest);
             return;
