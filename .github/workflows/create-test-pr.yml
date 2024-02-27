@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Check out main branch
-        uses: connor-baer/action-sync-branch@v1.0.3
+        uses: connor-baer/action-sync-branch@3d55a053fbea05b71050bc26c9c37913981bd8b5 # v1.0.3
         with:
           branch: ${{ env.TEST_BRANCH }}
           token: ${{ secrets.GITHUB_TOKEN }}
