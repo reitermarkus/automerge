@@ -3,14 +3,33 @@ name: create-test-pr
 on:
   workflow_dispatch:
 
+env:
+  TEST_BRANCH: main-test
+
 jobs:
-  create-test-pr:
+  sync-branch:
+    name: Update test branch
     runs-on: ubuntu-latest
+    steps:
+      - name: Check out main branch
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Check out main branch
+        uses: connor-baer/action-sync-branch@1.0.3
+        with:
+          branch: ${{ env.TEST_BRANCH }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          force: true
+
+  create-pr:
+    runs-on: ubuntu-latest
+    depends_on:
+      - sync-branch
     steps:
       - name: Check out test branch
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
-          ref: main-test
+          ref: ${{ env.TEST_BRANCH }}
           persist-credentials: false
 
       - name: Make changes
