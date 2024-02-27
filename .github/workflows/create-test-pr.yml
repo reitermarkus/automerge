@@ -23,7 +23,7 @@ jobs:
 
   create-pr:
     runs-on: ubuntu-latest
-    depends_on:
+    depends-on:
       - sync-branch
     steps:
       - name: Check out test branch
