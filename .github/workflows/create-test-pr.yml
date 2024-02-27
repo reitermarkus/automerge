@@ -18,7 +18,7 @@ jobs:
         uses: connor-baer/action-sync-branch@v1.0.3
         with:
           branch: ${{ env.TEST_BRANCH }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           force: true
 
   create-pr:
