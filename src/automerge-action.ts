@@ -5,7 +5,7 @@ import { isPresent } from 'ts-is-present'
 import { EnableAutoMerge, EnableAutoMergeMutation, DisableAutoMerge } from './codegen/github-graphql-schema'
 
 import { Input } from './input'
-import { isAuthorAllowed, requiredStatusChecksForBranch, squashCommit } from './helpers'
+import { isAuthorAllowed, branchHasRequiredStatusChecks, squashCommit } from './helpers'
 import { MergeMethod, Octokit, PullRequest, Review } from './types'
 
 export class AutomergeAction {
@@ -176,10 +176,10 @@ export class AutomergeAction {
     }
 
     const baseBranch = pullRequest.base.ref
-    const requiredStatusChecks = await requiredStatusChecksForBranch(this.octokit, baseBranch)
+    const hasRequiredStatusChecks = await branchHasRequiredStatusChecks(this.octokit, baseBranch)
 
     // Only auto-merge if there is at least one required status check.
-    if (requiredStatusChecks.length < 1) {
+    if (!hasRequiredStatusChecks) {
       core.info(`Base branch '${baseBranch}' of pull request ${number} is not sufficiently protected.`)
       await this.disableAutoMerge(pullRequest)
       return
