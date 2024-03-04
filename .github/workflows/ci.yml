@@ -51,8 +51,17 @@ jobs:
         with:
           name: dist
           path: dist
+
+      - name: Generate token
+        id: generate-token
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2
+        with:
+          app_id: ${{ secrets.GH_APP_ID }}
+          private_key: ${{ secrets.GH_APP_KEY }}
+
       - uses: peter-evans/create-pull-request@a4f52f8033a6168103c2538976c07b467e8163bc # v6
         with:
+          token: ${{ steps.generate-token.outputs.token }}
           commit-message: Update distribution.
           title: Update distribution.
           body: |
