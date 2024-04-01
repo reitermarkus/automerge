@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out main branch
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Check out main branch
         uses: connor-baer/action-sync-branch@0298935825bb8194982d322e7730b783a2ed9cd2 # v1.1.0
@@ -27,7 +27,7 @@ jobs:
       - sync-branch
     steps:
       - name: Check out test branch
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           ref: ${{ env.TEST_BRANCH }}
           persist-credentials: false
