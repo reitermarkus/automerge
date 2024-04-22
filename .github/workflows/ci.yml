@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
       - run: npm ci
       - run: npm run all
       - uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba # v4
@@ -29,7 +29,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
       - uses: actions/download-artifact@8caf195ad4b1dee92908e23f56eeb0696f1dd42d # v4
         with:
           name: dist
@@ -46,7 +46,7 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
       - uses: actions/download-artifact@8caf195ad4b1dee92908e23f56eeb0696f1dd42d # v4
         with:
           name: dist
