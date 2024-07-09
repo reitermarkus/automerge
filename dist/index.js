@@ -8794,6 +8794,12 @@ Object.defineProperty(exports, "GraphQLObjectType", ({
     return _index.GraphQLObjectType;
   },
 }));
+Object.defineProperty(exports, "GraphQLOneOfDirective", ({
+  enumerable: true,
+  get: function () {
+    return _index.GraphQLOneOfDirective;
+  },
+}));
 Object.defineProperty(exports, "GraphQLScalarType", ({
   enumerable: true,
   get: function () {
@@ -8882,6 +8888,12 @@ Object.defineProperty(exports, "LoneSchemaDefinitionRule", ({
   enumerable: true,
   get: function () {
     return _index4.LoneSchemaDefinitionRule;
+  },
+}));
+Object.defineProperty(exports, "MaxIntrospectionDepthRule", ({
+  enumerable: true,
+  get: function () {
+    return _index4.MaxIntrospectionDepthRule;
   },
 }));
 Object.defineProperty(exports, "NoDeprecatedCustomRule", ({
@@ -9778,6 +9790,12 @@ Object.defineProperty(exports, "printType", ({
     return _index6.printType;
   },
 }));
+Object.defineProperty(exports, "recommendedRules", ({
+  enumerable: true,
+  get: function () {
+    return _index4.recommendedRules;
+  },
+}));
 Object.defineProperty(exports, "resolveObjMapThunk", ({
   enumerable: true,
   get: function () {
@@ -10224,16 +10242,21 @@ exports.instanceOf = void 0;
 
 var _inspect = __nccwpck_require__(102);
 
+/* c8 ignore next 3 */
+const isProduction =
+  globalThis.process && // eslint-disable-next-line no-undef
+  process.env.NODE_ENV === 'production';
 /**
  * A replacement for instanceof which includes an error warning when multi-realm
  * constructors are detected.
  * See: https://expressjs.com/en/advanced/best-practice-performance.html#set-node_env-to-production
  * See: https://webpack.js.org/guides/production/
  */
+
 const instanceOf =
   /* c8 ignore next 6 */
   // FIXME: https://github.com/graphql/graphql-js/issues/2317
-  globalThis.process && globalThis.process.env.NODE_ENV === 'production'
+  isProduction
     ? function instanceOf(value, constructor) {
         return value instanceof constructor;
       }
@@ -16869,11 +16892,12 @@ class GraphQLEnumType {
       _config$extensionASTN5 !== void 0
         ? _config$extensionASTN5
         : [];
-    this._values = defineEnumValues(this.name, config.values);
-    this._valueLookup = new Map(
-      this._values.map((enumValue) => [enumValue.value, enumValue]),
-    );
-    this._nameLookup = (0, _keyMap.keyMap)(this._values, (value) => value.name);
+    this._values =
+      typeof config.values === 'function'
+        ? config.values
+        : defineEnumValues(this.name, config.values);
+    this._valueLookup = null;
+    this._nameLookup = null;
   }
 
   get [Symbol.toStringTag]() {
@@ -16881,14 +16905,31 @@ class GraphQLEnumType {
   }
 
   getValues() {
+    if (typeof this._values === 'function') {
+      this._values = defineEnumValues(this.name, this._values());
+    }
+
     return this._values;
   }
 
   getValue(name) {
+    if (this._nameLookup === null) {
+      this._nameLookup = (0, _keyMap.keyMap)(
+        this.getValues(),
+        (value) => value.name,
+      );
+    }
+
     return this._nameLookup[name];
   }
 
   serialize(outputValue) {
+    if (this._valueLookup === null) {
+      this._valueLookup = new Map(
+        this.getValues().map((enumValue) => [enumValue.value, enumValue]),
+      );
+    }
+
     const enumValue = this._valueLookup.get(outputValue);
 
     if (enumValue === undefined) {
@@ -17045,7 +17086,7 @@ function defineEnumValues(typeName, valueMap) {
  */
 class GraphQLInputObjectType {
   constructor(config) {
-    var _config$extensionASTN6;
+    var _config$extensionASTN6, _config$isOneOf;
 
     this.name = (0, _assertName.assertName)(config.name);
     this.description = config.description;
@@ -17056,6 +17097,10 @@ class GraphQLInputObjectType {
       _config$extensionASTN6 !== void 0
         ? _config$extensionASTN6
         : [];
+    this.isOneOf =
+      (_config$isOneOf = config.isOneOf) !== null && _config$isOneOf !== void 0
+        ? _config$isOneOf
+        : false;
     this._fields = defineInputFieldMap.bind(undefined, config);
   }
 
@@ -17087,6 +17132,7 @@ class GraphQLInputObjectType {
       extensions: this.extensions,
       astNode: this.astNode,
       extensionASTNodes: this.extensionASTNodes,
+      isOneOf: this.isOneOf,
     };
   }
 
@@ -17144,6 +17190,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.GraphQLSpecifiedByDirective =
   exports.GraphQLSkipDirective =
+  exports.GraphQLOneOfDirective =
   exports.GraphQLIncludeDirective =
   exports.GraphQLDirective =
   exports.GraphQLDeprecatedDirective =
@@ -17346,15 +17393,28 @@ const GraphQLSpecifiedByDirective = new GraphQLDirective({
   },
 });
 /**
- * The full list of specified directives.
+ * Used to indicate an Input Object is a OneOf Input Object.
  */
 
 exports.GraphQLSpecifiedByDirective = GraphQLSpecifiedByDirective;
+const GraphQLOneOfDirective = new GraphQLDirective({
+  name: 'oneOf',
+  description:
+    'Indicates exactly one field must be supplied and this field must not be `null`.',
+  locations: [_directiveLocation.DirectiveLocation.INPUT_OBJECT],
+  args: {},
+});
+/**
+ * The full list of specified directives.
+ */
+
+exports.GraphQLOneOfDirective = GraphQLOneOfDirective;
 const specifiedDirectives = Object.freeze([
   GraphQLIncludeDirective,
   GraphQLSkipDirective,
   GraphQLDeprecatedDirective,
   GraphQLSpecifiedByDirective,
+  GraphQLOneOfDirective,
 ]);
 exports.specifiedDirectives = specifiedDirectives;
 
@@ -17468,6 +17528,12 @@ Object.defineProperty(exports, "GraphQLObjectType", ({
   enumerable: true,
   get: function () {
     return _definition.GraphQLObjectType;
+  },
+}));
+Object.defineProperty(exports, "GraphQLOneOfDirective", ({
+  enumerable: true,
+  get: function () {
+    return _directives.GraphQLOneOfDirective;
   },
 }));
 Object.defineProperty(exports, "GraphQLScalarType", ({
@@ -18298,6 +18364,14 @@ const __Type = new _definition.GraphQLObjectType({
     ofType: {
       type: __Type,
       resolve: (type) => ('ofType' in type ? type.ofType : undefined),
+    },
+    isOneOf: {
+      type: _scalars.GraphQLBoolean,
+      resolve: (type) => {
+        if ((0, _definition.isInputObjectType)(type)) {
+          return type.isOneOf;
+        }
+      },
     },
   }),
 });
@@ -19906,6 +19980,30 @@ function validateInputFields(context, inputObj) {
         ],
       );
     }
+
+    if (inputObj.isOneOf) {
+      validateOneOfInputObjectField(inputObj, field, context);
+    }
+  }
+}
+
+function validateOneOfInputObjectField(type, field, context) {
+  if ((0, _definition.isNonNullType)(field.type)) {
+    var _field$astNode4;
+
+    context.reportError(
+      `OneOf input field ${type.name}.${field.name} must be nullable.`,
+      (_field$astNode4 = field.astNode) === null || _field$astNode4 === void 0
+        ? void 0
+        : _field$astNode4.type,
+    );
+  }
+
+  if (field.defaultValue !== undefined) {
+    context.reportError(
+      `OneOf input field ${type.name}.${field.name} cannot have a default value.`,
+      field.astNode,
+    );
   }
 }
 
@@ -21107,6 +21205,7 @@ function buildClientSchema(introspection, options) {
       name: inputObjectIntrospection.name,
       description: inputObjectIntrospection.description,
       fields: () => buildInputValueDefMap(inputObjectIntrospection.inputFields),
+      isOneOf: inputObjectIntrospection.isOneOf,
     });
   }
 
@@ -21357,6 +21456,31 @@ function coerceInputValueImpl(inputValue, type, onError, path) {
             `Field "${fieldName}" is not defined by type "${type.name}".` +
               (0, _didYouMean.didYouMean)(suggestions),
           ),
+        );
+      }
+    }
+
+    if (type.isOneOf) {
+      const keys = Object.keys(coercedValue);
+
+      if (keys.length !== 1) {
+        onError(
+          (0, _Path.pathToArray)(path),
+          inputValue,
+          new _GraphQLError.GraphQLError(
+            `Exactly one key must be specified for OneOf type "${type.name}".`,
+          ),
+        );
+      }
+
+      const key = keys[0];
+      const value = coercedValue[key];
+
+      if (value === null) {
+        onError(
+          (0, _Path.pathToArray)(path).concat(key),
+          value,
+          new _GraphQLError.GraphQLError(`Field "${key}" must be non-null.`),
         );
       }
     }
@@ -22210,6 +22334,7 @@ function extendSchemaImpl(schemaConfig, documentAST, options) {
           fields: () => buildInputFieldMap(allNodes),
           astNode,
           extensionASTNodes,
+          isOneOf: isOneOf(astNode),
         });
       }
     }
@@ -22248,6 +22373,15 @@ function getSpecifiedByURL(node) {
   return specifiedBy === null || specifiedBy === void 0
     ? void 0
     : specifiedBy.url;
+}
+/**
+ * Given an input object node, returns if the node should be OneOf.
+ */
+
+function isOneOf(node) {
+  return Boolean(
+    (0, _values.getDirectiveValues)(_directives.GraphQLOneOfDirective, node),
+  );
 }
 
 
@@ -22830,6 +22964,7 @@ function getIntrospectionQuery(options) {
     directiveIsRepeatable: false,
     schemaDescription: false,
     inputValueDeprecation: false,
+    oneOf: false,
     ...options,
   };
   const descriptions = optionsWithDefault.descriptions ? 'description' : '';
@@ -22847,6 +22982,7 @@ function getIntrospectionQuery(options) {
     return optionsWithDefault.inputValueDeprecation ? str : '';
   }
 
+  const oneOf = optionsWithDefault.oneOf ? 'isOneOf' : '';
   return `
     query IntrospectionQuery {
       __schema {
@@ -22874,6 +23010,7 @@ function getIntrospectionQuery(options) {
       name
       ${descriptions}
       ${specifiedByUrl}
+      ${oneOf}
       fields(includeDeprecated: true) {
         name
         ${descriptions}
@@ -23359,6 +23496,7 @@ function introspectionFromSchema(schema, options) {
     directiveIsRepeatable: true,
     schemaDescription: true,
     inputValueDeprecation: true,
+    oneOf: true,
     ...options,
   };
   const document = (0, _parser.parse)(
@@ -23780,7 +23918,12 @@ function printInputObject(type) {
   const fields = Object.values(type.getFields()).map(
     (f, i) => printDescription(f, '  ', !i) + '  ' + printInputValue(f),
   );
-  return printDescription(type) + `input ${type.name}` + printBlock(fields);
+  return (
+    printDescription(type) +
+    `input ${type.name}` +
+    (type.isOneOf ? ' @oneOf' : '') +
+    printBlock(fields)
+  );
 }
 
 function printFields(type) {
@@ -24491,6 +24634,18 @@ function valueFromAST(valueNode, type, variables) {
       coercedObj[field.name] = fieldValue;
     }
 
+    if (type.isOneOf) {
+      const keys = Object.keys(coercedObj);
+
+      if (keys.length !== 1) {
+        return; // Invalid: not exactly one key, intentionally return no value.
+      }
+
+      if (coercedObj[keys[0]] === null) {
+        return; // Invalid: value not non-null, intentionally return no value.
+      }
+    }
+
     return coercedObj;
   }
 
@@ -24905,6 +25060,12 @@ Object.defineProperty(exports, "LoneSchemaDefinitionRule", ({
     return _LoneSchemaDefinitionRule.LoneSchemaDefinitionRule;
   },
 }));
+Object.defineProperty(exports, "MaxIntrospectionDepthRule", ({
+  enumerable: true,
+  get: function () {
+    return _MaxIntrospectionDepthRule.MaxIntrospectionDepthRule;
+  },
+}));
 Object.defineProperty(exports, "NoDeprecatedCustomRule", ({
   enumerable: true,
   get: function () {
@@ -25073,6 +25234,12 @@ Object.defineProperty(exports, "VariablesInAllowedPositionRule", ({
     return _VariablesInAllowedPositionRule.VariablesInAllowedPositionRule;
   },
 }));
+Object.defineProperty(exports, "recommendedRules", ({
+  enumerable: true,
+  get: function () {
+    return _specifiedRules.recommendedRules;
+  },
+}));
 Object.defineProperty(exports, "specifiedRules", ({
   enumerable: true,
   get: function () {
@@ -25143,6 +25310,8 @@ var _ValuesOfCorrectTypeRule = __nccwpck_require__(9091);
 var _VariablesAreInputTypesRule = __nccwpck_require__(9506);
 
 var _VariablesInAllowedPositionRule = __nccwpck_require__(8815);
+
+var _MaxIntrospectionDepthRule = __nccwpck_require__(3318);
 
 var _LoneSchemaDefinitionRule = __nccwpck_require__(8307);
 
@@ -26013,6 +26182,104 @@ function LoneSchemaDefinitionRule(context) {
       }
 
       ++schemaDefinitionsCount;
+    },
+  };
+}
+
+
+/***/ }),
+
+/***/ 3318:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true,
+}));
+exports.MaxIntrospectionDepthRule = MaxIntrospectionDepthRule;
+
+var _GraphQLError = __nccwpck_require__(4797);
+
+var _kinds = __nccwpck_require__(1927);
+
+const MAX_LISTS_DEPTH = 3;
+
+function MaxIntrospectionDepthRule(context) {
+  /**
+   * Counts the depth of list fields in "__Type" recursively and
+   * returns `true` if the limit has been reached.
+   */
+  function checkDepth(node, visitedFragments = Object.create(null), depth = 0) {
+    if (node.kind === _kinds.Kind.FRAGMENT_SPREAD) {
+      const fragmentName = node.name.value;
+
+      if (visitedFragments[fragmentName] === true) {
+        // Fragment cycles are handled by `NoFragmentCyclesRule`.
+        return false;
+      }
+
+      const fragment = context.getFragment(fragmentName);
+
+      if (!fragment) {
+        // Missing fragments checks are handled by `KnownFragmentNamesRule`.
+        return false;
+      } // Rather than following an immutable programming pattern which has
+      // significant memory and garbage collection overhead, we've opted to
+      // take a mutable approach for efficiency's sake. Importantly visiting a
+      // fragment twice is fine, so long as you don't do one visit inside the
+      // other.
+
+      try {
+        visitedFragments[fragmentName] = true;
+        return checkDepth(fragment, visitedFragments, depth);
+      } finally {
+        visitedFragments[fragmentName] = undefined;
+      }
+    }
+
+    if (
+      node.kind === _kinds.Kind.FIELD && // check all introspection lists
+      (node.name.value === 'fields' ||
+        node.name.value === 'interfaces' ||
+        node.name.value === 'possibleTypes' ||
+        node.name.value === 'inputFields')
+    ) {
+      // eslint-disable-next-line no-param-reassign
+      depth++;
+
+      if (depth >= MAX_LISTS_DEPTH) {
+        return true;
+      }
+    } // handles fields and inline fragments
+
+    if ('selectionSet' in node && node.selectionSet) {
+      for (const child of node.selectionSet.selections) {
+        if (checkDepth(child, visitedFragments, depth)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  return {
+    Field(node) {
+      if (node.name.value === '__schema' || node.name.value === '__type') {
+        if (checkDepth(node)) {
+          context.reportError(
+            new _GraphQLError.GraphQLError(
+              'Maximum introspection depth exceeded',
+              {
+                nodes: [node],
+              },
+            ),
+          );
+          return false;
+        }
+      }
     },
   };
 }
@@ -28637,6 +28904,8 @@ var _suggestionList = __nccwpck_require__(7704);
 
 var _GraphQLError = __nccwpck_require__(4797);
 
+var _kinds = __nccwpck_require__(1927);
+
 var _printer = __nccwpck_require__(8203);
 
 var _definition = __nccwpck_require__(5821);
@@ -28650,7 +28919,18 @@ var _definition = __nccwpck_require__(5821);
  * See https://spec.graphql.org/draft/#sec-Values-of-Correct-Type
  */
 function ValuesOfCorrectTypeRule(context) {
+  let variableDefinitions = {};
   return {
+    OperationDefinition: {
+      enter() {
+        variableDefinitions = {};
+      },
+    },
+
+    VariableDefinition(definition) {
+      variableDefinitions[definition.variable.name.value] = definition;
+    },
+
     ListValue(node) {
       // Note: TypeInfo will traverse into a list's item type, so look to the
       // parent input type to check if it is a list.
@@ -28691,6 +28971,16 @@ function ValuesOfCorrectTypeRule(context) {
             ),
           );
         }
+      }
+
+      if (type.isOneOf) {
+        validateOneOfInputObject(
+          context,
+          node,
+          type,
+          fieldNodeMap,
+          variableDefinitions,
+        );
       }
     },
 
@@ -28806,6 +29096,71 @@ function isValidValueNode(context, node) {
           {
             nodes: node,
             originalError: error,
+          },
+        ),
+      );
+    }
+  }
+}
+
+function validateOneOfInputObject(
+  context,
+  node,
+  type,
+  fieldNodeMap,
+  variableDefinitions,
+) {
+  var _fieldNodeMap$keys$;
+
+  const keys = Object.keys(fieldNodeMap);
+  const isNotExactlyOneField = keys.length !== 1;
+
+  if (isNotExactlyOneField) {
+    context.reportError(
+      new _GraphQLError.GraphQLError(
+        `OneOf Input Object "${type.name}" must specify exactly one key.`,
+        {
+          nodes: [node],
+        },
+      ),
+    );
+    return;
+  }
+
+  const value =
+    (_fieldNodeMap$keys$ = fieldNodeMap[keys[0]]) === null ||
+    _fieldNodeMap$keys$ === void 0
+      ? void 0
+      : _fieldNodeMap$keys$.value;
+  const isNullLiteral = !value || value.kind === _kinds.Kind.NULL;
+  const isVariable =
+    (value === null || value === void 0 ? void 0 : value.kind) ===
+    _kinds.Kind.VARIABLE;
+
+  if (isNullLiteral) {
+    context.reportError(
+      new _GraphQLError.GraphQLError(
+        `Field "${type.name}.${keys[0]}" must be non-null.`,
+        {
+          nodes: [node],
+        },
+      ),
+    );
+    return;
+  }
+
+  if (isVariable) {
+    const variableName = value.name.value;
+    const definition = variableDefinitions[variableName];
+    const isNullableVariable =
+      definition.type.kind !== _kinds.Kind.NON_NULL_TYPE;
+
+    if (isNullableVariable) {
+      context.reportError(
+        new _GraphQLError.GraphQLError(
+          `Variable "${variableName}" must be non-nullable to be used for OneOf Input Object "${type.name}".`,
+          {
+            nodes: [node],
           },
         ),
       );
@@ -29191,7 +29546,10 @@ function NoSchemaIntrospectionCustomRule(context) {
 Object.defineProperty(exports, "__esModule", ({
   value: true,
 }));
-exports.specifiedSDLRules = exports.specifiedRules = void 0;
+exports.specifiedSDLRules =
+  exports.specifiedRules =
+  exports.recommendedRules =
+    void 0;
 
 var _ExecutableDefinitionsRule = __nccwpck_require__(9199);
 
@@ -29210,6 +29568,8 @@ var _KnownTypeNamesRule = __nccwpck_require__(2509);
 var _LoneAnonymousOperationRule = __nccwpck_require__(5726);
 
 var _LoneSchemaDefinitionRule = __nccwpck_require__(8307);
+
+var _MaxIntrospectionDepthRule = __nccwpck_require__(3318);
 
 var _NoFragmentCyclesRule = __nccwpck_require__(2564);
 
@@ -29270,6 +29630,7 @@ var _VariablesInAllowedPositionRule = __nccwpck_require__(8815);
 // Spec Section: "Fragment Spread Type Existence"
 // Spec Section: "Lone Anonymous Operation"
 // SDL-specific validation rules
+// TODO: Spec Section
 // Spec Section: "Fragments must not form cycles"
 // Spec Section: "All Variable Used Defined"
 // Spec Section: "Fragments must be used"
@@ -29290,11 +29651,20 @@ var _VariablesInAllowedPositionRule = __nccwpck_require__(8815);
 // Spec Section: "All Variable Usages Are Allowed"
 
 /**
+ * Technically these aren't part of the spec but they are strongly encouraged
+ * validation rules.
+ */
+const recommendedRules = Object.freeze([
+  _MaxIntrospectionDepthRule.MaxIntrospectionDepthRule,
+]);
+/**
  * This set includes all validation rules defined by the GraphQL spec.
  *
  * The order of the rules in this list has been adjusted to lead to the
  * most clear output when encountering multiple validation errors.
  */
+
+exports.recommendedRules = recommendedRules;
 const specifiedRules = Object.freeze([
   _ExecutableDefinitionsRule.ExecutableDefinitionsRule,
   _UniqueOperationNamesRule.UniqueOperationNamesRule,
@@ -29322,6 +29692,7 @@ const specifiedRules = Object.freeze([
   _VariablesInAllowedPositionRule.VariablesInAllowedPositionRule,
   _OverlappingFieldsCanBeMergedRule.OverlappingFieldsCanBeMergedRule,
   _UniqueInputFieldNamesRule.UniqueInputFieldNamesRule,
+  ...recommendedRules,
 ]);
 /**
  * @internal
@@ -29525,7 +29896,7 @@ exports.versionInfo = exports.version = void 0;
 /**
  * A string containing the version of the GraphQL.js library
  */
-const version = '16.8.1';
+const version = '16.9.0';
 /**
  * An object containing the components of the GraphQL.js version string
  */
@@ -29533,8 +29904,8 @@ const version = '16.8.1';
 exports.version = version;
 const versionInfo = Object.freeze({
   major: 16,
-  minor: 8,
-  patch: 1,
+  minor: 9,
+  patch: 0,
   preReleaseTag: null,
 });
 exports.versionInfo = versionInfo;
@@ -29946,10 +30317,11 @@ var __disposeResources;
     __asyncGenerator = function (thisArg, _arguments, generator) {
         if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
         var g = generator.apply(thisArg, _arguments || []), i, q = [];
-        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+        function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+        function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
         function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
         function fulfill(value) { resume("next", value); }
         function reject(value) { resume("throw", value); }
         function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
@@ -30013,7 +30385,7 @@ var __disposeResources;
     __addDisposableResource = function (env, value, async) {
         if (value !== null && value !== void 0) {
             if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-            var dispose;
+            var dispose, inner;
             if (async) {
                 if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
                 dispose = value[Symbol.asyncDispose];
@@ -30021,8 +30393,10 @@ var __disposeResources;
             if (dispose === void 0) {
                 if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
                 dispose = value[Symbol.dispose];
+                if (async) inner = dispose;
             }
             if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+            if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
             env.stack.push({ value: value, dispose: dispose, async: async });
         }
         else if (async) {
@@ -56725,18 +57099,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.squashCommit = exports.isDoNotMergeLabel = exports.branchHasRequiredStatusChecks = exports.isApprovedByAllowedAuthor = exports.isReviewAuthorAllowed = exports.isAuthorAllowed = exports.isApproved = exports.isChangesRequested = exports.UNMERGEABLE_STATES = void 0;
+exports.UNMERGEABLE_STATES = void 0;
+exports.isChangesRequested = isChangesRequested;
+exports.isApproved = isApproved;
+exports.isAuthorAllowed = isAuthorAllowed;
+exports.isReviewAuthorAllowed = isReviewAuthorAllowed;
+exports.isApprovedByAllowedAuthor = isApprovedByAllowedAuthor;
+exports.branchHasRequiredStatusChecks = branchHasRequiredStatusChecks;
+exports.isDoNotMergeLabel = isDoNotMergeLabel;
+exports.squashCommit = squashCommit;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 exports.UNMERGEABLE_STATES = ['blocked'];
 function isChangesRequested(review) {
     return review.state.toUpperCase() === 'CHANGES_REQUESTED';
 }
-exports.isChangesRequested = isChangesRequested;
 function isApproved(review) {
     return review.state.toUpperCase() === 'APPROVED';
 }
-exports.isApproved = isApproved;
 function isAuthorAllowed(pullRequestOrReview, authorAssociations) {
     if (pullRequestOrReview.user?.login === 'github-actions[bot]') {
         return true;
@@ -56746,7 +57126,6 @@ function isAuthorAllowed(pullRequestOrReview, authorAssociations) {
     }
     return authorAssociations.includes(pullRequestOrReview.author_association);
 }
-exports.isAuthorAllowed = isAuthorAllowed;
 function isReviewAuthorAllowed(review, authorAssociations) {
     if (!isAuthorAllowed(review, authorAssociations)) {
         core.debug(`Author @${review.user?.login} of review ${review.id} ` +
@@ -56756,7 +57135,6 @@ function isReviewAuthorAllowed(review, authorAssociations) {
     }
     return true;
 }
-exports.isReviewAuthorAllowed = isReviewAuthorAllowed;
 function isApprovedByAllowedAuthor(review, authorAssociations) {
     if (!isApproved(review)) {
         core.debug(`Review ${review.id} is not an approval.`);
@@ -56764,7 +57142,6 @@ function isApprovedByAllowedAuthor(review, authorAssociations) {
     }
     return isReviewAuthorAllowed(review, authorAssociations);
 }
-exports.isApprovedByAllowedAuthor = isApprovedByAllowedAuthor;
 async function branchHasRequiredStatusChecks(octokit, branchName) {
     const branch = (await octokit.rest.repos.getBranch({
         ...github.context.repo,
@@ -56790,14 +57167,12 @@ async function branchHasRequiredStatusChecks(octokit, branchName) {
     }
     return false;
 }
-exports.branchHasRequiredStatusChecks = branchHasRequiredStatusChecks;
 // Loosely match a “do not merge” label's name.
 function isDoNotMergeLabel(string) {
     const label = string.toLowerCase().replace(/[^a-z0-9]/g, '');
     const match = label.match(/^dono?tmerge$/);
     return match !== null;
 }
-exports.isDoNotMergeLabel = isDoNotMergeLabel;
 function squashCommit(isSquashCommit, squashCommitTitle, squashCommitMessage, pullRequest) {
     if (!isSquashCommit) {
         return { title: undefined, message: undefined };
@@ -56810,7 +57185,6 @@ function squashCommit(isSquashCommit, squashCommitTitle, squashCommitMessage, pu
         : undefined;
     return { title, message };
 }
-exports.squashCommit = squashCommit;
 function substitutePullRequestParams(input, pullRequest, isTitle) {
     const output = input
         .replace('${pull_request.title}', pullRequest.title)
