@@ -52,7 +52,7 @@ jobs:
           echo "review=$(jq -r .review.id event.json)" >> "${GITHUB_OUTPUT}"
         if: steps.download_event_json.outcome == 'success'
       - name: Trigger workflow for review ${{ steps.review_info.outputs.review }} on pull request \#${{ steps.review_info.outputs.pull_request }}
-        uses: benc-uk/workflow-dispatch@25b02cc069be46d637e8fe2f1e8484008e9e9609
+        uses: benc-uk/workflow-dispatch@e2e5e9a103e331dad343f381a29e654aea3cf8fc
         with:
           workflow: automerge.yml
           inputs: >
