@@ -54,7 +54,7 @@ jobs:
           review: ${{ github.event.inputs.review }}
         if: github.event_name != 'pull_request_review'
       - name: Upload `event.json`
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         if: github.event_name == 'pull_request_review'
         with:
           name: event.json
