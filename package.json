@@ -90,7 +90,7 @@
     "eslint-plugin-jsonc": "^2.20.1",
     "eslint-plugin-prettier": "^5.5.3",
     "graphql": "^16.11.0",
-    "jest": "^30.0.4",
+    "jest": "^30.0.5",
     "jest-circus": "^30.0.5",
     "js-yaml": "^4.1.0",
     "prettier": "3.6.2",
