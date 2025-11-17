@@ -73,7 +73,7 @@
     "ts-is-present": "^1.2.2"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^6.0.1",
+    "@graphql-codegen/cli": "^6.0.2",
     "@graphql-codegen/typescript": "^5.0.2",
     "@graphql-codegen/typescript-document-nodes": "^5.0.2",
     "@graphql-codegen/typescript-operations": "^5.0.2",
