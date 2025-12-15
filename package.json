@@ -68,7 +68,7 @@
     ]
   },
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.1",
     "@actions/github": "^6.0.1",
     "ts-is-present": "^1.2.2"
   },
